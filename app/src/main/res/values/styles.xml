@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BaseKiwiTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#3a7200</item>
+        <item name="colorPrimaryDark">#074600</item>
+        <item name="colorSecondary">#62717b</item>
+        <item name="colorAccent">#6aa138</item>
+    </style>
+
+    <style name="KiwiTheme" parent="BaseKiwiTheme">
+        <item name="android:colorBackground">#263238</item>
+    </style>
+</resources>
