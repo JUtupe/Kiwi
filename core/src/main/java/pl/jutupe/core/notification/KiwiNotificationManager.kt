@@ -17,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import pl.jutupe.core.R
-import timber.log.Timber
 
 const val NOW_PLAYING_CHANNEL_ID = "pl.jutupe.kiwi.notification.NOW_PLAYING"
 const val NOW_PLAYING_NOTIFICATION_ID = 0x10f2c
@@ -79,7 +78,6 @@ class KiwiNotificationManager (
             callback: PlayerNotificationManager.BitmapCallback
         ): Bitmap? {
             val iconUri = controller.metadata?.description?.iconUri
-            Timber.d("getCurrentLargeIcon(iconUri=$iconUri)")
 
             loader.memoryCache[MemoryCache.Key.invoke(iconUri.toString())]?.let {
                 return it

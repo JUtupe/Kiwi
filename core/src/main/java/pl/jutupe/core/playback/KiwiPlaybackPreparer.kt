@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import pl.jutupe.core.extension.getPaginationOrDefault
 import pl.jutupe.core.repository.MediaRepository
 import pl.jutupe.core.repository.RecentSongRepository
 import timber.log.Timber
@@ -49,8 +50,10 @@ class KiwiPlaybackPreparer(
     override fun onPrepareFromSearch(query: String, playWhenReady: Boolean, extras: Bundle?) {
         Timber.d("onPrepareFromSearch(query=$query)")
 
+        val pagination = extras.getPaginationOrDefault()
+
         serviceScope.launch {
-            val songs = mediaRepository.search(query, extras ?: Bundle.EMPTY)
+            val songs = mediaRepository.search(query, pagination)
 
             if (songs.isNotEmpty()) {
                 val playlist = PreparedPlaylist(

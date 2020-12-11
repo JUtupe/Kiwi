@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import pl.jutupe.core.extension.getPaginationOrDefault
 import pl.jutupe.core.extension.toMediaSource
 import pl.jutupe.core.notification.KiwiNotificationManager
 import pl.jutupe.core.repository.MediaRepository
@@ -128,15 +129,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
             result.sendResult(mutableListOf())
         }
 
-        //todo handle onLoadChildren
+        val pagination = options.getPaginationOrDefault()
+
         result.detach()
         serviceScope.launch {
-            val songs = mediaRepository.getSongs()
-                .take(30)
+            val songs = mediaRepository.getAllSongs(pagination)
                 .map {
                     MediaBrowserCompat.MediaItem(it, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
                 }
 
+            Timber.d("onLoadChildren result(${songs.size})")
             result.sendResult(songs)
         }
     }
@@ -144,15 +146,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
     override fun onSearch(query: String, extras: Bundle?, result: Result<List<MediaBrowserCompat.MediaItem>>) {
         Timber.d("onSearch(query=$query)")
 
-        //todo handle onSearch
+        val pagination = extras.getPaginationOrDefault()
+
         result.detach()
         serviceScope.launch {
-            val songs = mediaRepository.search(query, extras)
-                .take(50)
+            val songs = mediaRepository.search(query, pagination)
                 .map {
                     MediaBrowserCompat.MediaItem(it, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
                 }
 
+            Timber.d("onSearch result(${songs.size})")
             result.sendResult(songs)
         }
     }
