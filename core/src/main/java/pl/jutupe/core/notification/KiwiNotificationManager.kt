@@ -36,8 +36,8 @@ class KiwiNotificationManager (
         notificationManager = PlayerNotificationManager.createWithNotificationChannel(
             context,
             NOW_PLAYING_CHANNEL_ID,
-            R.string.notification_channel,
-            R.string.notification_channel_description,
+            R.string.notification_channel_now_playing,
+            R.string.notification_channel_now_playing_description,
             NOW_PLAYING_NOTIFICATION_ID,
             DescriptionAdapter(mediaController),
             notificationListener

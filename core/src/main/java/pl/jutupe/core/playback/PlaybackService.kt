@@ -19,6 +19,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import pl.jutupe.core.browser.MediaBrowserTree
+import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_EMPTY_ROOT
+import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
 import pl.jutupe.core.extension.getPaginationOrDefault
 import pl.jutupe.core.extension.toMediaSource
 import pl.jutupe.core.notification.KiwiNotificationManager
@@ -34,6 +37,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     private val mediaRepository: MediaRepository by inject()
     private val recentSongRepository: RecentSongRepository by inject()
+    private val browserTree: MediaBrowserTree by inject()
 
     private val playbackPreparer = KiwiPlaybackPreparer(
         mediaRepository,
@@ -125,21 +129,14 @@ class PlaybackService : MediaBrowserServiceCompat() {
     ) {
         Timber.d("onLoadChildren(parentId=$parentId, options=$options)")
 
-        if (parentId == KIWI_MEDIA_EMPTY_ROOT) {
-            result.sendResult(mutableListOf())
-        }
-
         val pagination = options.getPaginationOrDefault()
 
         result.detach()
         serviceScope.launch {
-            val songs = mediaRepository.getAllSongs(pagination)
-                .map {
-                    MediaBrowserCompat.MediaItem(it, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-                }
+            val items = browserTree.itemsFor(parentId, pagination)
 
-            Timber.d("onLoadChildren result(${songs.size})")
-            result.sendResult(songs)
+            Timber.d("onLoadChildren result(${items?.size ?: "null"})")
+            result.sendResult(items)
         }
     }
 
@@ -251,7 +248,5 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     companion object {
         const val TAG = "KiwiMediaService"
-        const val KIWI_MEDIA_EMPTY_ROOT = "KiwiMediaEmptyRoot"
-        const val KIWI_MEDIA_ROOT = "KiwiMediaRoot"
     }
 }

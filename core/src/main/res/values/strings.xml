@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="notification_channel">Kanał notyfikacji</string>
-    <string name="notification_channel_description">Opis kanału notyfikacji</string>
+    <string name="notification_channel_now_playing">Now playing</string>
+    <string name="notification_channel_now_playing_description">Now playing song controller</string>
+
+    <string name="browser_root_songs">Songs</string>
+    <string name="browser_root_albums">Albums</string>
+    <string name="browser_root_playlists">Playlists</string>
 </resources>

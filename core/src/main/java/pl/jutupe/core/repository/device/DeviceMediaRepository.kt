@@ -78,6 +78,20 @@ class DeviceMediaRepository(
         return cursorToSongs(cursor!!)
     }
 
+    //todo getAllAlbums
+    override suspend fun getAllAlbums(pagination: Pagination): List<MediaDescriptionCompat> {
+        Timber.d("getAllAlbums(pagination=$pagination)")
+
+        return emptyList()
+    }
+
+    //todo getAllPlaylists
+    override suspend fun getAllPlaylists(pagination: Pagination): List<MediaDescriptionCompat> {
+        Timber.d("getAllPlaylists(pagination=$pagination)")
+
+        return emptyList()
+    }
+
     private fun cursorToSongs(cursor: Cursor): List<MediaDescriptionCompat> {
         val songs: MutableList<MediaDescriptionCompat> = ArrayList()
 
