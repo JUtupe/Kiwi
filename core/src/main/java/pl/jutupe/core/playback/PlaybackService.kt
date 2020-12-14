@@ -20,7 +20,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import pl.jutupe.core.browser.MediaBrowserTree
-import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_EMPTY_ROOT
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
 import pl.jutupe.core.extension.getPaginationOrDefault
 import pl.jutupe.core.extension.toMediaSource

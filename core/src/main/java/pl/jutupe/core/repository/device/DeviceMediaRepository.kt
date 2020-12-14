@@ -34,6 +34,11 @@ class DeviceMediaRepository(
             MediaStore.Audio.Albums.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         } else MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
 
+    private val playlistsUri =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            MediaStore.Audio.Playlists.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        } else MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
+
     private val songProjection = arrayOf(
         MediaStore.Audio.Media._ID,
         MediaStore.Audio.Media.TITLE,
@@ -47,6 +52,11 @@ class DeviceMediaRepository(
         MediaStore.Audio.Albums.ALBUM_ID,
         MediaStore.Audio.Albums.ALBUM,
         MediaStore.Audio.Albums.ARTIST,
+    )
+
+    private val playlistProjection = arrayOf(
+        MediaStore.Audio.Playlists._ID,
+        MediaStore.Audio.Playlists.NAME,
     )
 
     override suspend fun search(query: String, pagination: Pagination): List<MediaDescriptionCompat> {
@@ -91,7 +101,6 @@ class DeviceMediaRepository(
         return cursorToSongs(cursor!!)
     }
 
-    //todo getAllAlbums
     override suspend fun getAllAlbums(pagination: Pagination): List<MediaDescriptionCompat> {
         Timber.d("getAllAlbums(pagination=$pagination)")
 
@@ -106,11 +115,18 @@ class DeviceMediaRepository(
         return cursorToAlbums(cursor!!)
     }
 
-    //todo getAllPlaylists
     override suspend fun getAllPlaylists(pagination: Pagination): List<MediaDescriptionCompat> {
         Timber.d("getAllPlaylists(pagination=$pagination)")
 
-        return emptyList()
+        val cursor = context.contentResolver.queryPaged(
+            playlistsUri,
+            playlistProjection,
+            null,
+            null,
+            pagination
+        )
+
+        return cursorToPlaylists(cursor!!)
     }
 
     private fun cursorToSongs(cursor: Cursor): List<MediaDescriptionCompat> {
@@ -176,6 +192,28 @@ class DeviceMediaRepository(
         cursor.close()
 
         return albums
+    }
+
+    private fun cursorToPlaylists(cursor: Cursor): List<MediaDescriptionCompat> {
+        val playlists: MutableList<MediaDescriptionCompat> = ArrayList()
+
+        while (cursor.moveToNext()) {
+            val mediaId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Playlists._ID))
+            val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Playlists.NAME))
+
+            val metadata = MediaMetadataCompat.Builder().apply {
+                this.id = mediaId.toString()
+                this.title = title
+
+                this.flag = MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
+                this.downloadStatus = STATUS_NOT_DOWNLOADED
+            }.build()
+
+            playlists.add(metadata.fullDescription)
+        }
+        cursor.close()
+
+        return playlists
     }
 
     private fun getAlbumArtUri(albumId: Long): Uri? {
