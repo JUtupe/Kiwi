@@ -3,6 +3,7 @@ package pl.jutupe.core.browser
 import android.content.Context
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
+import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
 import android.support.v4.media.MediaDescriptionCompat
 import androidx.annotation.StringRes
 import pl.jutupe.core.R
@@ -30,9 +31,9 @@ class DeviceBrowserTree(
             KIWI_MEDIA_EMPTY_ROOT -> emptyList()
             KIWI_MEDIA_ROOT -> rootMediaItems
 
-            KIWI_ROOT_SONGS -> mediaRepository.getAllSongs(pagination).toPlayableItems()
-            KIWI_ROOT_ALBUMS -> mediaRepository.getAllAlbums(pagination).toPlayableItems()
-            KIWI_ROOT_PLAYLISTS -> mediaRepository.getAllPlaylists(pagination).toPlayableItems()
+            KIWI_ROOT_SONGS -> mediaRepository.getAllSongs(pagination).toMediaItems(FLAG_PLAYABLE)
+            KIWI_ROOT_ALBUMS -> mediaRepository.getAllAlbums(pagination).toMediaItems(FLAG_BROWSABLE)
+            KIWI_ROOT_PLAYLISTS -> mediaRepository.getAllPlaylists(pagination).toMediaItems(FLAG_BROWSABLE)
             else -> null
         }?.let { return it }
 
@@ -53,8 +54,8 @@ class DeviceBrowserTree(
             FLAG_BROWSABLE
         )
 
-    private fun List<MediaDescriptionCompat>.toPlayableItems() : List<MediaBrowserCompat.MediaItem> =
-        map { MediaBrowserCompat.MediaItem(it, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE) }
+    private fun List<MediaDescriptionCompat>.toMediaItems(flag: Int) : List<MediaBrowserCompat.MediaItem> =
+        map { MediaBrowserCompat.MediaItem(it, flag) }
 
     companion object {
         const val KIWI_ROOT_SONGS = "kiwi.root.songs"

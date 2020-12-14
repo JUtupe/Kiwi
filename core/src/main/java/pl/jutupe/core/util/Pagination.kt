@@ -13,6 +13,8 @@ data class Pagination(
         require(pageSize in MIN_PAGE_SIZE..MAX_PAGE_SIZE)
     }
 
+    val offset = page * pageSize
+
     companion object {
         const val DEFAULT_PAGE = 0
         const val DEFAULT_PAGE_SIZE = 50
