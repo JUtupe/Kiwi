@@ -6,6 +6,7 @@ import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
 import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
 import android.support.v4.media.MediaDescriptionCompat
 import androidx.annotation.StringRes
+import kotlinx.coroutines.*
 import pl.jutupe.core.R
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_EMPTY_ROOT
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
@@ -26,7 +27,7 @@ class DeviceBrowserTree(
     override suspend fun itemsFor(
         parentId: String,
         pagination: Pagination
-    ): List<MediaBrowserCompat.MediaItem>? {
+    ): List<MediaBrowserCompat.MediaItem> {
         when (parentId) {
             KIWI_MEDIA_EMPTY_ROOT -> emptyList()
             KIWI_MEDIA_ROOT -> rootMediaItems
@@ -37,9 +38,16 @@ class DeviceBrowserTree(
             else -> null
         }?.let { return it }
 
-        //todo check if parent is playlist or album and query for its songs
+        /**
+         * We cannot determine if parentId is playlist, album or artist,
+         * so we need to query each function to possibly return media items
+        */
+        coroutineScope {
+            val playlistMembers = async { mediaRepository.getPlaylistMembers(parentId, pagination) }
+            val albumMembers = async {  mediaRepository.getAlbumMembers(parentId, pagination) }
 
-        return null
+            playlistMembers.await() + albumMembers.await()
+        }.toMediaItems(FLAG_PLAYABLE).let { return it }
     }
 
     private fun rootCategoryOf(

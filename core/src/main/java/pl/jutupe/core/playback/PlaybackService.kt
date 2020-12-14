@@ -61,7 +61,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
 
     private val dataSourceFactory: DefaultDataSourceFactory by lazy {
-        DefaultDataSourceFactory(this, "kiwi", null)
+        DefaultDataSourceFactory(this, TAG, null)
     }
 
     private lateinit var notificationManager: KiwiNotificationManager

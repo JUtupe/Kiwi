@@ -60,7 +60,7 @@ inline val MediaMetadataCompat.userRating
     get() = getLong(MediaMetadataCompat.METADATA_KEY_USER_RATING)
 
 inline val MediaMetadataCompat.rating
-     get() = getLong(MediaMetadataCompat.METADATA_KEY_RATING)
+    get() = getLong(MediaMetadataCompat.METADATA_KEY_RATING)
 
 inline val MediaMetadataCompat.displayTitle
     get() = getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE)
@@ -88,7 +88,10 @@ inline val MediaMetadataCompat.downloadStatus
  * item that is [MediaItem.FLAG_BROWSABLE] or [MediaItem.FLAG_PLAYABLE].
  */
 inline val MediaMetadataCompat.flag
-    get() = this.getLong(METADATA_KEY_KIWI_FLAGS).toInt()
+    get() = this.getLong(METADATA_KEY_KIWI_FLAG).toInt()
+
+inline val MediaMetadataCompat.playlistMemberId
+    get() = this.getLong(METADATA_KEY_KIWI_PLAYLIST_MEMBER_ID)
 
 inline val MediaMetadataCompat.albumId
     get() = this.getString("ALBUM_ID")
@@ -227,7 +230,14 @@ inline var MediaMetadataCompat.Builder.flag: Int
     @Deprecated(NO_GET, level = DeprecationLevel.ERROR)
     get() = throw IllegalAccessException("Cannot get from MediaMetadataCompat.Builder")
     set(value) {
-        putLong(METADATA_KEY_KIWI_FLAGS, value.toLong())
+        putLong(METADATA_KEY_KIWI_FLAG, value.toLong())
+    }
+
+inline var MediaMetadataCompat.Builder.playlistMemberId: Long
+    @Deprecated(NO_GET, level = DeprecationLevel.ERROR)
+    get() = throw IllegalAccessException("Cannot get from MediaMetadataCompat.Builder")
+    set(value) {
+        putLong(METADATA_KEY_KIWI_PLAYLIST_MEMBER_ID, value)
     }
 
 inline var MediaMetadataCompat.Builder.albumId: String
@@ -259,4 +269,9 @@ inline val MediaMetadataCompat.fullDescription
  * Custom property that holds whether an item is [MediaItem.FLAG_BROWSABLE] or
  * [MediaItem.FLAG_PLAYABLE].
  */
-const val METADATA_KEY_KIWI_FLAGS = "pl.jutupe.kiwi.METADATA_KEY_KIWI_FLAGS"
+const val METADATA_KEY_KIWI_FLAG = "KIWI_METADATA_KEY_FLAG"
+
+/**
+ * Custom property that holds playlist member id.
+ */
+const val METADATA_KEY_KIWI_PLAYLIST_MEMBER_ID = "KIWI_METADATA_KEY_PLAYLIST_MEMBER_ID"
