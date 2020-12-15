@@ -1,6 +1,8 @@
 include(
     ":app",
     ":core",
-    ":features:home"
+    ":features:home",
+    ":commons:base",
+    ":commons:ui"
 )
 rootProject.name = "Kiwi"
