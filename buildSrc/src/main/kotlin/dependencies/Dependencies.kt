@@ -27,6 +27,7 @@ private object Versions {
     const val appCompat = "1.1.0"
     const val material = "1.1.0"
     const val recyclerView = "1.1.0"
+    const val cardView = "1.0.0"
 }
 
 object Libraries {
@@ -44,6 +45,7 @@ object Libraries {
 
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
     const val material = "com.google.android.material:material:${Versions.material}"
+    const val cardView = "androidx.cardview:cardview:${Versions.cardView}"
 
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
