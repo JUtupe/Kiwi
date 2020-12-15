@@ -10,14 +10,16 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import pl.jutupe.core.browser.MediaBrowserTree
 import pl.jutupe.core.extension.getPaginationOrDefault
 import pl.jutupe.core.repository.MediaRepository
-import pl.jutupe.core.repository.RecentSongRepository
+import pl.jutupe.core.repository.RecentPlaybackSessionRepository
 import timber.log.Timber
 
 class KiwiPlaybackPreparer(
     private val mediaRepository: MediaRepository,
-    private val recentSongRepository: RecentSongRepository,
+    private val browserTree: MediaBrowserTree,
+    private val recentPlaybackSessionRepository: RecentPlaybackSessionRepository,
     private val serviceScope: CoroutineScope,
     private val onPlaylistPrepared: (PreparedPlaylist) -> Unit
 ) : MediaSessionConnector.PlaybackPreparer {
@@ -34,15 +36,17 @@ class KiwiPlaybackPreparer(
 
         //load recent song or return
         serviceScope.launch {
-            val recentSong = recentSongRepository.findRecentSong() ?: return@launch //todo find any song and prepare it
+            val session = recentPlaybackSessionRepository.findRecentPlaybackSession() ?: return@launch
 
-            val description = recentSong.description
-            recentSong.description.extras?.putLong(MEDIA_DESCRIPTION_EXTRAS_START_PLAYBACK_POSITION_MS, recentSong.position)
+            val description = session.description
+
+            description.extras?.putLong(MEDIA_DESCRIPTION_EXTRAS_START_PLAYBACK_POSITION_MS, session.position)
+            description.extras?.putString(KIWI_PARENT_ID_KEY, session.parentId)
 
             onPrepareFromMediaId(
                 description.mediaId!!,
                 playWhenReady,
-                recentSong.description.extras
+                description.extras
             )
         }
     }
@@ -67,21 +71,29 @@ class KiwiPlaybackPreparer(
     }
 
     override fun onPrepareFromMediaId(mediaId: String, playWhenReady: Boolean, extras: Bundle?) {
-        Timber.d("onPrepareFromMediaId(mediaId=$mediaId)")
+        Timber.d("onPrepareFromMediaId(mediaId=$mediaId, extras=$extras)")
 
         serviceScope.launch {
-            val item = mediaRepository.findByMediaId(mediaId)
+            mediaRepository.findByMediaId(mediaId)?.let { item ->
+                val pagination = extras.getPaginationOrDefault()
 
-            item?.let {
                 val playbackStartPositionMs =
                     extras?.getLong(MEDIA_DESCRIPTION_EXTRAS_START_PLAYBACK_POSITION_MS, 0) ?: 0
 
-                val songs = listOf(item) //todo build playlist based on song
+                val parentId = extras?.getString(KIWI_PARENT_ID_KEY)
+
+                val songs = parentId?.let { id ->
+                    val items = browserTree.itemsFor(id, pagination)
+                        ?.map { it.description }
+
+                    if (items?.isNotEmpty() == true) items
+                    else null
+                } ?: listOf(item)
 
                 val initialWindowIndex = songs.indexOf(item)
 
                 val playlist = PreparedPlaylist(
-                    songs = listOf(item),
+                    songs = songs,
                     itemIndex = initialWindowIndex,
                     playWhenReady = playWhenReady,
                     positionMs = playbackStartPositionMs
@@ -112,6 +124,7 @@ class KiwiPlaybackPreparer(
 
     companion object {
         const val MEDIA_DESCRIPTION_EXTRAS_START_PLAYBACK_POSITION_MS = "playback_start_position_ms"
+        const val KIWI_PARENT_ID_KEY = "KIWI_PARENT_ID_KEY"
     }
 
     data class PreparedPlaylist(

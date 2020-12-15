@@ -2,7 +2,9 @@ package pl.jutupe.core.repository
 
 import android.support.v4.media.MediaDescriptionCompat
 
-data class RecentSong (
+data class RecentPlaybackSession (
     val description: MediaDescriptionCompat,
     val position: Long
-)
+) {
+    val parentId: String = "1" //todo store parent id
+}

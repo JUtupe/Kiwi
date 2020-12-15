@@ -25,8 +25,8 @@ import pl.jutupe.core.extension.getPaginationOrDefault
 import pl.jutupe.core.extension.toMediaSource
 import pl.jutupe.core.notification.KiwiNotificationManager
 import pl.jutupe.core.repository.MediaRepository
-import pl.jutupe.core.repository.RecentSong
-import pl.jutupe.core.repository.RecentSongRepository
+import pl.jutupe.core.repository.RecentPlaybackSession
+import pl.jutupe.core.repository.RecentPlaybackSessionRepository
 import timber.log.Timber
 
 class PlaybackService : MediaBrowserServiceCompat() {
@@ -35,12 +35,13 @@ class PlaybackService : MediaBrowserServiceCompat() {
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
     private val mediaRepository: MediaRepository by inject()
-    private val recentSongRepository: RecentSongRepository by inject()
+    private val recentPlaybackSessionRepository: RecentPlaybackSessionRepository by inject()
     private val browserTree: MediaBrowserTree by inject()
 
     private val playbackPreparer = KiwiPlaybackPreparer(
         mediaRepository,
-        recentSongRepository,
+        browserTree,
+        recentPlaybackSessionRepository,
         serviceScope,
         this::onPlaylistPrepared
     )
@@ -92,7 +93,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
 
     override fun onTaskRemoved(rootIntent: Intent) {
-        storeRecentSong()
+        storeRecentPlaybackSession()
         super.onTaskRemoved(rootIntent)
 
         exoPlayer.stop(true)
@@ -175,17 +176,17 @@ class PlaybackService : MediaBrowserServiceCompat() {
             PendingIntent.getActivity(this, 0, sessionIntent, 0)
         }
 
-    private fun storeRecentSong() {
+    private fun storeRecentPlaybackSession() {
         serviceScope.launch {
             val description = exoPlayer.currentMediaItem?.playbackProperties?.tag as? MediaDescriptionCompat
             val position = exoPlayer.currentPosition // ms
 
-            val recent = description?.let {
-                RecentSong(it, position)
+            val session = description?.let {
+                RecentPlaybackSession(it, position)
             }
 
-            recent?.let {
-                recentSongRepository.save(recent)
+            session?.let {
+                recentPlaybackSessionRepository.save(session)
             }
         }
     }
@@ -200,7 +201,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
                 Player.STATE_READY -> {
                     notificationManager.showNotificationForPlayer(exoPlayer)
 
-                    storeRecentSong()
+                    storeRecentPlaybackSession()
 
                     if (!playWhenReady) {
                         // If playback is paused we remove the foreground state which allows the
