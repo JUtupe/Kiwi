@@ -9,6 +9,8 @@ dependencies {
     implementation(project(":commons:base"))
     implementation(project(":commons:ui"))
 
+    implementation(Libraries.media) //todo remove
+
     implementation(Libraries.appCompat)
     implementation(Libraries.constraintLayout)
 }

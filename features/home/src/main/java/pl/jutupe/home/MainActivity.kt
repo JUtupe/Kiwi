@@ -1,19 +1,16 @@
 package pl.jutupe.home
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.databinding.DataBindingUtil
+import org.koin.android.viewmodel.ext.android.viewModel
+import pl.jutupe.base.view.BaseActivity
 import pl.jutupe.home.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>(
+    layoutId = R.layout.activity_main
+) {
 
-    private lateinit var binding: ActivityMainBinding
+    override val viewModel: MainActivityViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
-        binding.test = "HEJ HEJ"
+    override fun onInitDataBinding() {
+        binding.viewModel = viewModel
     }
 }

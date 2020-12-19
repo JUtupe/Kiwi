@@ -2,8 +2,8 @@
 <layout>
     <data>
         <variable
-            name="test"
-            type="String" />
+            name="viewModel"
+            type="pl.jutupe.home.MainActivityViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,8 +16,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@{test}"
-            tools:text="hhhh"/>
+            android:text="@{viewModel.text}"
+            tools:text="Piosenka Tytuł"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
