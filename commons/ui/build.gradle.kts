@@ -8,9 +8,4 @@ plugins {
 
 dependencies {
     kapt(Libraries.databinding)
-
-    implementation(Libraries.coil)
-    implementation(Libraries.cardView)
-    implementation(Libraries.constraintLayout)
-    implementation(Libraries.recyclerView)
 }

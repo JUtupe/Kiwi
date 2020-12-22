@@ -28,6 +28,7 @@ private object Versions {
     const val material = "1.1.0"
     const val recyclerView = "1.1.0"
     const val cardView = "1.0.0"
+    const val lifecycle = "2.2.0"
 }
 
 object Libraries {
@@ -51,6 +52,7 @@ object Libraries {
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
 
     const val paging = "androidx.paging:paging-runtime:${Versions.paging}"
+    const val lifecycle = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
 
     const val navigationFragment = "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
     const val navigation = "androidx.navigation:navigation-ui-ktx:${Versions.navigation}"

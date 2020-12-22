@@ -1,4 +1,4 @@
-package pl.jutupe.ui.song
+package pl.jutupe.home.songs
 
 interface SongAction {
 

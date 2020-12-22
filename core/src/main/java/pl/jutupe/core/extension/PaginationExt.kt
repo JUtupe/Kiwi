@@ -18,5 +18,10 @@ fun Bundle?.getPaginationOrDefault(): Pagination {
     }
 }
 
+fun Bundle.putPagination(pagination: Pagination) = apply {
+    this.putInt(KEY_PAGE, pagination.page)
+    this.putInt(KEY_PAGE_SIZE, pagination.pageSize)
+}
+
 const val KEY_PAGE = MediaBrowserCompat.EXTRA_PAGE
 const val KEY_PAGE_SIZE = MediaBrowserCompat.EXTRA_PAGE_SIZE

@@ -135,7 +135,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         serviceScope.launch {
             val items = browserTree.itemsFor(parentId, pagination)
 
-            Timber.d("onLoadChildren result(${items?.size ?: "null"})")
+            Timber.d("onLoadChildren(parentId=$parentId) result(${items?.size ?: "null"})")
             result.sendResult(items)
         }
     }

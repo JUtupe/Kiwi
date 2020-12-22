@@ -11,12 +11,14 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.MutableLiveData
 import pl.jutupe.core.extension.id
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class KiwiServiceConnection(
     context: Context,
     serviceComponent: ComponentName
 ) {
-
     val rootMediaId: String
         get() = mediaBrowser.root
 
@@ -27,7 +29,7 @@ class KiwiServiceConnection(
     val nowPlaying = MutableLiveData<MediaMetadataCompat>()
         .apply { postValue(NOTHING_PLAYING) }
 
-    val transportControls: MediaControllerCompat.TransportControls
+    private val transportControls: MediaControllerCompat.TransportControls
         get() = mediaController.transportControls
 
     private val mediaBrowserConnectionCallback = MediaBrowserConnectionCallback(context)
@@ -39,12 +41,37 @@ class KiwiServiceConnection(
 
     private lateinit var mediaController: MediaControllerCompat
 
-    fun subscribe(parentId: String, callback: MediaBrowserCompat.SubscriptionCallback) {
-        mediaBrowser.subscribe(parentId, callback)
-    }
+    suspend fun getItems(parentId: String, options: Bundle): List<MediaItem> =
+        suspendCoroutine<List<MediaBrowserCompat.MediaItem>> { continuation ->
+            val callback = object : MediaBrowserCompat.SubscriptionCallback() {
+                override fun onChildrenLoaded(
+                    parentId: String,
+                    children: MutableList<MediaBrowserCompat.MediaItem>,
+                    options: Bundle
+                ) {
+                    continuation.resume(children)
 
-    fun unsubscribe(parentId: String, callback: MediaBrowserCompat.SubscriptionCallback) {
-        mediaBrowser.unsubscribe(parentId, callback)
+                    mediaBrowser.unsubscribe(parentId, this)
+                }
+
+                override fun onError(parentId: String, options: Bundle) {
+                    continuation.resumeWithException(Exception())
+
+                    mediaBrowser.unsubscribe(parentId, this)
+                }
+            }
+            mediaBrowser.subscribe(parentId, options, callback)
+        }.map {
+            MediaItem(
+                it.mediaId ?: "unknown",
+                it.description.title?.toString() ?: "unknown",
+                it.description.iconUri,
+                if (it.isPlayable) MediaFlag.FLAG_PLAYABLE else MediaFlag.FLAG_BROWSABLE
+            )
+        }
+
+    fun playFromMediaId(mediaId: String, extras: Bundle) {
+        transportControls.playFromMediaId(mediaId, extras)
     }
 
     fun sendCommand(command: String, parameters: Bundle?) =
