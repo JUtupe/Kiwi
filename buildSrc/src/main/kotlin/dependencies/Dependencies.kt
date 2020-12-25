@@ -21,7 +21,8 @@ private object Versions {
     const val media = "1.2.1"
     const val exoPlayer = "2.12.2"
     const val coil = "1.1.0"
-    const val constraintLayout = "2.0.0-beta8"
+    const val constraintLayout = "2.0.4"
+    const val coordinatorLayout = "1.1.0"
     const val databindingCompiler = "4.1.0"
     const val paging = "3.0.0-alpha04"
     const val appCompat = "1.1.0"
@@ -49,6 +50,7 @@ object Libraries {
     const val cardView = "androidx.cardview:cardview:${Versions.cardView}"
 
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
+    const val coordinatorLayout = "androidx.coordinatorlayout:coordinatorlayout:${Versions.coordinatorLayout}"
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
 
     const val paging = "androidx.paging:paging-runtime:${Versions.paging}"

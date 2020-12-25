@@ -17,4 +17,6 @@ dependencies {
     implementation(Libraries.appCompat)
     implementation(Libraries.cardView)
     implementation(Libraries.constraintLayout)
+    implementation(Libraries.coordinatorLayout)
+    implementation(Libraries.material)
 }

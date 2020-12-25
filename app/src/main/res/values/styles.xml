@@ -5,6 +5,7 @@
         <item name="colorPrimaryDark">#074600</item>
         <item name="colorSecondary">#62717b</item>
         <item name="colorAccent">#6aa138</item>
+        <item name="colorSurface">#37474F</item>
     </style>
 
     <style name="KiwiTheme" parent="BaseKiwiTheme">
