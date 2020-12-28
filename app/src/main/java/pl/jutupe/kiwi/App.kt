@@ -5,6 +5,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import pl.jutupe.core.di.coreModule
 import pl.jutupe.home.di.homeModule
+import pl.jutupe.settings.di.settingsModule
 import timber.log.Timber
 
 class App : Application() {
@@ -26,7 +27,8 @@ class App : Application() {
             modules(
                 listOf(
                     coreModule,
-                    homeModule
+                    homeModule,
+                    settingsModule
                 )
             )
         }

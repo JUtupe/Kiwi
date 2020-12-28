@@ -1,15 +1,14 @@
 package pl.jutupe.home.di
 
 import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
-import pl.jutupe.home.MainActivityViewModel
-import pl.jutupe.home.library.LibraryViewModel
-import pl.jutupe.home.main.MainViewModel
-import pl.jutupe.home.search.SearchViewModel
+import pl.jutupe.home.ui.HomeFragmentViewModel
+import pl.jutupe.home.ui.library.LibraryViewModel
+import pl.jutupe.home.ui.main.MainViewModel
+import pl.jutupe.home.ui.search.SearchViewModel
 
 val homeModule = module {
-    viewModel { MainActivityViewModel() }
+    viewModel { HomeFragmentViewModel() }
 
     viewModel { MainViewModel() }
     viewModel { SearchViewModel() }

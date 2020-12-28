@@ -9,6 +9,10 @@ dependencies {
     implementation(project(":commons:base"))
     implementation(project(":commons:ui"))
 
+    implementation(project(":navigation"))
+
+    implementation(Libraries.navigation)
+
     implementation(Libraries.paging)
     implementation(Libraries.lifecycle)
 

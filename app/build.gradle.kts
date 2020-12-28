@@ -44,6 +44,12 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":features:home"))
+    implementation(project(":features:settings"))
+
+    implementation(project(":navigation"))
+
+    implementation(Libraries.navigation)
+    implementation(Libraries.navigationFragment)
 
     implementation(Libraries.appCompat)
     implementation(Libraries.material)

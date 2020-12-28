@@ -14,7 +14,8 @@ object Releases {
 private object Versions {
     const val kotlin = "1.4.20"
     const val coroutines = "1.3.8"
-    const val navigation = "2.3.0"
+    const val navigation = "2.3.2"
+    const val preferences = "1.1.1"
     const val timber = "4.7.1"
     const val koin = "2.1.5"
     const val core = "1.3.1"
@@ -48,6 +49,7 @@ object Libraries {
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
     const val material = "com.google.android.material:material:${Versions.material}"
     const val cardView = "androidx.cardview:cardview:${Versions.cardView}"
+    const val preferences = "androidx.preference:preference:${Versions.preferences}"
 
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
     const val coordinatorLayout = "androidx.coordinatorlayout:coordinatorlayout:${Versions.coordinatorLayout}"

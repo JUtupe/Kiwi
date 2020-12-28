@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="BaseKiwiTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="BaseKiwiTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#3a7200</item>
         <item name="colorPrimaryDark">#074600</item>
         <item name="colorSecondary">#62717b</item>
         <item name="colorAccent">#6aa138</item>
         <item name="colorSurface">#37474F</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
     </style>
 
     <style name="KiwiTheme" parent="BaseKiwiTheme">

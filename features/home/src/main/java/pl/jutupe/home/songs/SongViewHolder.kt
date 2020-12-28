@@ -3,7 +3,6 @@ package pl.jutupe.home.songs
 import androidx.recyclerview.widget.RecyclerView
 import coil.Coil
 import coil.request.ImageRequest
-import coil.size.Scale
 import pl.jutupe.core.common.MediaItem
 import pl.jutupe.home.databinding.ItemSongBinding
 
