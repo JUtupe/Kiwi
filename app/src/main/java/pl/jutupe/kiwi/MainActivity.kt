@@ -1,6 +1,7 @@
 package pl.jutupe.kiwi
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -20,10 +21,17 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         navView.setupWithNavController(navController)
+        navView.setVersionText()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(findViewById(R.id.drawer)) || super.onSupportNavigateUp()
+    }
+
+    private fun NavigationView.setVersionText() {
+        val header = getHeaderView(0)
+        val versionText = header.findViewById<TextView>(R.id.version)
+        versionText.text = BuildConfig.VERSION_NAME
     }
 }

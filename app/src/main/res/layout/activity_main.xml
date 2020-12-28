@@ -26,6 +26,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="?attr/colorPrimary"
+        app:itemTextAppearance="@style/KiwiMenuText"
+        app:itemTextColor="@android:color/white"
+        app:itemBackground="@drawable/item_menu"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 

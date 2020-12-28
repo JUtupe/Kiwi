@@ -4,7 +4,7 @@ object Releases {
     const val applicationId = "pl.jutupe.kiwi"
 
     const val versionCode = 1
-    const val versionName = "0.1"
+    const val versionName = "v0.0.1"
 
     const val minSdk = 21
     const val compileSdk = 29

@@ -14,4 +14,8 @@
     <style name="KiwiTheme" parent="BaseKiwiTheme">
         <item name="android:colorBackground">#263238</item>
     </style>
+
+    <style name="KiwiMenuText">
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>
