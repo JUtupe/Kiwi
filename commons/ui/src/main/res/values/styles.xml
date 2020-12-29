@@ -11,11 +11,16 @@
         <item name="android:textColorSecondary">@android:color/white</item>
     </style>
 
-    <style name="KiwiTheme" parent="BaseKiwiTheme">
-        <item name="android:colorBackground">#263238</item>
+    <style name="WindowAnimationStyle">
+        <item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@android:anim/fade_out</item>
+        <item name="android:activityCloseExitAnimation">@android:anim/fade_in</item>
     </style>
 
-    <style name="KiwiMenuText">
-        <item name="android:textSize">20sp</item>
+    <style name="KiwiTheme" parent="BaseKiwiTheme">
+        <item name="android:colorBackground">#263238</item>
+
+        <item name="android:windowAnimationStyle">@style/WindowAnimationStyle</item>
     </style>
 </resources>

@@ -8,4 +8,7 @@ plugins {
 
 dependencies {
     kapt(Libraries.databinding)
+
+    implementation(Libraries.appCompat)
+    implementation(Libraries.material)
 }

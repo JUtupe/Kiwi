@@ -1,4 +1,4 @@
-package pl.jutupe.kiwi
+package pl.jutupe.main
 
 import org.junit.Test
 

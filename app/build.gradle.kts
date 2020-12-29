@@ -43,16 +43,10 @@ dependencies {
     implementation(Libraries.kotlin)
 
     implementation(project(":core"))
+    implementation(project(":main"))
+    implementation(project(":commons:ui"))
     implementation(project(":features:home"))
     implementation(project(":features:settings"))
-
-    implementation(project(":navigation"))
-
-    implementation(Libraries.navigation)
-    implementation(Libraries.navigationFragment)
-
-    implementation(Libraries.appCompat)
-    implementation(Libraries.material)
 
     implementation(Libraries.timber)
     implementation(Libraries.koin)
