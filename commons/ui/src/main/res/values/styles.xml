@@ -23,4 +23,13 @@
 
         <item name="android:windowAnimationStyle">@style/WindowAnimationStyle</item>
     </style>
+
+    <style name="KiwiDialog" parent="Theme.MaterialComponents.Dialog.FixedSize">
+        <item name="android:backgroundTint">#37474F</item>
+    </style>
+
+    <style name="KiwiDialog.Large">
+        <item name="android:windowMinWidthMajor">97%</item>
+        <item name="android:windowMinWidthMinor">97%</item>
+    </style>
 </resources>

@@ -6,6 +6,8 @@ plugins {
 
 dependencies {
     implementation(project(":commons:ui"))
+    implementation(project(":commons:base"))
+
     implementation(project(":navigation"))
 
     implementation(Libraries.constraintLayout)
