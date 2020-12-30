@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_now_playing">Teraz odtwarzane</string>
+    <string name="notification_channel_now_playing_description">Kontrolowanie aktualnie odtwarzanych utworów</string>
+    <string name="browser_root_songs">Utwory</string>
+    <string name="browser_root_albums">Albumy</string>
+    <string name="browser_root_playlists">Playlisty</string>
+</resources>

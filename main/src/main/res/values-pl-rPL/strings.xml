@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_home">Strona główna</string>
+    <string name="menu_settings">Ustawienia</string>
+    <string name="label_settings">Ustawienia</string>
+    <string name="label_permission">Uprawnienia</string>
+    <string name="label_permission_message">Do poprawnego funkcjonowania aplikacji wymagane są uprawnienia do pamięci</string>
+</resources>

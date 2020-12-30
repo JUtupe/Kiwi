@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_search">Wyszukaj</string>
+    <string name="tab_library">Biblioteka</string>
+    <string name="tab_main">Główna</string>
+</resources>
