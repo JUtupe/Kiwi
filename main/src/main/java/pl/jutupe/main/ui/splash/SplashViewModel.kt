@@ -35,4 +35,8 @@ class SplashViewModel(
             events.value = SplashViewEvent.ShowNoPermissionInformation
         }
     }
+
+    fun onPermissionSettingsClicked() {
+        events.value = SplashViewEvent.NavigateToAppSettings
+    }
 }

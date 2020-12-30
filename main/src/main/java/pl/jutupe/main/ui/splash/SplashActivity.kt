@@ -15,7 +15,6 @@ import pl.jutupe.base.view.BaseActivity
 import pl.jutupe.main.R
 import pl.jutupe.main.databinding.ActivitySplashBinding
 import pl.jutupe.main.ui.main.MainActivity
-import timber.log.Timber
 
 class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
     R.layout.activity_splash
@@ -102,17 +101,18 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
                 AlertDialog.Builder(this, R.style.KiwiDialog_Large)
                     .setTitle(R.string.label_permission)
                     .setMessage(R.string.label_permission_message)
-                    .setPositiveButton(R.string.label_settings) { _, _ ->
-                        startActivity(
-                            Intent(
-                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                Uri.fromParts("package", packageName, null)
-                            )
-                        )
-                    }
+                    .setPositiveButton(R.string.label_settings) { _, _ -> viewModel.onPermissionSettingsClicked() }
                     .setCancelable(false)
                     .create()
                     .show()
+            }
+            SplashViewEvent.NavigateToAppSettings -> {
+                startActivity(
+                    Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", packageName, null)
+                    )
+                )
             }
         }
     }
