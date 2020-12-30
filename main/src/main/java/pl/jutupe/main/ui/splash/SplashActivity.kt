@@ -15,7 +15,6 @@ import pl.jutupe.base.view.BaseActivity
 import pl.jutupe.main.R
 import pl.jutupe.main.databinding.ActivitySplashBinding
 import pl.jutupe.main.ui.main.MainActivity
-import timber.log.Timber
 
 class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
     R.layout.activity_splash
