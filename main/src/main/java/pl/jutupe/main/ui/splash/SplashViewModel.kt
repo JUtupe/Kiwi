@@ -12,19 +12,14 @@ class SplashViewModel(
 
     val events = SingleLiveData<SplashViewEvent>()
 
-    fun onSplashAnimationFinished(showPermissionRationale: Boolean) {
+    fun onSplashAnimationFinished() {
         val storagePermission = PermissionChecker.checkSelfPermission(getApplication(),
             Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
         if (storagePermission == PermissionChecker.PERMISSION_GRANTED) {
             events.value = SplashViewEvent.NavigateToMain
         } else {
-
-            if (showPermissionRationale) {
-                events.value = SplashViewEvent.RequestStoragePermission
-            } else {
-                events.value = SplashViewEvent.ShowNoPermissionInformation
-            }
+            events.value = SplashViewEvent.RequestStoragePermission
         }
     }
 
@@ -38,5 +33,14 @@ class SplashViewModel(
 
     fun onPermissionSettingsClicked() {
         events.value = SplashViewEvent.NavigateToAppSettings
+    }
+
+    fun onResumeToSplash() {
+        val storagePermission = PermissionChecker.checkSelfPermission(getApplication(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        if (storagePermission == PermissionChecker.PERMISSION_GRANTED) {
+            events.value = SplashViewEvent.NavigateToMain
+        }
     }
 }

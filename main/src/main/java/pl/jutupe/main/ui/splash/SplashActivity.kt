@@ -15,6 +15,7 @@ import pl.jutupe.base.view.BaseActivity
 import pl.jutupe.main.R
 import pl.jutupe.main.databinding.ActivitySplashBinding
 import pl.jutupe.main.ui.main.MainActivity
+import timber.log.Timber
 
 class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
     R.layout.activity_splash
@@ -26,12 +27,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
         binding.motionLayout.setTransitionListener(
             object : MotionLayout.TransitionListener {
                 override fun onTransitionCompleted(layout: MotionLayout?, p1: Int) {
-                    val showRationale = ActivityCompat.shouldShowRequestPermissionRationale(
-                        this@SplashActivity,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    )
-
-                    viewModel.onSplashAnimationFinished(showRationale)
+                    viewModel.onSplashAnimationFinished()
                 }
 
                 override fun onTransitionChange(
@@ -58,7 +54,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
 
             //retry when user came back from settings
             if (currentState == R.id.end) {
-                viewModel.onSplashAnimationFinished(false)
+                viewModel.onResumeToSplash()
             }
         }
     }
@@ -81,6 +77,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
             val permissionGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED
 
             viewModel.onStoragePermissionResult(permissionGranted)
+        } else {
+            viewModel.onStoragePermissionResult(false)
         }
     }
 
