@@ -22,7 +22,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="@{() -> action.onClick(item.id)}"
+            android:onClick="@{() -> action.onClick(item)}"
             app:cardElevation="4dp"
             app:cardCornerRadius="20dp">
 
@@ -84,7 +84,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
                     android:background="@android:color/transparent"
-                    android:onClick="@{() -> action.onMoreClick(item.id)}"
+                    android:onClick="@{() -> action.onMoreClick(item)}"
                     android:src="@drawable/ic_more"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

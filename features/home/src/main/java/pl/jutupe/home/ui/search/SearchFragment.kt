@@ -17,7 +17,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
             NavigationIconClickListener(
                 requireContext(),
                 binding.content,
-                binding.backdrop,
+                binding.backdrop.root,
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_filter),
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_up),
             )

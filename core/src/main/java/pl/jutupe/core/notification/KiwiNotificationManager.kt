@@ -86,7 +86,7 @@ class KiwiNotificationManager (
             imageScope.launch {
                 val r = ImageRequest.Builder(context)
                     .data(iconUri)
-                    .error(R.drawable.art_placeholder_error)
+                    .error(R.drawable.art_placeholder)
                     .size(NOTIFICATION_LARGE_ICON_SIZE)
                     .memoryCacheKey(iconUri.toString())
                     .build()

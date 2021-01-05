@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import pl.jutupe.core.common.MediaItem
 import pl.jutupe.home.databinding.ItemSongBinding
 
-class SongAdapter : PagingDataAdapter<MediaItem, SongViewHolder>(
+class MediaItemAdapter : PagingDataAdapter<MediaItem, SongViewHolder>(
     object : DiffUtil.ItemCallback<MediaItem>() {
         override fun areItemsTheSame(oldItem: MediaItem, newItem: MediaItem): Boolean =
             oldItem.id == newItem.id

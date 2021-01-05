@@ -1,4 +1,3 @@
-include(":main")
 include(
     ":app",
     ":core",

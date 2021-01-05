@@ -10,9 +10,11 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaDescriptionCompat.STATUS_DOWNLOADED
 import android.support.v4.media.MediaMetadataCompat
+import pl.jutupe.core.R
 import pl.jutupe.core.extension.*
 import pl.jutupe.core.repository.MediaRepository
 import pl.jutupe.core.util.Pagination
+import pl.jutupe.core.util.resourceUri
 import timber.log.Timber
 
 class DeviceMediaRepository(
@@ -189,7 +191,7 @@ class DeviceMediaRepository(
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
             val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
             val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
-            val albumArtUri = getAlbumArtUri(albumId)?.toString()
+            val albumArtUri = getAlbumArtUri(albumId) ?: context.resourceUri(R.drawable.art_placeholder)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
@@ -201,9 +203,9 @@ class DeviceMediaRepository(
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
                 this.downloadStatus = STATUS_DOWNLOADED
 
-                this.artUri = albumArtUri
-                this.albumArtUri = albumArtUri
-                this.displayIconUri = albumArtUri
+                this.artUri = albumArtUri.toString()
+                this.albumArtUri = albumArtUri.toString()
+                this.displayIconUri = albumArtUri.toString()
             }.build()
 
             songs.add(metadata.fullDescription)
@@ -222,7 +224,7 @@ class DeviceMediaRepository(
             val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM))
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST))
             val trackCount = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS))
-            val albumArtUri = getAlbumArtUri(albumId)?.toString()
+            val albumArtUri = getAlbumArtUri(albumId) ?: context.resourceUri(R.drawable.art_placeholder)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
@@ -234,9 +236,9 @@ class DeviceMediaRepository(
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
                 this.downloadStatus = STATUS_DOWNLOADED
 
-                this.artUri = albumArtUri
-                this.albumArtUri = albumArtUri
-                this.displayIconUri = albumArtUri
+                this.artUri = albumArtUri.toString()
+                this.albumArtUri = albumArtUri.toString()
+                this.displayIconUri = albumArtUri.toString()
             }.build()
 
             albums.add(metadata.fullDescription)
@@ -280,7 +282,7 @@ class DeviceMediaRepository(
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
             val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
             val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
-            val albumArtUri = getAlbumArtUri(albumId)?.toString()
+            val albumArtUri = getAlbumArtUri(albumId) ?: context.resourceUri(R.drawable.art_placeholder)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
@@ -294,9 +296,9 @@ class DeviceMediaRepository(
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
                 this.downloadStatus = STATUS_DOWNLOADED
 
-                this.artUri = albumArtUri
-                this.albumArtUri = albumArtUri
-                this.displayIconUri = albumArtUri
+                this.artUri = albumArtUri.toString()
+                this.albumArtUri = albumArtUri.toString()
+                this.displayIconUri = albumArtUri.toString()
             }.build()
 
             members.add(metadata.fullDescription)

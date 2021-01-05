@@ -1,8 +1,10 @@
 package pl.jutupe.home.songs
 
+import pl.jutupe.core.common.MediaItem
+
 interface SongAction {
 
-    fun onClick(id: String)
+    fun onClick(item: MediaItem)
 
-    fun onMoreClick(id: String)
+    fun onMoreClick(item: MediaItem)
 }

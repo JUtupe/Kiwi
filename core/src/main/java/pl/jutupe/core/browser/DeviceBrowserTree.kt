@@ -30,8 +30,7 @@ class DeviceBrowserTree(
     ): List<MediaBrowserCompat.MediaItem> {
         when (parentId) {
             KIWI_MEDIA_EMPTY_ROOT -> emptyList()
-            KIWI_MEDIA_ROOT -> rootMediaItems
-
+            KIWI_MEDIA_ROOT -> getRootItems(pagination)
             KIWI_ROOT_SONGS -> mediaRepository.getAllSongs(pagination).toMediaItems(FLAG_PLAYABLE)
             KIWI_ROOT_ALBUMS -> mediaRepository.getAllAlbums(pagination).toMediaItems(FLAG_BROWSABLE)
             KIWI_ROOT_PLAYLISTS -> mediaRepository.getAllPlaylists(pagination).toMediaItems(FLAG_BROWSABLE)
@@ -49,6 +48,13 @@ class DeviceBrowserTree(
             playlistMembers.await() + albumMembers.await()
         }.toMediaItems(FLAG_PLAYABLE).let { return it }
     }
+
+    private fun getRootItems(pagination: Pagination): List<MediaBrowserCompat.MediaItem> =
+        if (pagination.page != Pagination.DEFAULT_PAGE) {
+            emptyList()
+        } else {
+            rootMediaItems
+        }
 
     private fun rootCategoryOf(
         mediaId: String,
