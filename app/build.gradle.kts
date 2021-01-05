@@ -3,6 +3,9 @@ import dependencies.Releases
 
 plugins {
     id("com.android.application")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+
     kotlin("android")
 }
 
@@ -47,6 +50,10 @@ dependencies {
     implementation(project(":commons:ui"))
     implementation(project(":features:home"))
     implementation(project(":features:settings"))
+
+    implementation(platform(Libraries.firebaseBoM))
+    implementation(Libraries.firebaseAnalytics)
+    implementation(Libraries.firebaseCrashlytics)
 
     implementation(Libraries.timber)
     implementation(Libraries.koin)

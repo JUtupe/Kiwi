@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1053502097471",
+    "project_id": "kiwi-581f2",
+    "storage_bucket": "kiwi-581f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053502097471:android:dae5344ca68e56489a108a",
+        "android_client_info": {
+          "package_name": "pl.jutupe.kiwi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053502097471-ungggd3emjvpld75bildldjkdh89df3n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.jutupe.kiwi",
+            "certificate_hash": "8cf1ee33c272573a21c2f209cbe940715bc41485"
+          }
+        },
+        {
+          "client_id": "1053502097471-om5t8d2ssj1mte9g190lo6v6n2qb7f6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDA7wQPlF5qJnMyj1SHhS9pvNoL2r90FY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1053502097471-om5t8d2ssj1mte9g190lo6v6n2qb7f6p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
