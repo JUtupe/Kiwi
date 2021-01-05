@@ -60,8 +60,7 @@ class DeviceMediaRepository(
     )
 
     private val albumProjection = arrayOf(
-        MediaStore.Audio.Albums._ID, //todo check which one to use
-        MediaStore.Audio.Albums.ALBUM_ID,
+        MediaStore.Audio.Albums._ID,
         MediaStore.Audio.Albums.ALBUM,
         MediaStore.Audio.Albums.ARTIST,
         MediaStore.Audio.Albums.NUMBER_OF_SONGS,
@@ -220,17 +219,16 @@ class DeviceMediaRepository(
 
         while (cursor.moveToNext()) {
             val mediaId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Albums._ID))
-            val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ID))
             val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM))
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST))
             val trackCount = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS))
-            val albumArtUri = getAlbumArtUri(albumId) ?: context.resourceUri(R.drawable.art_placeholder)
+            val albumArtUri = getAlbumArtUri(mediaId) ?: context.resourceUri(R.drawable.art_placeholder)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
                 this.artist = artist
                 this.title = title
-                this.albumId = albumId.toString()
+                this.albumId = mediaId.toString()
                 this.trackCount = trackCount
 
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
