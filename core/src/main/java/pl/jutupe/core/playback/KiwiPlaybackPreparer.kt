@@ -5,15 +5,16 @@ import android.os.Bundle
 import android.os.ResultReceiver
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ControlDispatcher
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import pl.jutupe.core.browser.MediaBrowserTree
-import pl.jutupe.core.extension.getPaginationOrDefault
 import pl.jutupe.core.repository.MediaRepository
 import pl.jutupe.core.repository.RecentPlaybackSessionRepository
+import pl.jutupe.core.util.Pagination
 import timber.log.Timber
 
 class KiwiPlaybackPreparer(
@@ -54,10 +55,8 @@ class KiwiPlaybackPreparer(
     override fun onPrepareFromSearch(query: String, playWhenReady: Boolean, extras: Bundle?) {
         Timber.d("onPrepareFromSearch(query=$query)")
 
-        val pagination = extras.getPaginationOrDefault()
-
         serviceScope.launch {
-            val songs = mediaRepository.search(query, pagination)
+            val songs = mediaRepository.search(query, Pagination(Pagination.DEFAULT_PAGE, Pagination.MAX_PAGE_SIZE))
 
             if (songs.isNotEmpty()) {
                 val playlist = PreparedPlaylist(
@@ -75,10 +74,10 @@ class KiwiPlaybackPreparer(
 
         serviceScope.launch {
             mediaRepository.findByMediaId(mediaId)?.let { item ->
-                val pagination = extras.getPaginationOrDefault()
+                val pagination = Pagination(Pagination.DEFAULT_PAGE, Pagination.MAX_PAGE_SIZE)
 
                 val playbackStartPositionMs =
-                    extras?.getLong(MEDIA_DESCRIPTION_EXTRAS_START_PLAYBACK_POSITION_MS, 0) ?: 0
+                    extras?.getLong(MEDIA_DESCRIPTION_EXTRAS_START_PLAYBACK_POSITION_MS, C.TIME_UNSET) ?: C.TIME_UNSET
 
                 val parentId = extras?.getString(KIWI_PARENT_ID_KEY)
 
@@ -90,7 +89,12 @@ class KiwiPlaybackPreparer(
                     else null
                 } ?: listOf(item)
 
-                val initialWindowIndex = songs.indexOf(item)
+                val initialWindowIndex = songs.indexOf(songs.find { it.mediaId == mediaId })
+
+                if (initialWindowIndex == -1) {
+                    Timber.e("Song not in parent id mediaId=$mediaId, parentId=$parentId, songs=$songs,")
+                    throw IllegalArgumentException("song not in parentId")
+                }
 
                 val playlist = PreparedPlaylist(
                     songs = songs,
@@ -131,6 +135,6 @@ class KiwiPlaybackPreparer(
         val songs: List<MediaDescriptionCompat>,
         val itemIndex: Int = 0,
         val playWhenReady: Boolean,
-        val positionMs: Long = 0
+        val positionMs: Long = C.TIME_UNSET
     )
 }

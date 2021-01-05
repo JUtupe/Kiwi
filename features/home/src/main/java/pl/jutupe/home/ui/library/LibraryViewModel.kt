@@ -1,6 +1,5 @@
 package pl.jutupe.home.ui.library
 
-import android.os.Bundle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,7 +34,7 @@ class LibraryViewModel(
             Timber.d("onClick($item)")
 
             if (item.flag == MediaFlag.FLAG_PLAYABLE) {
-                connection.playFromMediaId(item.id, Bundle.EMPTY)
+                connection.playFromMediaId(item.id, currentRootId)
             } else {
                 changeRootId(item.id)
             }

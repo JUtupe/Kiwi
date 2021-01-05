@@ -11,6 +11,7 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.MutableLiveData
 import pl.jutupe.core.extension.id
+import pl.jutupe.core.playback.KiwiPlaybackPreparer
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -70,7 +71,11 @@ class KiwiServiceConnection(
             )
         }
 
-    fun playFromMediaId(mediaId: String, extras: Bundle) {
+    fun playFromMediaId(mediaId: String, parentId: String?) {
+        val extras = Bundle().apply {
+            putString(KiwiPlaybackPreparer.KIWI_PARENT_ID_KEY, parentId)
+        }
+
         transportControls.playFromMediaId(mediaId, extras)
     }
 
