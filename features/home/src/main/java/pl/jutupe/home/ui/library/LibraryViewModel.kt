@@ -1,13 +1,12 @@
 package pl.jutupe.home.ui.library
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import pl.jutupe.base.SingleLiveData
-import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
 import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.common.MediaFlag
 import pl.jutupe.core.common.MediaItem
@@ -19,24 +18,24 @@ class LibraryViewModel(
     private val connection: KiwiServiceConnection
 ) : ViewModel() {
 
-    private var currentRootId: String = KIWI_MEDIA_ROOT
+    private val currentRoot = MutableStateFlow(connection.rootMediaItem)
 
     val events = SingleLiveData<LibraryViewEvent>()
     val isInRoot = MutableLiveData(true)
 
     val songs = Pager(
         PagingConfig(pageSize = 30)
-    ) { MediaItemDataSource(currentRootId, connection) }
+    ) { MediaItemDataSource(currentRoot.value.id, connection) }
         .flow.cachedIn(viewModelScope)
 
     val songAction = object : SongAction {
         override fun onClick(item: MediaItem) {
             Timber.d("onClick($item)")
 
-            if (item.flag == MediaFlag.FLAG_PLAYABLE) {
-                connection.playFromMediaId(item.id, currentRootId)
-            } else {
-                changeRootId(item.id)
+            when (item.flag) {
+                MediaFlag.FLAG_BROWSABLE -> changeRoot(item)
+                MediaFlag.FLAG_PLAYABLE ->
+                    connection.playFromMediaId(item.id, currentRoot.value.id)
             }
         }
 
@@ -46,15 +45,16 @@ class LibraryViewModel(
     }
 
     fun onNavigateToParentClicked() {
-        Timber.d("onNavigateToParentClicked(), currentRootId=$currentRootId")
+        Timber.d("onNavigateToParentClicked(), currentRootId=$currentRoot")
 
-        changeRootId(connection.rootMediaId)
+        changeRoot(connection.rootMediaItem)
     }
 
-    private fun changeRootId(rootId: String) {
-        currentRootId = rootId
+    fun getCurrentRoot(): LiveData<MediaItem> = currentRoot.asLiveData()
 
-        isInRoot.postValue(rootId == KIWI_MEDIA_ROOT)
+    private fun changeRoot(root: MediaItem) {
+        currentRoot.value = root
+        isInRoot.value = root.id == connection.rootMediaId
 
         events.value = LibraryViewEvent.RefreshAdapter
     }

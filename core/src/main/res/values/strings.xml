@@ -3,7 +3,12 @@
     <string name="notification_channel_now_playing">Now playing</string>
     <string name="notification_channel_now_playing_description">Now playing song controller</string>
 
+    <string name="browser_root_main">Main directory</string>
     <string name="browser_root_songs">Songs</string>
     <string name="browser_root_albums">Albums</string>
     <string name="browser_root_playlists">Playlists</string>
+
+    <string name="artist_device">Device</string>
+    <string name="title_unknown">Title unknown</string>
+    <string name="artist_unknown">Artist unknown</string>
 </resources>

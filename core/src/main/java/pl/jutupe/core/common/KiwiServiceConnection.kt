@@ -10,18 +10,28 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.MutableLiveData
+import pl.jutupe.core.R
 import pl.jutupe.core.extension.id
 import pl.jutupe.core.playback.KiwiPlaybackPreparer
+import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class KiwiServiceConnection(
-    context: Context,
+    val context: Context,
     serviceComponent: ComponentName
 ) {
     val rootMediaId: String
-        get() = mediaBrowser.root
+        get() = KIWI_MEDIA_ROOT
+    val rootMediaItem: MediaItem
+        get() = MediaItem(
+            id = rootMediaId,
+            title = context.getString(R.string.browser_root_main),
+            artist = context.getString(R.string.artist_device),
+            art = null,
+            flag = MediaFlag.FLAG_BROWSABLE
+        )
 
     val isConnected = MutableLiveData<Boolean>()
         .apply { postValue(false) }
@@ -64,8 +74,9 @@ class KiwiServiceConnection(
             mediaBrowser.subscribe(parentId, options, callback)
         }.map {
             MediaItem(
-                it.mediaId ?: "unknown",
-                it.description.title?.toString() ?: "unknown",
+                it.mediaId ?: "unknown", //todo extract MediaItem mapping
+                it.description.title?.toString() ?: context.getString(R.string.title_unknown),
+                it.description.subtitle?.toString() ?: context.getString(R.string.artist_device),
                 it.description.iconUri,
                 if (it.isPlayable) MediaFlag.FLAG_PLAYABLE else MediaFlag.FLAG_BROWSABLE
             )

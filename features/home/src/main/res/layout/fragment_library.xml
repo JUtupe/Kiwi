@@ -15,9 +15,6 @@
         android:clipChildren="false"
         android:clipToPadding="false">
 
-        <include layout="@layout/backdrop_main"
-            android:id="@+id/backdrop" />
-
         <LinearLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
@@ -38,14 +35,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="0 items(s)"/>
-
-                <ImageView
-                    android:id="@+id/filterIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_filter"
-                    android:layout_gravity="end"/>
+                    android:text="@{viewModel.getCurrentRoot().title}"
+                    tools:text="Główny katalog"/>
 
             </LinearLayout>
 

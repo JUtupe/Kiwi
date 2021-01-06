@@ -5,6 +5,7 @@ import android.net.Uri
 data class MediaItem(
     val id: String,
     val title: String,
+    val artist: String,
     val art: Uri?,
     val flag: MediaFlag
 )

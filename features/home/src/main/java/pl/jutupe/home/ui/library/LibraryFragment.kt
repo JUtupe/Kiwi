@@ -2,7 +2,6 @@ package pl.jutupe.home.ui.library
 
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.flow.collectLatest
@@ -11,7 +10,6 @@ import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
 import pl.jutupe.home.databinding.FragmentLibraryBinding
 import pl.jutupe.home.songs.MediaItemAdapter
-import pl.jutupe.home.util.NavigationIconClickListener
 
 class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>(
     layoutId = R.layout.fragment_library
@@ -64,16 +62,6 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>(
             adapter = mediaItemAdapter
             layoutManager = GridLayoutManager(context, 2)
         }
-
-        binding.filterIcon.setOnClickListener(
-            NavigationIconClickListener(
-                requireContext(),
-                binding.content,
-                binding.backdrop.root,
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_filter),
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_up),
-            )
-        )
 
         viewModel.isInRoot.observe(viewLifecycleOwner) { isRoot ->
             libraryBackCallback.isEnabled = !isRoot

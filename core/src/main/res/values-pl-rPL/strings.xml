@@ -5,4 +5,8 @@
     <string name="browser_root_songs">Utwory</string>
     <string name="browser_root_albums">Albumy</string>
     <string name="browser_root_playlists">Playlisty</string>
+    <string name="browser_root_main">Główny katalog</string>
+    <string name="artist_device">Urządzenie</string>
+    <string name="title_unknown">Tytuł nieznany</string>
+    <string name="artist_unknown">Wykonawca nieznany</string>
 </resources>
