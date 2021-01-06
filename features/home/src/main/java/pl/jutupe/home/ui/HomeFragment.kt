@@ -25,6 +25,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragmentViewModel>(
         pagerAdapter = ScreenSlidePagerAdapter(childFragmentManager)
         binding.pager.apply {
             adapter = pagerAdapter
+            pageMargin = context.resources.getDimensionPixelSize(R.dimen.margin_fragment)
         }
 
         binding.tabs.setupWithViewPager(binding.pager)

@@ -5,13 +5,11 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
-import pl.jutupe.core.common.MediaFlag
 import pl.jutupe.core.common.MediaItem
 import pl.jutupe.home.songs.MediaItemDataSource
-import pl.jutupe.home.songs.SongAction
+import pl.jutupe.home.songs.adapter.MediaItemAction
 import timber.log.Timber
 
 class LibraryViewModel(
@@ -28,15 +26,12 @@ class LibraryViewModel(
     ) { MediaItemDataSource(currentRoot.value.id, connection) }
         .flow.cachedIn(viewModelScope)
 
-    val songAction = object : SongAction {
+    val songAction = object : MediaItemAction {
         override fun onClick(item: MediaItem) {
             Timber.d("onClick($item)")
 
-            when (item.flag) {
-                MediaFlag.FLAG_BROWSABLE -> changeRoot(item)
-                MediaFlag.FLAG_PLAYABLE ->
-                    connection.playFromMediaId(item.id, currentRoot.value.id)
-            }
+            if (item.isPlayable) connection.playFromMediaId(item.id, currentRoot.value.id)
+            else changeRoot(item)
         }
 
         override fun onMoreClick(item: MediaItem) {

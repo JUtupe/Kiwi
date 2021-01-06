@@ -1,8 +1,8 @@
-package pl.jutupe.home.songs
+package pl.jutupe.home.songs.adapter
 
 import pl.jutupe.core.common.MediaItem
 
-interface SongAction {
+interface MediaItemAction {
 
     fun onClick(item: MediaItem)
 

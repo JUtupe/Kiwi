@@ -10,7 +10,7 @@
 
         <variable
             name="action"
-            type="pl.jutupe.home.songs.SongAction" />
+            type="pl.jutupe.home.songs.adapter.MediaItemAction" />
     </data>
 
     <pl.jutupe.ui.layout.SquareLayout

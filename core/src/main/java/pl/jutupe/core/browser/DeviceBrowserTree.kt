@@ -5,11 +5,17 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
 import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
 import android.support.v4.media.MediaDescriptionCompat
+import android.support.v4.media.MediaMetadataCompat
 import androidx.annotation.StringRes
 import kotlinx.coroutines.*
 import pl.jutupe.core.R
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_EMPTY_ROOT
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
+import pl.jutupe.core.common.ItemType
+import pl.jutupe.core.extension.fullDescription
+import pl.jutupe.core.extension.id
+import pl.jutupe.core.extension.title
+import pl.jutupe.core.extension.type
 import pl.jutupe.core.repository.MediaRepository
 import pl.jutupe.core.util.Pagination
 
@@ -61,12 +67,19 @@ class DeviceBrowserTree(
         @StringRes titleRes: Int
     ): MediaBrowserCompat.MediaItem =
         MediaBrowserCompat.MediaItem(
-            MediaDescriptionCompat.Builder()
-                .setMediaId(mediaId)
-                .setTitle(context.getString(titleRes))
-                .build(),
+            getRootDescription(mediaId, titleRes),
             FLAG_BROWSABLE
         )
+
+    private fun getRootDescription(
+        mediaId: String,
+        @StringRes titleRes: Int
+    ): MediaDescriptionCompat = MediaMetadataCompat.Builder().apply {
+        id = mediaId
+        title = context.getString(titleRes)
+        type = ItemType.TYPE_ROOT.value.toLong()
+    }.build().fullDescription
+
 
     private fun List<MediaDescriptionCompat>.toMediaItems(flag: Int) : List<MediaBrowserCompat.MediaItem> =
         map { MediaBrowserCompat.MediaItem(it, flag) }

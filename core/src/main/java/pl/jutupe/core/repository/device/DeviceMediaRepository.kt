@@ -11,6 +11,7 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaDescriptionCompat.STATUS_DOWNLOADED
 import android.support.v4.media.MediaMetadataCompat
 import pl.jutupe.core.R
+import pl.jutupe.core.common.ItemType
 import pl.jutupe.core.extension.*
 import pl.jutupe.core.repository.MediaRepository
 import pl.jutupe.core.util.Pagination
@@ -199,6 +200,7 @@ class DeviceMediaRepository(
                 this.artist = artist
                 this.title = title
 
+                this.type = ItemType.TYPE_SONG.value.toLong()
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
                 this.downloadStatus = STATUS_DOWNLOADED
 
@@ -228,9 +230,9 @@ class DeviceMediaRepository(
                 this.id = mediaId.toString()
                 this.artist = artist
                 this.title = title
-                this.albumId = mediaId.toString()
                 this.trackCount = trackCount
 
+                this.type = ItemType.TYPE_ALBUM.value.toLong()
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
                 this.downloadStatus = STATUS_DOWNLOADED
 
@@ -257,6 +259,7 @@ class DeviceMediaRepository(
                 this.id = mediaId.toString()
                 this.title = title
 
+                this.type = ItemType.TYPE_PLAYLIST.value.toLong()
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
                 this.downloadStatus = STATUS_DOWNLOADED
             }.build()
@@ -291,6 +294,7 @@ class DeviceMediaRepository(
 
                 this.playlistMemberId = playlistMemberId
 
+                this.type = ItemType.TYPE_PLAYLIST_MEMBER.value.toLong()
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
                 this.downloadStatus = STATUS_DOWNLOADED
 

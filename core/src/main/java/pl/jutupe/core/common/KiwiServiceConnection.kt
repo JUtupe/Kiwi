@@ -14,6 +14,7 @@ import pl.jutupe.core.R
 import pl.jutupe.core.extension.id
 import pl.jutupe.core.playback.KiwiPlaybackPreparer
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
+import pl.jutupe.core.extension.type
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -22,16 +23,13 @@ class KiwiServiceConnection(
     val context: Context,
     serviceComponent: ComponentName
 ) {
-    val rootMediaId: String
-        get() = KIWI_MEDIA_ROOT
-    val rootMediaItem: MediaItem
-        get() = MediaItem(
-            id = rootMediaId,
-            title = context.getString(R.string.browser_root_main),
-            artist = context.getString(R.string.artist_device),
-            art = null,
-            flag = MediaFlag.FLAG_BROWSABLE
-        )
+    val rootMediaId: String = KIWI_MEDIA_ROOT
+    val rootMediaItem: MediaItem = MediaItem.Root(
+        id = rootMediaId,
+        title = context.getString(R.string.browser_root_main),
+        artist = context.getString(R.string.artist_device),
+        art = null,
+    )
 
     val isConnected = MutableLiveData<Boolean>()
         .apply { postValue(false) }
@@ -73,12 +71,12 @@ class KiwiServiceConnection(
             }
             mediaBrowser.subscribe(parentId, options, callback)
         }.map {
-            MediaItem(
-                it.mediaId ?: "unknown", //todo extract MediaItem mapping
-                it.description.title?.toString() ?: context.getString(R.string.title_unknown),
-                it.description.subtitle?.toString() ?: context.getString(R.string.artist_device),
-                it.description.iconUri,
-                if (it.isPlayable) MediaFlag.FLAG_PLAYABLE else MediaFlag.FLAG_BROWSABLE
+            MediaItem.create(
+                id = it.mediaId ?: "unknown",
+                title = it.description.title?.toString() ?: context.getString(R.string.title_unknown),
+                artist = it.description.subtitle?.toString() ?: context.getString(R.string.artist_device),
+                art = it.description.iconUri,
+                type = ItemType.getByValue(it.description.type!!.toInt())
             )
         }
 
