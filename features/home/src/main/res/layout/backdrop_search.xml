@@ -20,15 +20,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <EditText
+            <EditText style="@style/KiwiTheme.SearchBar"
                 android:id="@+id/search_bar"
-                style="@style/KiwiTheme.SearchBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_search"
                 android:text="@={viewModel.searchText}"
                 android:inputType="text"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:imeOptions="actionDone" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>
