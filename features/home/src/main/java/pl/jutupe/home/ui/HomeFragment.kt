@@ -26,6 +26,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragmentViewModel>(
         binding.pager.apply {
             adapter = pagerAdapter
             pageMargin = context.resources.getDimensionPixelSize(R.dimen.margin_fragment)
+            offscreenPageLimit = 2
         }
 
         binding.tabs.setupWithViewPager(binding.pager)

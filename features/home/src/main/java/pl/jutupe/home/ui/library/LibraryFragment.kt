@@ -30,7 +30,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>(
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launchWhenCreated {
-            viewModel.songs.collectLatest {
+            viewModel.items.collectLatest {
                 mediaItemAdapter.submitData(it)
             }
         }
@@ -65,13 +65,14 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>(
             layoutManager = itemsLayoutManager
         }
 
-        itemsLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int =
-                when (mediaItemAdapter.getItemViewType(position)) {
-                    MediaItemAdapter.TYPE_ROOT -> 2
-                    else -> 1
-                }
-        }
+        itemsLayoutManager.spanSizeLookup =
+            object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int =
+                    when (mediaItemAdapter.getItemViewType(position)) {
+                        MediaItemAdapter.TYPE_ROOT -> 2
+                        else -> 1
+                    }
+            }
 
         viewModel.isInRoot.observe(viewLifecycleOwner) { isRoot ->
             libraryBackCallback.isEnabled = !isRoot

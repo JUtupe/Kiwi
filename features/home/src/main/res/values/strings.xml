@@ -1,6 +1,10 @@
 <resources>
-
     <string name="tab_search">Search</string>
     <string name="tab_library">Library</string>
     <string name="tab_main">Home</string>
+
+    <string name="hint_search">Search</string>
+
+    <string name="label_search_result_for">Search results for: %s</string>
+    <string name="label_recently_searched">Recently searched:</string>
 </resources>

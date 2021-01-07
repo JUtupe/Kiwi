@@ -5,6 +5,7 @@ import org.koin.dsl.module
 import pl.jutupe.home.ui.HomeFragmentViewModel
 import pl.jutupe.home.ui.library.LibraryViewModel
 import pl.jutupe.home.ui.main.MainViewModel
+import pl.jutupe.home.ui.search.SearchBackdropViewModel
 import pl.jutupe.home.ui.search.SearchViewModel
 
 val homeModule = module {
@@ -13,4 +14,6 @@ val homeModule = module {
     viewModel { MainViewModel() }
     viewModel { SearchViewModel() }
     viewModel { LibraryViewModel(get()) }
+
+    viewModel { SearchBackdropViewModel() }
 }

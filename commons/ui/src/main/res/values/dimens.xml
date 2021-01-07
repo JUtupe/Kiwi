@@ -2,4 +2,5 @@
 <resources>
     <dimen name="margin_fab">16dp</dimen>
     <dimen name="margin_fragment">10dp</dimen>
+    <dimen name="margin_backdrop">10dp</dimen>
 </resources>

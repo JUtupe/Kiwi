@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import pl.jutupe.core.common.MediaItem
 import pl.jutupe.home.databinding.ItemPlayableBinding
 import pl.jutupe.home.databinding.ItemRootBinding
+import pl.jutupe.home.songs.adapter.viewholder.MediaItemViewHolder
+import pl.jutupe.home.songs.adapter.viewholder.PlayableMediaItemViewHolder
+import pl.jutupe.home.songs.adapter.viewholder.RootMediaItemViewHolder
 
 class MediaItemAdapter : PagingDataAdapter<MediaItem, MediaItemViewHolder<*>>(
     object : DiffUtil.ItemCallback<MediaItem>() {

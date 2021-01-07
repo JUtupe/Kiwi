@@ -1,11 +1,12 @@
-package pl.jutupe.home.songs.adapter
+package pl.jutupe.home.songs.adapter.viewholder
 
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import pl.jutupe.core.common.MediaItem
+import pl.jutupe.home.songs.adapter.MediaItemAction
 
 abstract class MediaItemViewHolder<B: ViewDataBinding>(
-    private val binding: B
+    binding: B
 ) : RecyclerView.ViewHolder(binding.root) {
 
     abstract fun bind(item: MediaItem, action: MediaItemAction?)

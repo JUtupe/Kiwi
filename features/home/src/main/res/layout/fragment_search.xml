@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="pl.jutupe.home.ui.search.SearchViewModel" />
+
+        <variable
+            name="backdropViewModel"
+            type="pl.jutupe.home.ui.search.SearchBackdropViewModel" />
+    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/backdrop_main"
-            android:id="@+id/backdrop" />
+        <include layout="@layout/backdrop_search"
+            android:id="@+id/backdrop"
+            app:viewModel="@{backdropViewModel}"/>
 
         <LinearLayout
             android:id="@+id/content"
@@ -26,40 +39,31 @@
                 android:elevation="4dp">
 
                 <TextView
+                    android:id="@+id/title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="0 items(s)"/>
+                    android:text="@string/label_recently_searched"/>
 
                 <ImageView
-                    android:id="@+id/filterIcon"
+                    android:id="@+id/searchIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_filter"
+                    android:src="@drawable/ic_search"
                     android:layout_gravity="end"/>
 
             </LinearLayout>
 
-            <TextView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Search"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Search"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Search"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Search"/>
+                android:layout_height="match_parent"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

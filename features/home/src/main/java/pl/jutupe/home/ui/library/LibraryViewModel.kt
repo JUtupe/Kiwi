@@ -21,7 +21,7 @@ class LibraryViewModel(
     val events = SingleLiveData<LibraryViewEvent>()
     val isInRoot = MutableLiveData(true)
 
-    val songs = Pager(
+    val items = Pager(
         PagingConfig(pageSize = 30)
     ) { MediaItemDataSource(currentRoot.value.id, connection) }
         .flow.cachedIn(viewModelScope)

@@ -1,26 +1,29 @@
 package pl.jutupe.home.ui.main
 
-import androidx.core.content.ContextCompat
 import org.koin.android.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
 import pl.jutupe.home.databinding.FragmentMainBinding
-import pl.jutupe.home.util.NavigationIconClickListener
+import pl.jutupe.home.util.BackdropManager
 
 class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(
     layoutId = R.layout.fragment_main
 ) {
     override val viewModel: MainViewModel by viewModel()
 
+    private lateinit var backdropManager: BackdropManager
+
     override fun onInitDataBinding() {
-        binding.filterIcon.setOnClickListener(
-            NavigationIconClickListener(
-                requireContext(),
-                binding.content,
-                binding.backdrop.root,
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_filter),
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_up),
-            )
+        backdropManager = BackdropManager(
+            binding.filterIcon,
+            binding.content,
+            binding.backdrop.root,
+            openIconRes = R.drawable.ic_search,
+            closeIconRes = R.drawable.ic_arrow_up,
         )
+
+        binding.filterIcon.setOnClickListener {
+            backdropManager.toggle()
+        }
     }
 }
