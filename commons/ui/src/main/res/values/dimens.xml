@@ -3,4 +3,8 @@
     <dimen name="margin_fab">16dp</dimen>
     <dimen name="margin_fragment">10dp</dimen>
     <dimen name="margin_backdrop">10dp</dimen>
+
+    <dimen name="radius_small">5dp</dimen>
+    <dimen name="radius_medium">20dp</dimen>
+    <dimen name="radius_large">25dp</dimen>
 </resources>

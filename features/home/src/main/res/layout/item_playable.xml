@@ -10,7 +10,7 @@
 
         <variable
             name="action"
-            type="pl.jutupe.home.songs.adapter.MediaItemAction" />
+            type="pl.jutupe.home.adapter.MediaItemAction" />
     </data>
 
     <pl.jutupe.ui.layout.SquareLayout
@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:onClick="@{() -> action.onClick(item)}"
             app:cardElevation="4dp"
-            app:cardCornerRadius="20dp">
+            app:cardCornerRadius="@dimen/radius_medium">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

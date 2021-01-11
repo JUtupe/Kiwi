@@ -1,10 +1,11 @@
-package pl.jutupe.home.songs.adapter.viewholder
+package pl.jutupe.home.adapter.library.viewholder
 
 import coil.Coil
 import coil.request.ImageRequest
 import pl.jutupe.core.common.MediaItem
 import pl.jutupe.home.databinding.ItemPlayableBinding
-import pl.jutupe.home.songs.adapter.MediaItemAction
+import pl.jutupe.home.adapter.MediaItemAction
+import pl.jutupe.home.adapter.MediaItemViewHolder
 
 class PlayableMediaItemViewHolder(
     private val binding: ItemPlayableBinding

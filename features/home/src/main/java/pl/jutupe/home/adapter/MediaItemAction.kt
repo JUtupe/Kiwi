@@ -1,4 +1,4 @@
-package pl.jutupe.home.songs.adapter
+package pl.jutupe.home.adapter
 
 import pl.jutupe.core.common.MediaItem
 

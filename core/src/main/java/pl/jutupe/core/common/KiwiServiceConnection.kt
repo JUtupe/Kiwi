@@ -3,8 +3,6 @@ package pl.jutupe.core.common
 import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.ResultReceiver
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
@@ -70,15 +68,25 @@ class KiwiServiceConnection(
                 }
             }
             mediaBrowser.subscribe(parentId, options, callback)
-        }.map {
-            MediaItem.create(
-                id = it.mediaId ?: "unknown",
-                title = it.description.title?.toString() ?: context.getString(R.string.title_unknown),
-                artist = it.description.subtitle?.toString() ?: context.getString(R.string.artist_device),
-                art = it.description.iconUri,
-                type = ItemType.getByValue(it.description.type!!.toInt())
-            )
-        }
+        }.map { it.toMediaItem() }
+
+    suspend fun searchItems(query: String, options: Bundle): List<MediaItem> =
+        suspendCoroutine<List<MediaBrowserCompat.MediaItem>> { continuation ->
+            val callback = object : MediaBrowserCompat.SearchCallback() {
+                override fun onSearchResult(
+                    query: String,
+                    extras: Bundle?,
+                    items: MutableList<MediaBrowserCompat.MediaItem>
+                ) {
+                    continuation.resume(items)
+                }
+
+                override fun onError(query: String, extras: Bundle?) {
+                    continuation.resumeWithException(Exception())
+                }
+            }
+            mediaBrowser.search(query, options, callback)
+        }.map { it.toMediaItem() }
 
     fun playFromMediaId(mediaId: String, parentId: String?) {
         val extras = Bundle().apply {
@@ -88,23 +96,14 @@ class KiwiServiceConnection(
         transportControls.playFromMediaId(mediaId, extras)
     }
 
-    fun sendCommand(command: String, parameters: Bundle?) =
-        sendCommand(command, parameters) { _, _ -> }
-
-    fun sendCommand(
-        command: String,
-        parameters: Bundle?,
-        resultCallback: ((Int, Bundle?) -> Unit)
-    ) = if (mediaBrowser.isConnected) {
-        mediaController.sendCommand(command, parameters, object : ResultReceiver(Handler()) {
-            override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
-                resultCallback(resultCode, resultData)
-            }
-        })
-        true
-    } else {
-        false
-    }
+    private fun MediaBrowserCompat.MediaItem.toMediaItem(): MediaItem =
+        MediaItem.create(
+            id = this.mediaId ?: "unknown",
+            title = this.description.title?.toString() ?: context.getString(R.string.title_unknown),
+            artist = this.description.subtitle?.toString() ?: context.getString(R.string.artist_device),
+            art = this.description.iconUri,
+            type = ItemType.getByValue(this.description.type!!.toInt())
+        )
 
     private inner class MediaBrowserConnectionCallback(
         private val context: Context

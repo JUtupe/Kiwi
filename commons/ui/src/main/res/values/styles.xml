@@ -19,9 +19,13 @@
     </style>
 
     <style name="KiwiTheme" parent="BaseKiwiTheme">
-        <item name="android:colorBackground">#263238</item>
+        <item name="android:colorBackground">#37474F</item>
 
         <item name="android:windowAnimationStyle">@style/WindowAnimationStyle</item>
+    </style>
+
+    <style name="KiwiTheme.Card">
+        <item name="cardBackgroundColor">#263238</item>
     </style>
 
     <style name="KiwiDialog" parent="Theme.MaterialComponents.Dialog.FixedSize">

@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.common.MediaItem
-import pl.jutupe.home.songs.MediaItemDataSource
-import pl.jutupe.home.songs.adapter.MediaItemAction
+import pl.jutupe.home.data.MediaItemDataSource
+import pl.jutupe.home.adapter.MediaItemAction
 import timber.log.Timber
 
 class LibraryViewModel(

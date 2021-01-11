@@ -1,4 +1,4 @@
-package pl.jutupe.home.songs
+package pl.jutupe.home.data
 
 import android.os.Bundle
 import androidx.paging.PagingSource
@@ -7,8 +7,8 @@ import pl.jutupe.core.common.MediaItem
 import pl.jutupe.core.extension.putPagination
 import pl.jutupe.core.util.Pagination
 
-class MediaItemDataSource(
-    private val parentId: String,
+class SearchMediaItemDataSource(
+    private val query: String,
     private val connection: KiwiServiceConnection
 ) : PagingSource<Int, MediaItem>() {
 
@@ -20,7 +20,7 @@ class MediaItemDataSource(
         val options = Bundle().putPagination(pagination)
 
         return try {
-            val items = connection.getItems(parentId, options)
+            val items = connection.searchItems(query, options)
 
             LoadResult.Page(
                 data = items,

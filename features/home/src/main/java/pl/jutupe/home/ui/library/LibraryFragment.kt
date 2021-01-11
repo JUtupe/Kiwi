@@ -9,7 +9,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
 import pl.jutupe.home.databinding.FragmentLibraryBinding
-import pl.jutupe.home.songs.adapter.MediaItemAdapter
+import pl.jutupe.home.adapter.library.MediaItemAdapter
 
 class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>(
     layoutId = R.layout.fragment_library

@@ -12,7 +12,7 @@ val homeModule = module {
     viewModel { HomeFragmentViewModel() }
 
     viewModel { MainViewModel() }
-    viewModel { SearchViewModel() }
+    viewModel { SearchViewModel(get()) }
     viewModel { LibraryViewModel(get()) }
 
     viewModel { SearchBackdropViewModel() }

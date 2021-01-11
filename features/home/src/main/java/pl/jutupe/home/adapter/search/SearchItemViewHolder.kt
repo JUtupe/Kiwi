@@ -1,14 +1,15 @@
-package pl.jutupe.home.songs.adapter.viewholder
+package pl.jutupe.home.adapter.search
 
 import coil.Coil
 import coil.request.ImageRequest
 import pl.jutupe.core.common.MediaItem
-import pl.jutupe.home.databinding.ItemRootBinding
-import pl.jutupe.home.songs.adapter.MediaItemAction
+import pl.jutupe.home.adapter.MediaItemAction
+import pl.jutupe.home.adapter.MediaItemViewHolder
+import pl.jutupe.home.databinding.ItemSearchBinding
 
-class RootMediaItemViewHolder(
-    private val binding: ItemRootBinding
-) : MediaItemViewHolder<ItemRootBinding>(binding) {
+class SearchItemViewHolder(
+    val binding: ItemSearchBinding
+) : MediaItemViewHolder<ItemSearchBinding>(binding) {
 
     override fun bind(item: MediaItem, action: MediaItemAction?) {
         binding.item = item

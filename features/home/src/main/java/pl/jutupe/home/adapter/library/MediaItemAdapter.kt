@@ -1,25 +1,18 @@
-package pl.jutupe.home.songs.adapter
+package pl.jutupe.home.adapter.library
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import pl.jutupe.core.common.MediaItem
+import pl.jutupe.home.adapter.MediaItemAction
+import pl.jutupe.home.adapter.MediaItemDiffUtil
 import pl.jutupe.home.databinding.ItemPlayableBinding
 import pl.jutupe.home.databinding.ItemRootBinding
-import pl.jutupe.home.songs.adapter.viewholder.MediaItemViewHolder
-import pl.jutupe.home.songs.adapter.viewholder.PlayableMediaItemViewHolder
-import pl.jutupe.home.songs.adapter.viewholder.RootMediaItemViewHolder
+import pl.jutupe.home.adapter.MediaItemViewHolder
+import pl.jutupe.home.adapter.library.viewholder.PlayableMediaItemViewHolder
+import pl.jutupe.home.adapter.library.viewholder.RootMediaItemViewHolder
 
-class MediaItemAdapter : PagingDataAdapter<MediaItem, MediaItemViewHolder<*>>(
-    object : DiffUtil.ItemCallback<MediaItem>() {
-        override fun areItemsTheSame(oldItem: MediaItem, newItem: MediaItem): Boolean =
-            oldItem.id == newItem.id
-
-        override fun areContentsTheSame(oldItem: MediaItem, newItem: MediaItem): Boolean =
-            oldItem == newItem
-    }
-) {
+class MediaItemAdapter : PagingDataAdapter<MediaItem, MediaItemViewHolder<*>>(MediaItemDiffUtil) {
     var action: MediaItemAction? = null
 
     override fun onBindViewHolder(holder: MediaItemViewHolder<*>, position: Int) {
