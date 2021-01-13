@@ -13,9 +13,9 @@ interface MediaRepository {
 
     suspend fun getAllPlaylists(pagination: Pagination): List<MediaDescriptionCompat>
 
-    suspend fun getPlaylistMembers(playlistId: String, pagination: Pagination): List<MediaDescriptionCompat>
+    suspend fun getPlaylistMembers(playlistId: String, pagination: Pagination): List<MediaDescriptionCompat>?
 
-    suspend fun getAlbumMembers(albumId: String, pagination: Pagination): List<MediaDescriptionCompat>
+    suspend fun getAlbumMembers(albumId: String, pagination: Pagination): List<MediaDescriptionCompat>?
 
     suspend fun findByMediaId(mediaId: String): MediaDescriptionCompat?
 }

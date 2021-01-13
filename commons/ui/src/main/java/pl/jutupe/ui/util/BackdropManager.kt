@@ -1,4 +1,4 @@
-package pl.jutupe.home.util
+package pl.jutupe.ui.util
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
-import timber.log.Timber
 
 class BackdropManager(
     private val button: ImageView,

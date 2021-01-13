@@ -150,8 +150,13 @@ class DeviceMediaRepository(
     override suspend fun getPlaylistMembers(
         playlistId: String,
         pagination: Pagination
-    ): List<MediaDescriptionCompat> {
+    ): List<MediaDescriptionCompat>? {
         Timber.d("getPlaylistMembers(playlistId=$playlistId, pagination=$pagination)")
+
+        //check if playlist exists
+        if (!checkExistsById(playlistsUri, playlistId)) {
+            return null
+        }
 
         val cursor = context.contentResolver.queryPaged(
             playlistMembersUri(playlistId),
@@ -167,8 +172,13 @@ class DeviceMediaRepository(
     override suspend fun getAlbumMembers(
         albumId: String,
         pagination: Pagination
-    ): List<MediaDescriptionCompat> {
+    ): List<MediaDescriptionCompat>? {
         Timber.d("getAlbumMembers(albumId=$albumId, pagination=$pagination)")
+
+        //check if album exists
+        if (!checkExistsById(albumsUri, albumId)) {
+            return null
+        }
 
         val cursor = context.contentResolver.queryPaged(
             mediaUri,
@@ -191,7 +201,7 @@ class DeviceMediaRepository(
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
             val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
             val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
-            val albumArtUri = getAlbumArtUri(albumId) ?: context.resourceUri(R.drawable.art_placeholder)
+            val albumArtUri = getAlbumArtUri(albumId)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
@@ -224,7 +234,7 @@ class DeviceMediaRepository(
             val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM))
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST))
             val trackCount = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS))
-            val albumArtUri = getAlbumArtUri(mediaId) ?: context.resourceUri(R.drawable.art_placeholder)
+            val albumArtUri = getAlbumArtUri(mediaId)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
@@ -283,7 +293,7 @@ class DeviceMediaRepository(
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
             val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
             val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
-            val albumArtUri = getAlbumArtUri(albumId) ?: context.resourceUri(R.drawable.art_placeholder)
+            val albumArtUri = getAlbumArtUri(albumId)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
@@ -310,9 +320,24 @@ class DeviceMediaRepository(
         return members
     }
 
-    private fun getAlbumArtUri(albumId: Long): Uri? {
+    private fun checkExistsById(uri: Uri, id: String): Boolean {
+        val cursor = context.contentResolver.query(
+            uri,
+            arrayOf("_id"),
+            "_ID = ?",
+            arrayOf(id),
+            null
+        )
+        val itemExists = cursor!!.count >= 1
+        cursor.close()
+
+        return itemExists
+    }
+
+    private fun getAlbumArtUri(albumId: Long): Uri {
         val albumArtUri = Uri.parse("content://media/external/audio/albumart")
         return ContentUris.withAppendedId(albumArtUri, albumId)
+            ?: context.resourceUri(R.drawable.art_placeholder)
     }
 
     private fun getMediaUri(mediaId: Long): Uri =

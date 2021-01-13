@@ -33,7 +33,7 @@ class DeviceBrowserTree(
     override suspend fun itemsFor(
         parentId: String,
         pagination: Pagination
-    ): List<MediaBrowserCompat.MediaItem> {
+    ): List<MediaBrowserCompat.MediaItem>? {
         when (parentId) {
             KIWI_MEDIA_EMPTY_ROOT -> emptyList()
             KIWI_MEDIA_ROOT -> getRootItems(pagination)
@@ -43,24 +43,20 @@ class DeviceBrowserTree(
             else -> null
         }?.let { return it }
 
-        /**
-         * We cannot determine if parentId is playlist, album or artist,
-         * so we need to query each function to possibly return media items
-        */
-        coroutineScope {
-            val playlistMembers = async { mediaRepository.getPlaylistMembers(parentId, pagination) }
-            val albumMembers = async {  mediaRepository.getAlbumMembers(parentId, pagination) }
+        mediaRepository.getPlaylistMembers(parentId, pagination)
+            ?.toMediaItems(FLAG_PLAYABLE)?.let { return it }
 
-            playlistMembers.await() + albumMembers.await()
-        }.toMediaItems(FLAG_PLAYABLE).let { return it }
+        mediaRepository.getAlbumMembers(parentId, pagination)
+            ?.toMediaItems(FLAG_PLAYABLE)?.let { return it }
+
+        //return null if id is invalid
+        return null
     }
 
     private fun getRootItems(pagination: Pagination): List<MediaBrowserCompat.MediaItem> =
-        if (pagination.page != Pagination.DEFAULT_PAGE) {
-            emptyList()
-        } else {
+        if (pagination.page == Pagination.DEFAULT_PAGE)
             rootMediaItems
-        }
+        else emptyList()
 
     private fun rootCategoryOf(
         mediaId: String,

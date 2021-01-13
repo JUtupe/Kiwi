@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
+import pl.jutupe.core.common.MediaItem
+import pl.jutupe.home.adapter.MediaItemAction
 import pl.jutupe.home.data.SearchMediaItemDataSource
+import timber.log.Timber
 
 class SearchViewModel(
     private val connection: KiwiServiceConnection
@@ -26,6 +29,19 @@ class SearchViewModel(
         .flow.cachedIn(viewModelScope)
 
     val events = SingleLiveData<SearchViewEvent>()
+
+    val songAction = object : MediaItemAction {
+        override fun onClick(item: MediaItem) {
+            Timber.d("onClick($item)")
+
+            if (item.isPlayable)
+                connection.playFromMediaId(item.id, null)
+        }
+
+        override fun onMoreClick(item: MediaItem) {
+            Timber.d("onMoreClick($item)")
+        }
+    }
 
     fun onSearchTextChanged(text: String?) {
         searchJob?.cancel()

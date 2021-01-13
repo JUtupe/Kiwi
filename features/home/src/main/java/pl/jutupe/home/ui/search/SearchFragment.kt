@@ -9,7 +9,7 @@ import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
 import pl.jutupe.home.databinding.FragmentSearchBinding
 import pl.jutupe.home.adapter.search.SearchItemAdapter
-import pl.jutupe.home.util.BackdropManager
+import pl.jutupe.ui.util.BackdropManager
 import timber.log.Timber
 
 class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
@@ -36,6 +36,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
         Timber.d("onInitDataBinding")
         binding.viewModel = viewModel
         binding.backdropViewModel = backdropViewModel
+        searchAdapter.action = viewModel.songAction
 
         viewModel.events.observe(viewLifecycleOwner, this::onViewEvent)
 
@@ -63,9 +64,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
 
     private fun onViewEvent(event: SearchViewEvent) {
         when (event) {
-            is SearchViewEvent.SetBackdropSearchTitle -> {
+            is SearchViewEvent.SetBackdropSearchTitle ->
                 binding.title.text = getString(R.string.label_search_result_for, event.text)
-            }
             SearchViewEvent.SetBackdropRecentlySearchedTitle ->
                 binding.title.text = getString(R.string.label_recently_searched)
             SearchViewEvent.RefreshAdapter ->

@@ -4,7 +4,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
 import pl.jutupe.home.databinding.FragmentMainBinding
-import pl.jutupe.home.util.BackdropManager
+import pl.jutupe.ui.util.BackdropManager
 
 class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(
     layoutId = R.layout.fragment_main
