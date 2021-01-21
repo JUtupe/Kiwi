@@ -3,7 +3,10 @@ package pl.jutupe.home.ui
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.MarginPageTransformer
+import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.android.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
@@ -19,17 +22,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragmentViewModel>(
 
     private lateinit var pagerAdapter: ScreenSlidePagerAdapter
 
+    val fragments = listOf<Pair<() -> Fragment, Int>>(
+        { MainFragment() } to R.string.tab_main,
+        { LibraryFragment() } to R.string.tab_library,
+        { SearchFragment() } to R.string.tab_search
+    )
+
     override fun onInitDataBinding() {
         binding.viewModel = viewModel
 
-        pagerAdapter = ScreenSlidePagerAdapter(childFragmentManager)
+        pagerAdapter = ScreenSlidePagerAdapter(childFragmentManager, lifecycle)
         binding.pager.apply {
             adapter = pagerAdapter
-            pageMargin = context.resources.getDimensionPixelSize(R.dimen.margin_fragment)
+            setPageTransformer(MarginPageTransformer(resources.getDimensionPixelSize(R.dimen.margin_fragment)))
             offscreenPageLimit = 2
         }
 
-        binding.tabs.setupWithViewPager(binding.pager)
+        TabLayoutMediator(binding.tabs, binding.pager) { tab, pos ->
+            tab.text = getString(fragments[pos].second)
+        }.attach()
 
         binding.toolbar.apply {
             setNavigationIcon(R.drawable.ic_menu)
@@ -42,20 +53,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragmentViewModel>(
     }
 
     private inner class ScreenSlidePagerAdapter(
-        fm: FragmentManager
-    ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        fm: FragmentManager,
+        lifecycle: Lifecycle
+    ) : FragmentStateAdapter(fm, lifecycle) {
 
-        val fragments = listOf<Pair<Fragment, Int>>(
-            MainFragment() to R.string.tab_main,
-            LibraryFragment() to R.string.tab_library,
-            SearchFragment() to R.string.tab_search
-        )
+        override fun getItemCount(): Int = fragments.size
 
-        override fun getCount(): Int = fragments.size
-
-        override fun getItem(position: Int): Fragment = fragments[position].first
-
-        override fun getPageTitle(position: Int): CharSequence =
-            getString(fragments[position].second)
+        override fun createFragment(position: Int) =
+            fragments[position].first.invoke()
     }
 }

@@ -3,8 +3,8 @@ package dependencies
 object Releases {
     const val applicationId = "pl.jutupe.kiwi"
 
-    const val versionCode = 2
-    const val versionName = "0.0.2"
+    const val versionCode = 3
+    const val versionName = "0.0.3"
 
     const val minSdk = 21
     const val compileSdk = 29
@@ -27,7 +27,7 @@ private object Versions {
     const val databindingCompiler = "4.1.0"
     const val paging = "3.0.0-alpha04"
     const val appCompat = "1.1.0"
-    const val material = "1.1.0"
+    const val material = "1.1.0-beta01"
     const val recyclerView = "1.1.0"
     const val cardView = "1.0.0"
     const val lifecycle = "2.2.0"
@@ -64,6 +64,7 @@ object Libraries {
     const val firebaseBoM = "com.google.firebase:firebase-bom:26.2.0"
     const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics-ktx"
+    const val firebasePerformance = "com.google.firebase:firebase-perf-ktx"
 
     //others
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"

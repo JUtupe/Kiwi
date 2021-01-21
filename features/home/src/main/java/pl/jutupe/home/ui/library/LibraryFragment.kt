@@ -18,8 +18,6 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>(
 
     private val mediaItemAdapter = MediaItemAdapter()
 
-    private val itemsLayoutManager = GridLayoutManager(context, 2)
-
     private val libraryBackCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             viewModel.onNavigateToParentClicked()
@@ -59,6 +57,8 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>(
     override fun onInitDataBinding() {
         binding.viewModel = viewModel
         mediaItemAdapter.action = viewModel.songAction
+
+        val itemsLayoutManager = GridLayoutManager(context, 2)
 
         binding.list.apply {
             adapter = mediaItemAdapter
