@@ -3,8 +3,8 @@ package dependencies
 object Releases {
     const val applicationId = "pl.jutupe.kiwi"
 
-    const val versionCode = 3
-    const val versionName = "0.0.3"
+    const val versionCode = 4
+    const val versionName = "0.0.4"
 
     const val minSdk = 21
     const val compileSdk = 29

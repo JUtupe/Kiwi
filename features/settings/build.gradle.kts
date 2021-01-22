@@ -6,6 +6,7 @@ plugins {
 
 dependencies {
     implementation(project(":navigation"))
+    implementation(project(":commons:ui"))
 
     implementation(Libraries.navigation)
     implementation(Libraries.preferences)
