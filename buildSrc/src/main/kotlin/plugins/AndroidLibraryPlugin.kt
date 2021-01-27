@@ -1,16 +1,19 @@
 package plugins
 
 import com.android.build.gradle.BaseExtension
+import dependencies.*
 import extensions.implementation
 import extensions.testImplementation
+import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.dependencies
-import dependencies.*
-import org.gradle.api.JavaVersion
 import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.File
 
 @Suppress("unused")
 class AndroidLibraryPlugin : Plugin<Project> {
@@ -73,6 +76,15 @@ class AndroidLibraryPlugin : Plugin<Project> {
 
         tasks.withType<Test> {
             useJUnitPlatform()
+
+            testLogging {
+                exceptionFormat = TestExceptionFormat.FULL
+                events = setOf(
+                    TestLogEvent.PASSED,
+                    TestLogEvent.SKIPPED,
+                    TestLogEvent.FAILED
+                )
+            }
         }
     }
 
