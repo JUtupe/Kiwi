@@ -19,9 +19,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:orientation="vertical">
             <EditText style="@style/KiwiTheme.SearchBar"
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"

@@ -9,6 +9,7 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:windowSoftInputMode">stateHidden</item>
     </style>
 
     <style name="WindowAnimationStyle">
