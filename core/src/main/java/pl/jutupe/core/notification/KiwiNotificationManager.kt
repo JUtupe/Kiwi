@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.VectorDrawable
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import coil.ImageLoader
@@ -17,14 +18,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import pl.jutupe.core.R
+import pl.jutupe.core.util.toBitmap
 
 const val NOW_PLAYING_CHANNEL_ID = "pl.jutupe.kiwi.notification.NOW_PLAYING"
 const val NOW_PLAYING_NOTIFICATION_ID = 0x10f2c
 
-class KiwiNotificationManager (
+class KiwiNotificationManager(
     private val context: Context,
     sessionToken: MediaSessionCompat.Token,
-    notificationListener: PlayerNotificationManager.NotificationListener
+    notificationListener: PlayerNotificationManager.NotificationListener,
 ) {
     private val loadImageJob = SupervisorJob()
     private val imageScope = CoroutineScope(Dispatchers.IO + loadImageJob)
@@ -65,7 +67,7 @@ class KiwiNotificationManager (
         val loader = ImageLoader(context)
 
         override fun createCurrentContentIntent(player: Player): PendingIntent? =
-            controller.sessionActivity
+            null
 
         override fun getCurrentContentText(player: Player) =
             controller.metadata?.description?.subtitle.toString()
@@ -86,13 +88,16 @@ class KiwiNotificationManager (
             imageScope.launch {
                 val r = ImageRequest.Builder(context)
                     .data(iconUri)
-                    .error(R.drawable.art_placeholder)
+                    .error(R.drawable.placeholder_song)
                     .size(NOTIFICATION_LARGE_ICON_SIZE)
                     .memoryCacheKey(iconUri.toString())
                     .build()
 
-                val result = loader.execute(r).drawable
-                val bitmap = (result as BitmapDrawable).bitmap
+                val bitmap = when (val result = loader.execute(r).drawable) {
+                    is VectorDrawable -> result.toBitmap()
+                    is BitmapDrawable -> result.bitmap
+                    else -> throw IllegalArgumentException("Invalid drawable type")
+                }
 
                 loader.memoryCache[MemoryCache.Key.invoke(iconUri.toString())] = bitmap
 

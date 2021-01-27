@@ -38,6 +38,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:scaleType="centerCrop"
+                    mediaImage="@{item}"
                     tools:ignore="ContentDescription"
                     tools:src="@tools:sample/avatars" />
 

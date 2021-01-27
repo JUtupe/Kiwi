@@ -1,7 +1,9 @@
 import dependencies.*
+import extensions.kapt
 
 plugins {
     id("common-android-library")
+    kotlin("kapt")
 }
 
 dependencies {
@@ -22,4 +24,6 @@ dependencies {
     implementation(Libraries.constraintLayout)
     implementation(Libraries.coordinatorLayout)
     implementation(Libraries.material)
+
+    kapt(Libraries.databinding)
 }

@@ -10,8 +10,8 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaDescriptionCompat.STATUS_DOWNLOADED
 import android.support.v4.media.MediaMetadataCompat
-import pl.jutupe.core.R
 import pl.jutupe.core.common.ItemType
+import pl.jutupe.core.common.getItemBaseDrawable
 import pl.jutupe.core.extension.*
 import pl.jutupe.core.repository.MediaRepository
 import pl.jutupe.core.util.Pagination
@@ -201,7 +201,7 @@ class DeviceMediaRepository(
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
             val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
             val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
-            val albumArtUri = getAlbumArtUri(albumId)
+            val albumArtUri = getAlbumArtUri(albumId, ItemType.TYPE_SONG)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
@@ -234,7 +234,7 @@ class DeviceMediaRepository(
             val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM))
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST))
             val trackCount = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS))
-            val albumArtUri = getAlbumArtUri(mediaId)
+            val albumArtUri = getAlbumArtUri(mediaId, ItemType.TYPE_ALBUM)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
@@ -293,7 +293,7 @@ class DeviceMediaRepository(
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
             val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
             val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
-            val albumArtUri = getAlbumArtUri(albumId)
+            val albumArtUri = getAlbumArtUri(albumId, ItemType.TYPE_PLAYLIST_MEMBER)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
@@ -334,10 +334,12 @@ class DeviceMediaRepository(
         return itemExists
     }
 
-    private fun getAlbumArtUri(albumId: Long): Uri {
+    private fun getAlbumArtUri(albumId: Long, type: ItemType): Uri {
         val albumArtUri = Uri.parse("content://media/external/audio/albumart")
+        val baseDrawable = type.getItemBaseDrawable()
+
         return ContentUris.withAppendedId(albumArtUri, albumId)
-            ?: context.resourceUri(R.drawable.art_placeholder)
+            ?: context.resourceUri(baseDrawable)
     }
 
     private fun getMediaUri(mediaId: Long): Uri =
