@@ -8,6 +8,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import dependencies.*
 import org.gradle.api.JavaVersion
+import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -60,7 +61,7 @@ class AndroidLibraryPlugin : Plugin<Project> {
 
             compileOptions {
                 sourceCompatibility = JavaVersion.VERSION_1_8
-                targetCompatibility =JavaVersion.VERSION_1_8
+                targetCompatibility = JavaVersion.VERSION_1_8
             }
         }
 
@@ -68,6 +69,10 @@ class AndroidLibraryPlugin : Plugin<Project> {
             kotlinOptions {
                 jvmTarget = "1.8"
             }
+        }
+
+        tasks.withType<Test> {
+            useJUnitPlatform()
         }
     }
 
