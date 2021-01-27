@@ -2,6 +2,7 @@ package plugins
 
 import com.android.build.gradle.BaseExtension
 import extensions.implementation
+import extensions.testImplementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -22,6 +23,7 @@ class AndroidLibraryPlugin : Plugin<Project> {
             applyPlugins()
             androidConfig()
             dependenciesConfig()
+            testDependenciesConfig()
         }
 
     private fun Project.applyPlugins() {
@@ -76,6 +78,15 @@ class AndroidLibraryPlugin : Plugin<Project> {
 
             implementation(Libraries.koin)
             implementation(Libraries.koinViewModel)
+        }
+    }
+
+    private fun Project.testDependenciesConfig() {
+        dependencies {
+            testImplementation(TestLibraries.junit)
+            testImplementation(TestLibraries.testRunner)
+
+            testImplementation(TestLibraries.mockk)
         }
     }
 }
