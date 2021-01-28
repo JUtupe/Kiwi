@@ -1,5 +1,6 @@
 import dependencies.Libraries
 import dependencies.Releases
+import util.versionProps
 
 plugins {
     id("com.android.application")
@@ -19,8 +20,8 @@ android {
         minSdkVersion(Releases.minSdk)
         targetSdkVersion(Releases.targetSdk)
 
-        versionCode = Releases.versionCode
-        versionName = Releases.versionName
+        versionCode = (versionProps["kiwiVersionCode"] as String).toInt()
+        versionName = versionProps["kiwiVersionName"] as String
     }
 
     buildTypes {
