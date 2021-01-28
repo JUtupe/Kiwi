@@ -25,7 +25,7 @@ jobs:
         run: bash ./gradlew bumpVersion --newVersionName ${{ github.event.inputs.versionName }}
 
       - name: Build release APK
-          run: bash ./gradlew assembleRelease --stacktrace
+        run: bash ./gradlew assembleRelease --stacktrace
 
       - name: Sign release APK
         uses: r0adkll/sign-android-release@v1
