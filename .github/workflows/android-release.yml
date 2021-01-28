@@ -43,6 +43,17 @@ jobs:
           name: kiwi-${{ github.event.inputs.versionName }}
           path: ${{steps.release_app.outputs.signedReleaseFile}}
 
+      - name: Commit changelog and manifest files
+        id: make-commit
+        run: |
+          git add app_versions.gradle
+          git add CHANGELOG.md
+          git commit –message "Prepare release ${{ github.event.inputs.versionName }}"
+          echo "::set-output name=commit::$(git rev-parse HEAD)"
+
+      - name: Push new release branch
+        run: git push origin release/v${{ github.event.inputs.versionName }}
+
       - name: Create pull request into develop
         uses: thomaseizinger/create-pull-request@1.0.0
         with:
