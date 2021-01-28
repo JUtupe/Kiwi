@@ -1,3 +1,5 @@
+import task.BumpVersionTask
+
 buildscript {
     repositories {
         google()
@@ -19,6 +21,8 @@ allprojects {
         jcenter()
     }
 }
+
+tasks.register<BumpVersionTask>("bumpVersion")
 
 tasks {
     val clean by registering(Delete::class) {
