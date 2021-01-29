@@ -25,7 +25,7 @@ jobs:
         run: bash ./gradlew bumpVersion --newVersionName ${{ github.event.inputs.versionName }}
 
       - name: Build release APK
-        run: bash ./gradlew assembleRelease --stacktrace
+        run: bash ./gradlew bundleRelease
 
       - name: Sign release APK
         uses: r0adkll/sign-android-release@v1
@@ -44,11 +44,10 @@ jobs:
           path: ${{steps.release_app.outputs.signedReleaseFile}}
 
       - name: Commit version update
-        id: make-commit
         run: |
-          git add versions.properties
-          git commit –message "Prepare release ${{ github.event.inputs.versionName }}"
-          echo "::set-output name=commit::$(git rev-parse HEAD)"
+         git add versions.properties
+         git commit –message "Prepare release ${{ github.event.inputs.versionName }}"
+         echo "::set-output name=commit::$(git rev-parse HEAD)"
 
       - name: Push new release branch
         run: git push origin release/v${{ github.event.inputs.versionName }}
