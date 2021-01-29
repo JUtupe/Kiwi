@@ -21,6 +21,14 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: Create release branch
+        run: git checkout -b release/v${{ github.event.inputs.versionName }}
+
+      - name: Initialize mandatory git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email noreply@github.com
+
       - name: Bump android version
         run: bash ./gradlew bumpVersion --newVersionName ${{ github.event.inputs.versionName }}
 
@@ -45,9 +53,9 @@ jobs:
 
       - name: Commit version update
         run: |
-         git add versions.properties
-         git commit –message "Prepare release ${{ github.event.inputs.versionName }}"
-         echo "::set-output name=commit::$(git rev-parse HEAD)"
+          git add versions.properties
+          git commit –message "Prepare release ${{ github.event.inputs.versionName }}"
+          echo "::set-output name=commit::$(git rev-parse HEAD)"
 
       - name: Push new release branch
         run: git push origin release/v${{ github.event.inputs.versionName }}
