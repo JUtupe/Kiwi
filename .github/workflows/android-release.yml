@@ -54,7 +54,7 @@ jobs:
       - name: Commit version update
         run: |
           git add versions.properties
-          git commit –message "Prepare release ${{ github.event.inputs.versionName }}"
+          git commit –m "Prepare release ${{ github.event.inputs.versionName }}"
           echo "::set-output name=commit::$(git rev-parse HEAD)"
 
       - name: Push new release branch
