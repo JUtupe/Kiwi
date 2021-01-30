@@ -9,6 +9,7 @@ import dependencies.*
 import org.gradle.api.JavaVersion
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import util.versionProps
 
 @Suppress("unused")
 class AndroidDynamicFeaturePlugin : Plugin<Project> {
@@ -41,8 +42,8 @@ class AndroidDynamicFeaturePlugin : Plugin<Project> {
                 minSdkVersion(Releases.minSdk)
                 targetSdkVersion(Releases.targetSdk)
 
-                versionCode = Releases.versionCode
-                versionName = Releases.versionName
+                versionCode = (versionProps["kiwiVersionCode"] as String).toInt()
+                versionName = versionProps["kiwiVersionName"] as String
 
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
