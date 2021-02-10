@@ -4,12 +4,18 @@
         <item name="colorPrimary">#3a7200</item>
         <item name="colorPrimaryDark">#074600</item>
         <item name="colorSecondary">#62717b</item>
+        <item name="colorSecondaryVariant">#263238</item>
         <item name="colorAccent">#6aa138</item>
         <item name="colorSurface">#37474F</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:windowSoftInputMode">stateHidden</item>
+
+        <item name="android:scrollbarTrackHorizontal">@drawable/scrollbar_track</item>
+        <item name="android:scrollbarThumbHorizontal">@drawable/scrollbar_thumb</item>
+        <item name="android:scrollbarTrackVertical">@drawable/scrollbar_track</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scrollbar_thumb</item>
     </style>
 
     <style name="WindowAnimationStyle">

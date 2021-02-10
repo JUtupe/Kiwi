@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="pl.jutupe.home.ui.main.MainViewModel" />
+    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -25,13 +32,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="20dp"
-                android:elevation="4dp">
+                android:elevation="4dp"
+                tools:ignore="UseCompoundDrawables">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="0 items(s)"/>
+                    android:text="Kolejka odtwarzania"/>
 
                 <ImageView
                     android:id="@+id/filterIcon"
@@ -42,26 +50,15 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Main"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Main"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Main"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Main"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/queue"
+                    android:layout_width="match_parent"
+                    android:layout_height="175dp"
+                    android:orientation="horizontal"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_queue"/>
+
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
