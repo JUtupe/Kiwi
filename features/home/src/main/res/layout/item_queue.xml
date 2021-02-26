@@ -56,32 +56,40 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
 
-                <TextView
-                    android:id="@+id/title"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="@{item.title}"
-                    android:textColor="#FFFFFF"
-                    app:layout_constraintBottom_toTopOf="@+id/artist"
-                    app:layout_constraintEnd_toEndOf="@+id/artist"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:text="Polskie Tango" />
-
-                <TextView
-                    android:id="@+id/artist"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="@{item.artist}"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/imageButton"
-                    app:layout_constraintStart_toStartOf="@+id/art"
-                    tools:text="Taco Hemingway" />
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="@{item.title}"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        tools:text="Polskie Tango" />
+
+                    <TextView
+                        android:id="@+id/artist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@{item.artist}"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textStyle="bold"
+                        tools:text="Taco Hemingway" />
+
+                </LinearLayout>
 
                 <ImageButton
                     android:id="@+id/imageButton"
