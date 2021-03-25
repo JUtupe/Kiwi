@@ -1,4 +1,4 @@
-package pl.jutupe.core.notification
+package pl.jutupe.core.playback
 
 import android.app.PendingIntent
 import android.content.Context
@@ -19,9 +19,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import pl.jutupe.core.R
 import pl.jutupe.core.util.toBitmap
-
-const val NOW_PLAYING_CHANNEL_ID = "pl.jutupe.kiwi.notification.NOW_PLAYING"
-const val NOW_PLAYING_NOTIFICATION_ID = 0x10f2c
 
 class KiwiNotificationManager(
     private val context: Context,
@@ -107,6 +104,10 @@ class KiwiNotificationManager(
             return null
         }
     }
-}
 
-const val NOTIFICATION_LARGE_ICON_SIZE = 144 // px
+    companion object {
+        const val NOW_PLAYING_CHANNEL_ID = "pl.jutupe.kiwi.notification.NOW_PLAYING"
+        const val NOW_PLAYING_NOTIFICATION_ID = 0x10f2c
+        const val NOTIFICATION_LARGE_ICON_SIZE = 144 // px
+    }
+}

@@ -10,17 +10,18 @@ import androidx.annotation.StringRes
 import pl.jutupe.core.R
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_EMPTY_ROOT
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
+import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_ROOT_RECENTLY_SEARCHED
 import pl.jutupe.core.common.ItemType
-import pl.jutupe.core.extension.fullDescription
-import pl.jutupe.core.extension.id
-import pl.jutupe.core.extension.title
-import pl.jutupe.core.extension.type
-import pl.jutupe.core.repository.MediaRepository
-import pl.jutupe.core.util.Pagination
+import pl.jutupe.core.repository.media.MediaRepository
+import pl.jutupe.core.repository.playlist.PlaylistRepository
+import pl.jutupe.core.repository.recentSearch.RecentSearchRepository
+import pl.jutupe.core.util.*
 
-class DeviceBrowserTree(
+class LocalMediaBrowserTree(
     private val context: Context,
-    private val mediaRepository: MediaRepository
+    private val mediaRepository: MediaRepository,
+    private val playlistRepository: PlaylistRepository,
+    private val recentSearchRepository: RecentSearchRepository
 ) : MediaBrowserTree {
 
     private val rootMediaItems = arrayListOf(
@@ -31,29 +32,31 @@ class DeviceBrowserTree(
 
     override suspend fun itemsFor(
         parentId: String,
-        pagination: Pagination
+        filter: Filter
     ): List<MediaBrowserCompat.MediaItem>? {
         when (parentId) {
             KIWI_MEDIA_EMPTY_ROOT -> emptyList()
-            KIWI_MEDIA_ROOT -> getRootItems(pagination)
-            KIWI_ROOT_SONGS -> mediaRepository.getAllSongs(pagination).toMediaItems(FLAG_PLAYABLE)
-            KIWI_ROOT_ALBUMS -> mediaRepository.getAllAlbums(pagination).toMediaItems(FLAG_BROWSABLE)
-            KIWI_ROOT_PLAYLISTS -> mediaRepository.getAllPlaylists(pagination).toMediaItems(FLAG_BROWSABLE)
+            KIWI_MEDIA_ROOT -> getRootItems(filter)
+            KIWI_ROOT_SONGS -> mediaRepository.getAllSongs(filter).toMediaItems(FLAG_PLAYABLE)
+            KIWI_ROOT_ALBUMS -> mediaRepository.getAllAlbums(filter).toMediaItems(FLAG_BROWSABLE)
+            KIWI_ROOT_PLAYLISTS -> playlistRepository.getAll(filter).toMediaItems(FLAG_BROWSABLE)
+            KIWI_ROOT_RECENTLY_SEARCHED -> recentSearchRepository.findRecentSearched(filter)
+                ?.toMediaItems(FLAG_PLAYABLE)
             else -> null
         }?.let { return it }
 
-        mediaRepository.getPlaylistMembers(parentId, pagination)
+        playlistRepository.getMembers(parentId, filter)
             ?.toMediaItems(FLAG_PLAYABLE)?.let { return it }
 
-        mediaRepository.getAlbumMembers(parentId, pagination)
+        mediaRepository.getAlbumMembers(parentId, filter)
             ?.toMediaItems(FLAG_PLAYABLE)?.let { return it }
 
         //return null if id is invalid
         return null
     }
 
-    private fun getRootItems(pagination: Pagination): List<MediaBrowserCompat.MediaItem> =
-        if (pagination.page == Pagination.DEFAULT_PAGE)
+    private fun getRootItems(filter: Filter): List<MediaBrowserCompat.MediaItem> =
+        if (filter.pagination.page == Pagination.DEFAULT_PAGE)
             rootMediaItems
         else emptyList()
 
@@ -74,7 +77,6 @@ class DeviceBrowserTree(
         title = context.getString(titleRes)
         type = ItemType.TYPE_ROOT.value.toLong()
     }.build().fullDescription
-
 
     private fun List<MediaDescriptionCompat>.toMediaItems(flag: Int) : List<MediaBrowserCompat.MediaItem> =
         map { MediaBrowserCompat.MediaItem(it, flag) }

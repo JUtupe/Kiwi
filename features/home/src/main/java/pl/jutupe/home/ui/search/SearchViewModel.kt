@@ -1,5 +1,6 @@
 package pl.jutupe.home.ui.search
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -12,8 +13,10 @@ import kotlinx.coroutines.launch
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.common.MediaItem
+import pl.jutupe.core.util.Pagination
+import pl.jutupe.core.util.putPagination
 import pl.jutupe.home.adapter.MediaItemAction
-import pl.jutupe.home.data.SearchMediaItemDataSource
+import pl.jutupe.home.data.MediaItemDataSource
 import timber.log.Timber
 
 class SearchViewModel(
@@ -25,8 +28,17 @@ class SearchViewModel(
 
     val items = Pager(
         PagingConfig(pageSize = 30)
-    ) { SearchMediaItemDataSource(currentQuery.value, connection) }
-        .flow.cachedIn(viewModelScope)
+    ) {
+        MediaItemDataSource { pagination ->
+            val options = Bundle().putPagination(pagination)
+
+            if (currentQuery.value.isEmpty()) {
+                connection.getRecentSearchItems(options)
+            } else {
+                connection.searchItems(currentQuery.value, options)
+            }
+        }
+    }.flow.cachedIn(viewModelScope)
 
     val events = SingleLiveData<SearchViewEvent>()
 
@@ -34,8 +46,10 @@ class SearchViewModel(
         override fun onClick(item: MediaItem) {
             Timber.d("onClick($item)")
 
-            if (item.isPlayable)
+            if (item.isPlayable) {
                 connection.playFromMediaId(item.id, null)
+                connection.addRecentSearchItem(item)
+            }
         }
 
         override fun onMoreClick(item: MediaItem) {
@@ -49,15 +63,13 @@ class SearchViewModel(
             delay(500)
 
             if (text.isNullOrBlank()) {
-                events.value = SearchViewEvent.SetBackdropRecentlySearchedTitle
                 updatePager("")
 
-                //todo clear list (display recents)
+                events.value = SearchViewEvent.SetBackdropRecentlySearchedTitle
             } else {
-                events.value = SearchViewEvent.SetBackdropSearchTitle(text)
                 updatePager(text)
 
-                //todo show found items
+                events.value = SearchViewEvent.SetBackdropSearchTitle(text)
             }
         }
     }

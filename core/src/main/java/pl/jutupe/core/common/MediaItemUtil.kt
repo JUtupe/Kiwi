@@ -1,10 +1,9 @@
 package pl.jutupe.core.common
 
 import android.content.Context
-import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import pl.jutupe.core.R
-import pl.jutupe.core.extension.type
+import pl.jutupe.core.util.type
 
 fun ItemType.getItemBaseDrawable() =
     when (this) {

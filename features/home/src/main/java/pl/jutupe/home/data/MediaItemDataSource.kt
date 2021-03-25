@@ -1,15 +1,11 @@
 package pl.jutupe.home.data
 
-import android.os.Bundle
 import androidx.paging.PagingSource
-import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.common.MediaItem
-import pl.jutupe.core.extension.putPagination
 import pl.jutupe.core.util.Pagination
 
 class MediaItemDataSource(
-    private val parentId: String,
-    private val connection: KiwiServiceConnection
+    private val data: suspend (Pagination) -> List<MediaItem>
 ) : PagingSource<Int, MediaItem>() {
 
     override suspend fun load(
@@ -17,10 +13,9 @@ class MediaItemDataSource(
     ): LoadResult<Int, MediaItem> {
         val position = params.key ?: Pagination.DEFAULT_PAGE
         val pagination = Pagination(position, params.loadSize)
-        val options = Bundle().putPagination(pagination)
 
         return try {
-            val items = connection.getItems(parentId, options)
+            val items = data(pagination)
 
             LoadResult.Page(
                 data = items,
