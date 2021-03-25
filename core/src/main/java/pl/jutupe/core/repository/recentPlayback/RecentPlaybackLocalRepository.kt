@@ -1,17 +1,17 @@
-package pl.jutupe.core.repository.device
+package pl.jutupe.core.repository.recentPlayback
 
 import android.content.Context
-import pl.jutupe.core.repository.MediaRepository
-import pl.jutupe.core.repository.RecentPlaybackSession
-import pl.jutupe.core.repository.RecentPlaybackSessionRepository
+import pl.jutupe.core.repository.media.MediaRepository
 import timber.log.Timber
 
-class DeviceRecentPlaybackSessionRepository(
+class RecentPlaybackLocalRepository(
     context: Context,
     private val mediaRepository: MediaRepository
-) : RecentPlaybackSessionRepository {
+) : RecentPlaybackRepository {
 
-    private val sharedPreferences = context.getSharedPreferences(RECENT_SONG_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+    private val sharedPreferences = context.getSharedPreferences(
+        RECENT_SONG_SHARED_PREFERENCES, Context.MODE_PRIVATE
+    )
 
     override suspend fun save(playbackSession: RecentPlaybackSession) {
         Timber.d("save(playbackSession=$playbackSession)")

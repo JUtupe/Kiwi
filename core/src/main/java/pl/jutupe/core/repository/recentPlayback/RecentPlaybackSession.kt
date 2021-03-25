@@ -1,4 +1,4 @@
-package pl.jutupe.core.repository
+package pl.jutupe.core.repository.recentPlayback
 
 import android.support.v4.media.MediaDescriptionCompat
 

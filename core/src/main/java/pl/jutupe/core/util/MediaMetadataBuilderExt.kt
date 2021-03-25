@@ -1,4 +1,4 @@
-package pl.jutupe.core.extension
+package pl.jutupe.core.util
 
 import android.graphics.Bitmap
 import android.support.v4.media.MediaBrowserCompat.MediaItem

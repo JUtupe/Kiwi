@@ -1,6 +1,6 @@
-package pl.jutupe.core.repository
+package pl.jutupe.core.repository.recentPlayback
 
-interface RecentPlaybackSessionRepository {
+interface RecentPlaybackRepository {
 
     suspend fun save(playbackSession: RecentPlaybackSession)
 

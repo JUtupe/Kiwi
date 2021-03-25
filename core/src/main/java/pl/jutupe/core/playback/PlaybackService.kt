@@ -19,14 +19,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import pl.jutupe.core.action.AddRecentSearchActionProvider
 import pl.jutupe.core.browser.MediaBrowserTree
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
-import pl.jutupe.core.extension.getPaginationOrDefault
-import pl.jutupe.core.extension.toMediaSource
-import pl.jutupe.core.notification.KiwiNotificationManager
-import pl.jutupe.core.repository.MediaRepository
-import pl.jutupe.core.repository.RecentPlaybackSession
-import pl.jutupe.core.repository.RecentPlaybackSessionRepository
+import pl.jutupe.core.util.getPaginationOrDefault
+import pl.jutupe.core.util.toMediaSource
+import pl.jutupe.core.repository.media.MediaRepository
+import pl.jutupe.core.repository.recentPlayback.RecentPlaybackSession
+import pl.jutupe.core.repository.recentPlayback.RecentPlaybackRepository
+import pl.jutupe.core.util.Filter
 import timber.log.Timber
 
 class PlaybackService : MediaBrowserServiceCompat() {
@@ -35,13 +36,14 @@ class PlaybackService : MediaBrowserServiceCompat() {
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
     private val mediaRepository: MediaRepository by inject()
-    private val recentPlaybackSessionRepository: RecentPlaybackSessionRepository by inject()
+    private val recentPlaybackRepository: RecentPlaybackRepository by inject()
     private val browserTree: MediaBrowserTree by inject()
+    private val addRecentSearchActionProvider: AddRecentSearchActionProvider by inject()
 
     private val playbackPreparer = KiwiPlaybackPreparer(
         mediaRepository,
         browserTree,
-        recentPlaybackSessionRepository,
+        recentPlaybackRepository,
         serviceScope,
         this::onPlaylistPrepared
     )
@@ -85,6 +87,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         mediaSessionConnector = MediaSessionConnector(mediaSession).apply {
             setPlaybackPreparer(playbackPreparer)
+            setCustomActionProviders(addRecentSearchActionProvider)
             setQueueNavigator(queueNavigator)
             setPlayer(exoPlayer)
         }
@@ -130,10 +133,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
         Timber.d("onLoadChildren(parentId=$parentId, options=$options)")
 
         val pagination = options.getPaginationOrDefault()
+        val filter = Filter(pagination)
 
         result.detach()
         serviceScope.launch {
-            val items = browserTree.itemsFor(parentId, pagination)
+            val items = browserTree.itemsFor(parentId, filter)
 
             Timber.d("onLoadChildren(parentId=$parentId) result(${items?.size ?: "null"})")
             result.sendResult(items)
@@ -144,10 +148,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
         Timber.d("onSearch(query=$query)")
 
         val pagination = extras.getPaginationOrDefault()
+        val filter = Filter(pagination)
 
         result.detach()
         serviceScope.launch {
-            val songs = mediaRepository.search(query, pagination)
+            val songs = mediaRepository.search(query, filter)
                 .map {
                     MediaBrowserCompat.MediaItem(it, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
                 }
@@ -186,7 +191,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
             }
 
             session?.let {
-                recentPlaybackSessionRepository.save(session)
+                recentPlaybackRepository.save(session)
             }
         }
     }
