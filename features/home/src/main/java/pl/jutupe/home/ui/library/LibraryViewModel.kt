@@ -23,7 +23,7 @@ class LibraryViewModel(
     val events = SingleLiveData<LibraryViewEvent>()
     val isInRoot = MutableLiveData(true)
 
-    private val libraryHistory = LibraryHistory(currentRoot.value)
+    private val history = BrowserHistory(currentRoot.value)
 
     val items = Pager(
         PagingConfig(pageSize = 30)
@@ -41,7 +41,7 @@ class LibraryViewModel(
             if (item.isPlayable) {
                 connection.playFromMediaId(item.id, currentRoot.value.id)
             } else {
-                libraryHistory.add(item)
+                history.push(item)
                 changeRoot(item)
             }
         }
@@ -54,11 +54,7 @@ class LibraryViewModel(
     fun onNavigateToParentClicked() {
         Timber.d("onNavigateToParentClicked(), currentRootId=${currentRoot.value.id}")
 
-        val lastRoot = libraryHistory.removeLast()
-
-        if (currentRoot.value != lastRoot) {
-            changeRoot(lastRoot)
-        }
+        changeRoot(history.moveBack())
     }
 
     fun getCurrentRoot(): LiveData<MediaItem> = currentRoot.asLiveData()
