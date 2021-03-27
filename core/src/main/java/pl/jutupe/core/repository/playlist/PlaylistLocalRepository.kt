@@ -1,60 +1,24 @@
 package pl.jutupe.core.repository.playlist
 
-import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import pl.jutupe.core.common.ItemType
 import pl.jutupe.core.util.*
+import pl.jutupe.core.util.MediaStoreConst.getMediaUri
+import pl.jutupe.core.util.MediaStoreConst.playlistMemberProjection
+import pl.jutupe.core.util.MediaStoreConst.playlistMembersUri
+import pl.jutupe.core.util.MediaStoreConst.playlistProjection
+import pl.jutupe.core.util.MediaStoreConst.playlistsUri
 import timber.log.Timber
 
 class PlaylistLocalRepository(
     private val context: Context
 ) : PlaylistRepository {
-
-    private val mediaUri =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-
-    private val playlistsUri =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Playlists.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
-
-    private fun playlistMembersUri(playlistId: String) =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Playlists.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else {
-            MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
-        }.buildUpon()
-            .appendEncodedPath(playlistId)
-            .appendEncodedPath("members")
-            .build()
-
-    private val songProjection = arrayOf(
-        MediaStore.Audio.Media._ID,
-        MediaStore.Audio.Media.TITLE,
-        MediaStore.Audio.Media.ARTIST,
-        MediaStore.Audio.Media.ALBUM,
-        MediaStore.Audio.Media.ALBUM_ID,
-    )
-
-    private val playlistProjection = arrayOf(
-        MediaStore.Audio.Playlists._ID,
-        MediaStore.Audio.Playlists.NAME,
-    )
-
-    private val playlistMemberProjection = arrayOf(
-        MediaStore.Audio.Playlists.Members._ID,
-        MediaStore.Audio.Playlists.Members.AUDIO_ID,
-    ) + songProjection
 
     override suspend fun getAll(filter: Filter): List<MediaDescriptionCompat> {
         Timber.d("getAll(filter=$filter)")
@@ -201,6 +165,7 @@ class PlaylistLocalRepository(
             val mediaUri = getMediaUri(mediaId).toString()
             val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+            val duration = cursor.getDuration()
             val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
             val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
             val albumArtUri = context.getAlbumArtUri(albumId, ItemType.TYPE_PLAYLIST_MEMBER)
@@ -211,6 +176,7 @@ class PlaylistLocalRepository(
                 this.album = album
                 this.artist = artist
                 this.title = title
+                this.duration = duration
 
                 this.playlistMemberId = playlistMemberId
 
@@ -229,7 +195,4 @@ class PlaylistLocalRepository(
 
         return members
     }
-
-    private fun getMediaUri(mediaId: Long): Uri =
-        ContentUris.withAppendedId(mediaUri, mediaId)
 }

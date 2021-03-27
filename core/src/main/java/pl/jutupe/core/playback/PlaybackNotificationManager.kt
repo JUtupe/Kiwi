@@ -41,6 +41,7 @@ class KiwiNotificationManager(
         ).apply {
             setMediaSessionToken(sessionToken)
             setSmallIcon(R.drawable.ic_notification)
+            setUseChronometer(true)
 
             //don't display fast forward buttons
             setControlDispatcher(DefaultControlDispatcher(0, 0))
