@@ -20,15 +20,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <EditText style="@style/KiwiTheme.SearchBar"
-                android:id="@+id/search_bar"
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_search"
-                android:text="@={viewModel.searchText}"
-                android:inputType="text"
-                android:singleLine="true"
-                android:imeOptions="actionDone" />
+                app:hintEnabled="false"
+                app:endIconMode="clear_text"
+                app:endIconDrawable="@drawable/ic_close">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/KiwiTheme.SearchBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:hint="@string/hint_search"
+                    android:singleLine="true"
+                    android:inputType="text"
+                    android:imeOptions="actionDone"
+                    android:text="@={viewModel.searchText}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

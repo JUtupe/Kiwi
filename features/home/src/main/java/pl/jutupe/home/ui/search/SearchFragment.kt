@@ -9,6 +9,7 @@ import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
 import pl.jutupe.home.databinding.FragmentSearchBinding
 import pl.jutupe.home.adapter.search.SearchItemAdapter
+import pl.jutupe.home.ui.search.SearchViewModel.SearchViewEvent
 import pl.jutupe.ui.util.BackdropManager
 import timber.log.Timber
 
