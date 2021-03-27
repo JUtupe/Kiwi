@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
+import android.net.Uri
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import coil.ImageLoader
@@ -13,10 +14,7 @@ import coil.request.ImageRequest
 import com.google.android.exoplayer2.DefaultControlDispatcher
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import pl.jutupe.core.R
 import pl.jutupe.core.util.toBitmap
 
@@ -26,7 +24,7 @@ class KiwiNotificationManager(
     notificationListener: PlayerNotificationManager.NotificationListener,
 ) {
     private val loadImageJob = SupervisorJob()
-    private val imageScope = CoroutineScope(Dispatchers.IO + loadImageJob)
+    private val imageScope = CoroutineScope(Dispatchers.Main + loadImageJob)
     private val notificationManager: PlayerNotificationManager
 
     init {
@@ -67,41 +65,58 @@ class KiwiNotificationManager(
             null
 
         override fun getCurrentContentText(player: Player) =
-            controller.metadata?.description?.subtitle.toString()
+            controller.metadata?.description?.subtitle?.toString()
 
-        override fun getCurrentContentTitle(player: Player) =
-            controller.metadata?.description?.title.toString()
+        override fun getCurrentContentTitle(player: Player): CharSequence =
+            controller.metadata?.description?.title?.toString() ?: ""
 
         override fun getCurrentLargeIcon(
             player: Player,
             callback: PlayerNotificationManager.BitmapCallback
-        ): Bitmap? {
+        ): Bitmap {
             val iconUri = controller.metadata?.description?.iconUri
+            val cacheKey = MemoryCache.Key(iconUri.toString())
 
-            loader.memoryCache[MemoryCache.Key.invoke(iconUri.toString())]?.let {
+            loader.memoryCache[cacheKey]?.let {
                 return it
             }
 
             imageScope.launch {
-                val r = ImageRequest.Builder(context)
-                    .data(iconUri)
-                    .error(R.drawable.placeholder_song)
-                    .size(NOTIFICATION_LARGE_ICON_SIZE)
-                    .memoryCacheKey(iconUri.toString())
-                    .build()
+                fetchArt(iconUri, cacheKey)?.let {
+                    loader.memoryCache[cacheKey] = it
 
-                val bitmap = when (val result = loader.execute(r).drawable) {
-                    is VectorDrawable -> result.toBitmap()
-                    is BitmapDrawable -> result.bitmap
-                    else -> throw IllegalArgumentException("Invalid drawable type")
+                    callback.onBitmap(it)
                 }
-
-                loader.memoryCache[MemoryCache.Key.invoke(iconUri.toString())] = bitmap
-
-                callback.onBitmap(bitmap)
             }
 
-            return null
+            return runBlocking { fetchPlaceholder() }
+        }
+
+        private suspend fun fetchArt(iconUri: Uri?, cacheKey: MemoryCache.Key): Bitmap? {
+            val request = ImageRequest.Builder(context)
+                .data(iconUri)
+                .memoryCacheKey(cacheKey)
+                .error(R.drawable.placeholder_song)
+                .size(NOTIFICATION_LARGE_ICON_SIZE)
+                .build()
+
+            val result = loader.execute(request)
+
+            return when (val drawable = result.drawable) {
+                is VectorDrawable -> drawable.toBitmap()
+                is BitmapDrawable -> drawable.bitmap
+                else -> null
+            }
+        }
+
+        private suspend fun fetchPlaceholder(): Bitmap {
+            val request = ImageRequest.Builder(context)
+                .fallback(R.drawable.placeholder_song)
+                .build()
+
+            val result = loader.execute(request).drawable as VectorDrawable
+
+            return result.toBitmap()
         }
     }
 

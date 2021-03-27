@@ -7,14 +7,14 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
 
 fun MediaDescriptionCompat.toMediaSource(dataSourceFactory: DataSource.Factory) =
-        ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(MediaItem.Builder()
-                        .setUri(mediaUri)
-                        .setTag(this)
-                        .build())
+    ProgressiveMediaSource.Factory(dataSourceFactory)
+        .createMediaSource(MediaItem.Builder()
+            .setUri(mediaUri)
+            .setTag(this)
+            .build())
 
 fun List<MediaDescriptionCompat>.toMediaSource(
-        dataSourceFactory: DataSource.Factory
+    dataSourceFactory: DataSource.Factory
 ): ConcatenatingMediaSource {
 
     val concatenatingMediaSource = ConcatenatingMediaSource()
