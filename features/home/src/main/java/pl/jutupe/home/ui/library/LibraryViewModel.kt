@@ -23,7 +23,7 @@ class LibraryViewModel(
     val events = SingleLiveData<LibraryViewEvent>()
     val isInRoot = MutableLiveData(true)
 
-    private val history = BrowserHistory(currentRoot.value)
+    private val history = BrowserHistory(mutableListOf(currentRoot.value))
 
     val items = Pager(
         PagingConfig(pageSize = 30)

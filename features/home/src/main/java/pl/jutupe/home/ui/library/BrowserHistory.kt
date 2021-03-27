@@ -2,19 +2,18 @@ package pl.jutupe.home.ui.library
 
 import pl.jutupe.core.common.MediaItem
 
-class BrowserHistory(mediaItem: MediaItem) {
-    private val history = mutableListOf(mediaItem)
+class BrowserHistory(
+    private val history: MutableList<MediaItem> = mutableListOf()
+) {
 
     fun push(item: MediaItem) {
         history.add(item)
     }
 
     fun moveBack(): MediaItem {
-        return if (history.size != 1) {
+        if (history.size != 1) {
             history.removeLastOrNull()
-            history.last()
-        } else {
-            history.last()
         }
+        return history.last()
     }
 }
