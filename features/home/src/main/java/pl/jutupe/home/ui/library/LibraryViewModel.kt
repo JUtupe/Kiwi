@@ -1,5 +1,6 @@
 package pl.jutupe.home.ui.library
 
+import android.os.Bundle
 import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -8,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.common.MediaItem
+import pl.jutupe.core.util.putPagination
 import pl.jutupe.home.data.MediaItemDataSource
 import pl.jutupe.home.adapter.MediaItemAction
 import timber.log.Timber
@@ -23,8 +25,12 @@ class LibraryViewModel(
 
     val items = Pager(
         PagingConfig(pageSize = 30)
-    ) { MediaItemDataSource(currentRoot.value.id, connection) }
-        .flow.cachedIn(viewModelScope)
+    ) {
+        MediaItemDataSource { pagination ->
+            val options = Bundle().putPagination(pagination)
+            connection.getItems(currentRoot.value.id, options)
+        }
+    }.flow.cachedIn(viewModelScope)
 
     val songAction = object : MediaItemAction {
         override fun onClick(item: MediaItem) {

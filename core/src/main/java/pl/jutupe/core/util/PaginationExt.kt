@@ -1,8 +1,7 @@
-package pl.jutupe.core.extension
+package pl.jutupe.core.util
 
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
-import pl.jutupe.core.util.*
 import pl.jutupe.core.util.Pagination.Companion.DEFAULT_PAGE
 import pl.jutupe.core.util.Pagination.Companion.DEFAULT_PAGE_SIZE
 import pl.jutupe.core.util.Pagination.Companion.DEFAULT_PAGINATION

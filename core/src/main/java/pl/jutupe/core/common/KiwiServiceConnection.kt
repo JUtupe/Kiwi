@@ -10,9 +10,12 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.MutableLiveData
 import pl.jutupe.core.R
-import pl.jutupe.core.extension.id
+import pl.jutupe.core.action.AddRecentSearchActionProvider.Companion.ACTION_ADD_RECENT_SEARCH
+import pl.jutupe.core.action.AddRecentSearchActionProvider.Companion.KEY_MEDIA_ID
 import pl.jutupe.core.playback.KiwiPlaybackPreparer
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
+import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_ROOT_RECENTLY_SEARCHED
+import pl.jutupe.core.util.id
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -48,6 +51,16 @@ class KiwiServiceConnection(
     ).apply { connect() }
 
     private lateinit var mediaController: MediaControllerCompat
+
+    fun addRecentSearchItem(item: MediaItem) {
+        val options = Bundle().apply {
+            putString(KEY_MEDIA_ID, item.id)
+        }
+        mediaController.transportControls.sendCustomAction(ACTION_ADD_RECENT_SEARCH, options)
+    }
+
+    suspend fun getRecentSearchItems(options: Bundle): List<MediaItem> =
+        getItems(KIWI_ROOT_RECENTLY_SEARCHED, options)
 
     suspend fun getItems(parentId: String, options: Bundle): List<MediaItem> =
         suspendCoroutine<List<MediaBrowserCompat.MediaItem>> { continuation ->
