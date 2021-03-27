@@ -10,8 +10,8 @@ import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.common.MediaItem
 import pl.jutupe.core.util.putPagination
-import pl.jutupe.home.data.MediaItemDataSource
 import pl.jutupe.home.adapter.MediaItemAction
+import pl.jutupe.home.data.MediaItemDataSource
 import timber.log.Timber
 
 class LibraryViewModel(
@@ -22,6 +22,8 @@ class LibraryViewModel(
 
     val events = SingleLiveData<LibraryViewEvent>()
     val isInRoot = MutableLiveData(true)
+
+    private val libraryHistory = LibraryHistory(currentRoot.value)
 
     val items = Pager(
         PagingConfig(pageSize = 30)
@@ -36,8 +38,12 @@ class LibraryViewModel(
         override fun onClick(item: MediaItem) {
             Timber.d("onClick($item)")
 
-            if (item.isPlayable) connection.playFromMediaId(item.id, currentRoot.value.id)
-            else changeRoot(item)
+            if (item.isPlayable) {
+                connection.playFromMediaId(item.id, currentRoot.value.id)
+            } else {
+                libraryHistory.add(item)
+                changeRoot(item)
+            }
         }
 
         override fun onMoreClick(item: MediaItem) {
@@ -46,17 +52,25 @@ class LibraryViewModel(
     }
 
     fun onNavigateToParentClicked() {
-        Timber.d("onNavigateToParentClicked(), currentRootId=$currentRoot")
+        Timber.d("onNavigateToParentClicked(), currentRootId=${currentRoot.value.id}")
 
-        changeRoot(connection.rootMediaItem)
+        val lastRoot = libraryHistory.removeLast()
+
+        if (currentRoot.value != lastRoot) {
+            changeRoot(lastRoot)
+        }
     }
 
     fun getCurrentRoot(): LiveData<MediaItem> = currentRoot.asLiveData()
 
-    private fun changeRoot(root: MediaItem) {
-        currentRoot.value = root
-        isInRoot.value = root.id == connection.rootMediaId
+    private fun changeRoot(newRoot: MediaItem) {
+        currentRoot.value = newRoot
+        isInRoot.value = newRoot.id == connection.rootMediaId
 
         events.value = LibraryViewEvent.RefreshAdapter
+    }
+
+    sealed class LibraryViewEvent {
+        object RefreshAdapter : LibraryViewEvent()
     }
 }
