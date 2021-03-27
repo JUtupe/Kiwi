@@ -1,9 +1,6 @@
 package pl.jutupe.kiwi
 
 import android.app.Application
-import com.google.firebase.FirebaseApp
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import pl.jutupe.core.di.coreModule
