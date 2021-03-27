@@ -12,41 +12,16 @@ import android.support.v4.media.MediaDescriptionCompat.STATUS_DOWNLOADED
 import android.support.v4.media.MediaMetadataCompat
 import pl.jutupe.core.common.ItemType
 import pl.jutupe.core.util.*
+import pl.jutupe.core.util.MediaStoreConst.albumProjection
+import pl.jutupe.core.util.MediaStoreConst.albumsUri
+import pl.jutupe.core.util.MediaStoreConst.mediaUri
+import pl.jutupe.core.util.MediaStoreConst.musicSelection
+import pl.jutupe.core.util.MediaStoreConst.songProjection
 import timber.log.Timber
 
 class MediaLocalRepository(
     private val context: Context
 ) : MediaRepository {
-
-    private val musicSelection = "((${MediaStore.Audio.Media.IS_MUSIC} != 0) " +
-            "AND (${MediaStore.Audio.Media.IS_RINGTONE} == 0) " +
-            "AND (${MediaStore.Audio.Media.IS_NOTIFICATION} == 0) " +
-            "AND (${MediaStore.Audio.Media.IS_ALARM} == 0))"
-
-    private val mediaUri =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-
-    private val albumsUri =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Albums.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
-
-    private val songProjection = arrayOf(
-        MediaStore.Audio.Media._ID,
-        MediaStore.Audio.Media.TITLE,
-        MediaStore.Audio.Media.ARTIST,
-        MediaStore.Audio.Media.ALBUM,
-        MediaStore.Audio.Media.ALBUM_ID,
-    )
-
-    private val albumProjection = arrayOf(
-        MediaStore.Audio.Albums._ID,
-        MediaStore.Audio.Albums.ALBUM,
-        MediaStore.Audio.Albums.ARTIST,
-        MediaStore.Audio.Albums.NUMBER_OF_SONGS,
-    )
 
     override suspend fun search(query: String, filter: Filter): List<MediaDescriptionCompat> {
         Timber.d("search(query=$query, filter=$filter)")
@@ -134,6 +109,7 @@ class MediaLocalRepository(
             val mediaUri = getMediaUri(mediaId).toString()
             val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
             val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+            val duration = cursor.getDuration()
             val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
             val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
             val albumArtUri = context.getAlbumArtUri(albumId, ItemType.TYPE_SONG)
@@ -144,6 +120,7 @@ class MediaLocalRepository(
                 this.album = album
                 this.artist = artist
                 this.title = title
+                this.duration = duration
 
                 this.type = ItemType.TYPE_SONG.value.toLong()
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
