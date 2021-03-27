@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1053502097471-aqn5frsng4vmul56ltoem9dftdrotvtm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.jutupe.kiwi",
+            "certificate_hash": "ac38a85d6d7bad235668bc28598ed20ae994639c"
+          }
+        },
+        {
           "client_id": "1053502097471-ungggd3emjvpld75bildldjkdh89df3n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -21,6 +29,35 @@
             "certificate_hash": "8cf1ee33c272573a21c2f209cbe940715bc41485"
           }
         },
+        {
+          "client_id": "1053502097471-om5t8d2ssj1mte9g190lo6v6n2qb7f6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDA7wQPlF5qJnMyj1SHhS9pvNoL2r90FY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1053502097471-om5t8d2ssj1mte9g190lo6v6n2qb7f6p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053502097471:android:63d650d9bd405da39a108a",
+        "android_client_info": {
+          "package_name": "pl.jutupe.kiwi.debug"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "1053502097471-om5t8d2ssj1mte9g190lo6v6n2qb7f6p.apps.googleusercontent.com",
           "client_type": 3

@@ -33,7 +33,7 @@ android {
         }
 
         getByName("debug") {
-            manifestPlaceholders["crashlyticsCollectionEnabled"] = false
+            applicationIdSuffix =".debug"
             versionNameSuffix = "-DEBUG"
         }
     }
