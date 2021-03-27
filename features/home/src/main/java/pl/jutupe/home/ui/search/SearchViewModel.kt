@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.common.MediaItem
-import pl.jutupe.core.util.Pagination
 import pl.jutupe.core.util.putPagination
 import pl.jutupe.home.adapter.MediaItemAction
 import pl.jutupe.home.data.MediaItemDataSource
@@ -77,5 +76,13 @@ class SearchViewModel(
     private fun updatePager(query: String) {
         currentQuery.value = query
         events.value = SearchViewEvent.RefreshAdapter
+    }
+
+    sealed class SearchViewEvent {
+        object RefreshAdapter : SearchViewEvent()
+
+        class SetBackdropSearchTitle(val text: String): SearchViewEvent()
+
+        object SetBackdropRecentlySearchedTitle: SearchViewEvent()
     }
 }
