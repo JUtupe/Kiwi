@@ -3,6 +3,8 @@
     <string name="menu_home">Strona główna</string>
     <string name="menu_settings">Ustawienia</string>
     <string name="label_settings">Ustawienia</string>
-    <string name="label_permission">Uprawnienia</string>
-    <string name="label_permission_message">Do poprawnego funkcjonowania aplikacji wymagane są uprawnienia do pamięci</string>
+    <string name="label_permission_settings">Uprawnienia</string>
+    <string name="label_permission_rationale">Uprawnienia</string>
+    <string name="label_permission_rationale_message">Do poprawnego funkcjonowania aplikacji wymagane są uprawnienia do pamięci</string>
+    <string name="label_permission_settings_message">Zezwól aplikacji na wyszukiwanie utworów na twoim urządzeniu, to uprawnienie jest wymagane do poprawnego funkcjonowania aplikacji.</string>
 </resources>

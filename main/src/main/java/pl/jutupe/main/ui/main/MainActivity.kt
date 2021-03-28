@@ -8,7 +8,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import pl.jutupe.main.BuildConfig
 import pl.jutupe.main.R
 
 class MainActivity : AppCompatActivity() {

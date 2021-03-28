@@ -4,7 +4,9 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="KiwiTheme.Splash">
+    <style name="KiwiTheme.Splash" parent="BaseKiwiTheme">
         <item name="android:windowFullscreen">true</item>
+
+        <item name="android:colorBackground">#37474F</item>
     </style>
 </resources>
