@@ -26,5 +26,5 @@ gradlePlugin {
 
 dependencies {
     implementation("com.android.tools.build:gradle:4.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.20")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31")
 }

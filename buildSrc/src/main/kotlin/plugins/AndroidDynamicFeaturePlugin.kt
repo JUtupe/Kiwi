@@ -1,5 +1,6 @@
 package plugins
 
+import com.android.build.api.dsl.LibraryBuildFeatures
 import com.android.build.gradle.BaseExtension
 import extensions.implementation
 import org.gradle.api.Plugin
@@ -54,8 +55,8 @@ class AndroidDynamicFeaturePlugin : Plugin<Project> {
                 }
             }
 
-            dataBinding {
-                isEnabled = true
+            (buildFeatures as LibraryBuildFeatures).apply {
+                dataBinding = true
             }
 
             compileOptions {
