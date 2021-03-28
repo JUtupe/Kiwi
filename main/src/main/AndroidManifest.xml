@@ -3,9 +3,8 @@
     package="pl.jutupe.main">
 
     <application>
-        <activity android:name=".ui.main.MainActivity">
-
-        </activity>
+        <activity android:name=".ui.main.MainActivity"
+            android:theme="@style/KiwiTheme"/>
 
         <activity android:name=".ui.splash.SplashActivity"
             android:theme="@style/KiwiTheme.Splash">
