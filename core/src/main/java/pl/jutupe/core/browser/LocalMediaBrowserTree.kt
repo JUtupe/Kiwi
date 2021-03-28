@@ -6,6 +6,7 @@ import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
 import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import pl.jutupe.core.R
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_EMPTY_ROOT
@@ -25,9 +26,9 @@ class LocalMediaBrowserTree(
 ) : MediaBrowserTree {
 
     private val rootMediaItems = arrayListOf(
-        rootCategoryOf(KIWI_ROOT_SONGS, R.string.browser_root_songs),
-        rootCategoryOf(KIWI_ROOT_ALBUMS, R.string.browser_root_albums),
-        rootCategoryOf(KIWI_ROOT_PLAYLISTS, R.string.browser_root_playlists),
+        rootCategoryOf(KIWI_ROOT_SONGS, R.string.browser_root_songs, R.drawable.background_media_root_songs),
+        rootCategoryOf(KIWI_ROOT_ALBUMS, R.string.browser_root_albums, R.drawable.background_media_root_albums),
+        rootCategoryOf(KIWI_ROOT_PLAYLISTS, R.string.browser_root_playlists, R.drawable.background_media_root_playlists),
     )
 
     override suspend fun itemsFor(
@@ -62,20 +63,27 @@ class LocalMediaBrowserTree(
 
     private fun rootCategoryOf(
         mediaId: String,
-        @StringRes titleRes: Int
+        @StringRes titleRes: Int,
+        @DrawableRes artRes: Int,
     ): MediaBrowserCompat.MediaItem =
         MediaBrowserCompat.MediaItem(
-            getRootDescription(mediaId, titleRes),
+            getRootDescription(mediaId, titleRes, artRes),
             FLAG_BROWSABLE
         )
 
     private fun getRootDescription(
         mediaId: String,
-        @StringRes titleRes: Int
+        @StringRes titleRes: Int,
+        @DrawableRes artRes: Int,
     ): MediaDescriptionCompat = MediaMetadataCompat.Builder().apply {
         id = mediaId
         title = context.getString(titleRes)
         type = ItemType.TYPE_ROOT.value.toLong()
+
+        val art = context.resourceUri(artRes).toString()
+        artUri = art
+        albumArtUri = art
+        displayIconUri = art
     }.build().fullDescription
 
     private fun List<MediaDescriptionCompat>.toMediaItems(flag: Int) : List<MediaBrowserCompat.MediaItem> =

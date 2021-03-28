@@ -184,9 +184,10 @@ class PlaylistLocalRepository(
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
                 this.downloadStatus = MediaDescriptionCompat.STATUS_DOWNLOADED
 
-                this.artUri = albumArtUri.toString()
-                this.albumArtUri = albumArtUri.toString()
-                this.displayIconUri = albumArtUri.toString()
+                val art = albumArtUri.toString()
+                this.artUri = art
+                this.albumArtUri = art
+                this.displayIconUri = art
             }.build()
 
             members.add(metadata.fullDescription)

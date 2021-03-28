@@ -45,7 +45,9 @@ android {
         jvmTarget = "1.8"
     }
 
-    android.buildFeatures.dataBinding = true
+    buildFeatures {
+        dataBinding = true
+    }
 }
 
 dependencies {

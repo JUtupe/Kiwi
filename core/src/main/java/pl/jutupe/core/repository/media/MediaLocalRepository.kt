@@ -126,9 +126,10 @@ class MediaLocalRepository(
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
                 this.downloadStatus = STATUS_DOWNLOADED
 
-                this.artUri = albumArtUri.toString()
-                this.albumArtUri = albumArtUri.toString()
-                this.displayIconUri = albumArtUri.toString()
+                val art = albumArtUri.toString()
+                this.artUri = art
+                this.albumArtUri = art
+                this.displayIconUri = art
             }.build()
 
             songs.add(metadata.fullDescription)
@@ -158,9 +159,10 @@ class MediaLocalRepository(
                 this.flag = MediaBrowserCompat.MediaItem.FLAG_BROWSABLE
                 this.downloadStatus = STATUS_DOWNLOADED
 
-                this.artUri = albumArtUri.toString()
-                this.albumArtUri = albumArtUri.toString()
-                this.displayIconUri = albumArtUri.toString()
+                val art = albumArtUri.toString()
+                this.artUri = art
+                this.albumArtUri = art
+                this.displayIconUri = art
             }.build()
 
             albums.add(metadata.fullDescription)
