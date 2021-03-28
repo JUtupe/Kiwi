@@ -1,5 +1,6 @@
 package plugins
 
+import com.android.build.api.dsl.LibraryBuildFeatures
 import com.android.build.gradle.BaseExtension
 import dependencies.*
 import extensions.implementation
@@ -58,13 +59,18 @@ class AndroidLibraryPlugin : Plugin<Project> {
                 }
             }
 
-            dataBinding {
-                isEnabled = true
+            (buildFeatures as LibraryBuildFeatures).apply {
+                dataBinding = true
             }
 
             compileOptions {
                 sourceCompatibility = JavaVersion.VERSION_1_8
                 targetCompatibility = JavaVersion.VERSION_1_8
+            }
+
+            testOptions {
+                unitTests.isReturnDefaultValues = true
+                unitTests.isIncludeAndroidResources = true
             }
         }
 

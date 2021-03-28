@@ -12,15 +12,16 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import pl.jutupe.core.browser.MediaBrowserTree
-import pl.jutupe.core.repository.MediaRepository
-import pl.jutupe.core.repository.RecentPlaybackSessionRepository
+import pl.jutupe.core.repository.media.MediaRepository
+import pl.jutupe.core.repository.recentPlayback.RecentPlaybackRepository
+import pl.jutupe.core.util.Filter
 import pl.jutupe.core.util.Pagination
 import timber.log.Timber
 
 class KiwiPlaybackPreparer(
     private val mediaRepository: MediaRepository,
     private val browserTree: MediaBrowserTree,
-    private val recentPlaybackSessionRepository: RecentPlaybackSessionRepository,
+    private val recentPlaybackRepository: RecentPlaybackRepository,
     private val serviceScope: CoroutineScope,
     private val onPlaylistPrepared: (PreparedPlaylist) -> Unit
 ) : MediaSessionConnector.PlaybackPreparer {
@@ -37,7 +38,7 @@ class KiwiPlaybackPreparer(
 
         //load recent song or return
         serviceScope.launch {
-            val session = recentPlaybackSessionRepository.findRecentPlaybackSession() ?: return@launch
+            val session = recentPlaybackRepository.findRecentPlaybackSession() ?: return@launch
 
             val description = session.description
 
@@ -55,8 +56,11 @@ class KiwiPlaybackPreparer(
     override fun onPrepareFromSearch(query: String, playWhenReady: Boolean, extras: Bundle?) {
         Timber.d("onPrepareFromSearch(query=$query)")
 
+        val pagination = Pagination(Pagination.DEFAULT_PAGE, Pagination.MAX_PAGE_SIZE)
+        val filter = Filter(pagination)
+
         serviceScope.launch {
-            val songs = mediaRepository.search(query, Pagination(Pagination.DEFAULT_PAGE, Pagination.MAX_PAGE_SIZE))
+            val songs = mediaRepository.search(query, filter)
 
             if (songs.isNotEmpty()) {
                 val playlist = PreparedPlaylist(
@@ -75,6 +79,7 @@ class KiwiPlaybackPreparer(
         serviceScope.launch {
             mediaRepository.findByMediaId(mediaId)?.let { item ->
                 val pagination = Pagination(Pagination.DEFAULT_PAGE, Pagination.MAX_PAGE_SIZE)
+                val filter = Filter(pagination)
 
                 val playbackStartPositionMs =
                     extras?.getLong(MEDIA_DESCRIPTION_EXTRAS_START_PLAYBACK_POSITION_MS, C.TIME_UNSET) ?: C.TIME_UNSET
@@ -82,7 +87,7 @@ class KiwiPlaybackPreparer(
                 val parentId = extras?.getString(KIWI_PARENT_ID_KEY)
 
                 val songs = parentId?.let { id ->
-                    val items = browserTree.itemsFor(id, pagination)
+                    val items = browserTree.itemsFor(id, filter)
                         ?.map { it.description }
 
                     if (items?.isNotEmpty() == true) items

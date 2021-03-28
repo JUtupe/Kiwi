@@ -18,7 +18,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(
             binding.filterIcon,
             binding.content,
             binding.backdrop.root,
-            openIconRes = R.drawable.ic_search,
+            openIconRes = R.drawable.ic_filter,
             closeIconRes = R.drawable.ic_arrow_up,
         )
 

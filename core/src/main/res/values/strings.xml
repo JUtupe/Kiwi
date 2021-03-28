@@ -8,6 +8,9 @@
     <string name="browser_root_albums">Albums</string>
     <string name="browser_root_playlists">Playlists</string>
 
+    <string name="playlist_recent_search">Recently searched</string>
+    <string name="playlist_recent_playback">Recently played</string>
+
     <string name="artist_device">Device</string>
     <string name="title_unknown">Title unknown</string>
     <string name="artist_unknown">Artist unknown</string>

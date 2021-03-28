@@ -6,13 +6,16 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
+import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.MutableLiveData
 import pl.jutupe.core.R
-import pl.jutupe.core.extension.id
+import pl.jutupe.core.action.AddRecentSearchActionProvider.Companion.ACTION_ADD_RECENT_SEARCH
+import pl.jutupe.core.action.AddRecentSearchActionProvider.Companion.KEY_MEDIA_ID
 import pl.jutupe.core.playback.KiwiPlaybackPreparer
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
-import pl.jutupe.core.extension.type
+import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_ROOT_RECENTLY_SEARCHED
+import pl.jutupe.core.util.id
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -35,6 +38,7 @@ class KiwiServiceConnection(
         .apply { postValue(EMPTY_PLAYBACK_STATE) }
     val nowPlaying = MutableLiveData<MediaMetadataCompat>()
         .apply { postValue(NOTHING_PLAYING) }
+    val queue = MutableLiveData<List<QueueItem>>()
 
     private val transportControls: MediaControllerCompat.TransportControls
         get() = mediaController.transportControls
@@ -47,6 +51,16 @@ class KiwiServiceConnection(
     ).apply { connect() }
 
     private lateinit var mediaController: MediaControllerCompat
+
+    fun addRecentSearchItem(item: MediaItem) {
+        val options = Bundle().apply {
+            putString(KEY_MEDIA_ID, item.id)
+        }
+        mediaController.transportControls.sendCustomAction(ACTION_ADD_RECENT_SEARCH, options)
+    }
+
+    suspend fun getRecentSearchItems(options: Bundle): List<MediaItem> =
+        getItems(KIWI_ROOT_RECENTLY_SEARCHED, options)
 
     suspend fun getItems(parentId: String, options: Bundle): List<MediaItem> =
         suspendCoroutine<List<MediaBrowserCompat.MediaItem>> { continuation ->
@@ -68,7 +82,7 @@ class KiwiServiceConnection(
                 }
             }
             mediaBrowser.subscribe(parentId, options, callback)
-        }.map { it.toMediaItem() }
+        }.map { it.description.toMediaItem(context) }
 
     suspend fun searchItems(query: String, options: Bundle): List<MediaItem> =
         suspendCoroutine<List<MediaBrowserCompat.MediaItem>> { continuation ->
@@ -86,7 +100,7 @@ class KiwiServiceConnection(
                 }
             }
             mediaBrowser.search(query, options, callback)
-        }.map { it.toMediaItem() }
+        }.map { it.description.toMediaItem(context) }
 
     fun playFromMediaId(mediaId: String, parentId: String?) {
         val extras = Bundle().apply {
@@ -95,15 +109,6 @@ class KiwiServiceConnection(
 
         transportControls.playFromMediaId(mediaId, extras)
     }
-
-    private fun MediaBrowserCompat.MediaItem.toMediaItem(): MediaItem =
-        MediaItem.create(
-            id = this.mediaId ?: "unknown",
-            title = this.description.title?.toString() ?: context.getString(R.string.title_unknown),
-            artist = this.description.subtitle?.toString() ?: context.getString(R.string.artist_device),
-            art = this.description.iconUri,
-            type = ItemType.getByValue(this.description.type!!.toInt())
-        )
 
     private inner class MediaBrowserConnectionCallback(
         private val context: Context
@@ -141,6 +146,17 @@ class KiwiServiceConnection(
                     metadata
                 }
             )
+        }
+
+        override fun onQueueChanged(queueItems: MutableList<MediaSessionCompat.QueueItem>?) {
+            val items = queueItems?.map {
+                QueueItem(
+                    it.queueId,
+                    it.description.toMediaItem(context)
+                )
+            } ?: emptyList()
+
+            queue.postValue(items)
         }
 
         override fun onSessionDestroyed() {

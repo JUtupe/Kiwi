@@ -25,7 +25,6 @@ private object Versions {
     const val paging = "3.0.0-alpha04"
     const val appCompat = "1.1.0"
     const val material = "1.1.0-beta01"
-    const val recyclerView = "1.1.0"
     const val cardView = "1.0.0"
     const val lifecycle = "2.2.0"
 }
@@ -50,7 +49,6 @@ object Libraries {
 
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
     const val coordinatorLayout = "androidx.coordinatorlayout:coordinatorlayout:${Versions.coordinatorLayout}"
-    const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
 
     const val paging = "androidx.paging:paging-runtime:${Versions.paging}"
     const val lifecycle = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
@@ -69,6 +67,7 @@ object Libraries {
     const val koinViewModel = "org.koin:koin-android-viewmodel:${Versions.koin}"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+    const val permissions = "com.github.sembozdemir:PermissionsKt:1.0.0"
 }
 
 object TestLibraries {

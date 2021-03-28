@@ -26,14 +26,14 @@ android {
 
     buildTypes {
         getByName("release") {
-            manifestPlaceholders["crashlyticsCollectionEnabled"] = true
+            isShrinkResources = true
+            isMinifyEnabled = true
 
-            isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
 
         getByName("debug") {
-            manifestPlaceholders["crashlyticsCollectionEnabled"] = false
+            applicationIdSuffix = ".debug"
             versionNameSuffix = "-DEBUG"
         }
     }
@@ -47,7 +47,9 @@ android {
         jvmTarget = "1.8"
     }
 
-    android.buildFeatures.dataBinding = true
+    buildFeatures {
+        dataBinding = true
+    }
 }
 
 dependencies {

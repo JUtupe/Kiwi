@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":navigation"))
 
     implementation(Libraries.constraintLayout)
+    implementation(Libraries.permissions)
 
     implementation(Libraries.navigation)
     implementation(Libraries.navigationFragment)

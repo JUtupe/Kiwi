@@ -9,4 +9,6 @@
     <string name="artist_device">Urządzenie</string>
     <string name="title_unknown">Tytuł nieznany</string>
     <string name="artist_unknown">Wykonawca nieznany</string>
+    <string name="playlist_recent_search">Ostatnio wyszukiwane</string>
+    <string name="playlist_recent_playback">Ostatnio odtwarzane</string>
 </resources>

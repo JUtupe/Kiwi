@@ -4,56 +4,42 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import android.view.View
-import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.core.app.ActivityCompat
+import com.sembozdemir.permissionskt.askPermissions
+import com.sembozdemir.permissionskt.handlePermissionsResult
 import org.koin.android.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseActivity
 import pl.jutupe.main.R
 import pl.jutupe.main.databinding.ActivitySplashBinding
 import pl.jutupe.main.ui.main.MainActivity
+import pl.jutupe.main.util.TransitionCompletedListener
 
 class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
     R.layout.activity_splash
 ) {
 
+    private var settingsClicked = false
+
     override val viewModel: SplashViewModel by viewModel()
 
+    private val transitionCompletedListener = TransitionCompletedListener {
+        requestStoragePermissions()
+    }
+
     override fun onInitDataBinding() {
-        binding.motionLayout.setTransitionListener(
-            object : MotionLayout.TransitionListener {
-                override fun onTransitionCompleted(layout: MotionLayout?, p1: Int) {
-                    viewModel.onSplashAnimationFinished()
-                }
-
-                override fun onTransitionChange(
-                    layout: MotionLayout?, p1: Int, p2: Int, p3: Float
-                ) = Unit
-
-                override fun onTransitionStarted(
-                    layout: MotionLayout?, p1: Int, p2: Int
-                ) = Unit
-
-                override fun onTransitionTrigger(
-                    layout: MotionLayout?, p1: Int, p2: Boolean, p3: Float
-                ) = Unit
-            }
-        )
-
-        viewModel.events.observe(this, this::onViewEvent)
+        binding.motionLayout.setTransitionListener(transitionCompletedListener)
     }
 
     override fun onResume() {
         super.onResume()
         binding.motionLayout.apply {
-            startLayoutAnimation()
-
             //retry when user came back from settings
-            if (currentState == R.id.end) {
-                viewModel.onResumeToSplash()
+            if (settingsClicked && currentState == R.id.end) {
+                settingsClicked = false
+
+                requestStoragePermissions()
             }
         }
     }
@@ -66,66 +52,72 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) = handlePermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == REQUEST_CODE_STORAGE && grantResults.isNotEmpty()) {
-            val permissionGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED
+    override fun onDestroy() {
+        binding.motionLayout.removeTransitionListener(transitionCompletedListener)
 
-            viewModel.onStoragePermissionResult(permissionGranted)
-        } else {
-            viewModel.onStoragePermissionResult(false)
-        }
-    }
-
-    private fun onViewEvent(event: SplashViewEvent) {
-        when (event) {
-            SplashViewEvent.NavigateToMain -> {
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                finish()
-            }
-            SplashViewEvent.RequestStoragePermission -> {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    REQUEST_CODE_STORAGE
-                )
-            }
-            SplashViewEvent.ShowNoPermissionInformation -> {
-                AlertDialog.Builder(this, R.style.KiwiDialog_Large)
-                    .setTitle(R.string.label_permission)
-                    .setMessage(R.string.label_permission_message)
-                    .setPositiveButton(R.string.label_settings) { _, _ -> viewModel.onPermissionSettingsClicked() }
-                    .setCancelable(false)
-                    .create()
-                    .show()
-            }
-            SplashViewEvent.NavigateToAppSettings -> {
-                startActivity(
-                    Intent(
-                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                        Uri.fromParts("package", packageName, null)
-                    )
-                )
-            }
-        }
+        super.onDestroy()
     }
 
     private fun hideSystemUIAndNavigation(activity: Activity) {
         val decorView: View = activity.window.decorView
         decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE or
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_FULLSCREEN
     }
 
-    companion object {
-        const val REQUEST_CODE_STORAGE = 1
+    private fun requestStoragePermissions() {
+        askPermissions(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) {
+            onShowRationale { showRationaleDialog { it.retry() } }
+            onGranted { openMainActivity() }
+            onDenied { requestStoragePermissions() }
+            onNeverAskAgain { showNoPermissionDialog() }
+        }
+    }
+
+    private fun showRationaleDialog(action: () -> Unit) {
+        AlertDialog.Builder(this@SplashActivity, R.style.KiwiDialog_Large)
+            .setTitle(R.string.label_permission_rationale)
+            .setMessage(R.string.label_permission_rationale_message)
+            .setPositiveButton(android.R.string.ok) { _, _ -> action() }
+            .setOnCancelListener { action() }
+            .setCancelable(false)
+            .create()
+            .show()
+    }
+
+    private fun showNoPermissionDialog() {
+        AlertDialog.Builder(this@SplashActivity, R.style.KiwiDialog_Large)
+            .setTitle(R.string.label_permission_settings)
+            .setMessage(R.string.label_permission_settings_message)
+            .setPositiveButton(R.string.label_settings) { _, _ -> openAppSettings() }
+            .setCancelable(false)
+            .create()
+            .show()
+    }
+
+    private fun openMainActivity() {
+        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+        finish()
+    }
+
+    private fun openAppSettings() {
+        settingsClicked = true
+
+        val settingsIntent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", packageName, null)
+        )
+
+        startActivity(settingsIntent)
     }
 }
