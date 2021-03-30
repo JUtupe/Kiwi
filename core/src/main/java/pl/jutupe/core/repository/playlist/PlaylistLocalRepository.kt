@@ -59,12 +59,6 @@ class PlaylistLocalRepository(
     override suspend fun create(playlist: MediaDescriptionCompat): MediaDescriptionCompat {
         Timber.d( "create(playlist=$playlist)")
 
-        val filter = Filter(Pagination.DEFAULT_PAGINATION)
-
-        getAll(filter).first().let {
-            it.mediaId?.let { it1 -> delete(it1) }
-        }
-
         val playlistContentValue = ContentValues().apply {
             put(MediaStore.Audio.Playlists._ID, playlist.mediaId)
             put(MediaStore.Audio.Playlists.NAME, playlist.title.toString())
