@@ -8,10 +8,10 @@ import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
-import pl.jutupe.core.common.MediaItem
 import pl.jutupe.core.util.putPagination
 import pl.jutupe.home.adapter.MediaItemAction
 import pl.jutupe.home.data.MediaItemDataSource
+import pl.jutupe.model.MediaItem
 import timber.log.Timber
 
 class LibraryViewModel(

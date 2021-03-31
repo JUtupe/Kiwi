@@ -7,13 +7,13 @@ import android.provider.MediaStore
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
-import pl.jutupe.core.common.ItemType
 import pl.jutupe.core.util.*
 import pl.jutupe.core.util.MediaStoreConst.getMediaUri
 import pl.jutupe.core.util.MediaStoreConst.playlistMemberProjection
 import pl.jutupe.core.util.MediaStoreConst.playlistMembersUri
 import pl.jutupe.core.util.MediaStoreConst.playlistProjection
 import pl.jutupe.core.util.MediaStoreConst.playlistsUri
+import pl.jutupe.model.ItemType
 import timber.log.Timber
 
 class PlaylistLocalRepository(

@@ -1,8 +1,8 @@
 package pl.jutupe.home.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import pl.jutupe.core.common.MediaItem
-import pl.jutupe.core.common.QueueItem
+import pl.jutupe.model.MediaItem
+import pl.jutupe.model.QueueItem
 
 object MediaItemDiffUtil : DiffUtil.ItemCallback<MediaItem>() {
     override fun areItemsTheSame(oldItem: MediaItem, newItem: MediaItem): Boolean =

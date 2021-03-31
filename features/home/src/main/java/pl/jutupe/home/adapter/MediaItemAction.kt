@@ -1,6 +1,7 @@
 package pl.jutupe.home.adapter
 
-import pl.jutupe.core.common.MediaItem
+import pl.jutupe.model.MediaItem
+
 
 interface MediaItemAction {
 

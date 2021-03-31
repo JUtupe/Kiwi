@@ -1,6 +1,7 @@
 package pl.jutupe.home.ui.library
 
-import pl.jutupe.core.common.MediaItem
+import pl.jutupe.model.MediaItem
+
 
 class BrowserHistory(
     private val history: MutableList<MediaItem> = mutableListOf()

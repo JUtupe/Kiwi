@@ -3,7 +3,6 @@ package pl.jutupe.home.adapter.library
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import pl.jutupe.core.common.MediaItem
 import pl.jutupe.home.adapter.MediaItemAction
 import pl.jutupe.home.adapter.MediaItemDiffUtil
 import pl.jutupe.home.databinding.ItemPlayableBinding
@@ -11,6 +10,7 @@ import pl.jutupe.home.databinding.ItemRootBinding
 import pl.jutupe.home.adapter.MediaItemViewHolder
 import pl.jutupe.home.adapter.library.viewholder.PlayableMediaItemViewHolder
 import pl.jutupe.home.adapter.library.viewholder.RootMediaItemViewHolder
+import pl.jutupe.model.MediaItem
 
 class MediaItemAdapter : PagingDataAdapter<MediaItem, MediaItemViewHolder<*>>(MediaItemDiffUtil) {
     var action: MediaItemAction? = null

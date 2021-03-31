@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":commons:base"))
     implementation(project(":commons:ui"))
+    implementation(project(":commons:model"))
 
     implementation(project(":navigation"))
 

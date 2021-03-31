@@ -9,6 +9,10 @@ plugins {
 dependencies {
     kapt(Libraries.databinding)
 
+    implementation(project(":commons:model"))
+
     implementation(Libraries.appCompat)
     implementation(Libraries.material)
+    implementation(Libraries.coil)
+
 }

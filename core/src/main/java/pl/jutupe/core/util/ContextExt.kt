@@ -4,8 +4,8 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
-import pl.jutupe.core.common.ItemType
-import pl.jutupe.core.common.getItemBaseDrawable
+import pl.jutupe.model.ItemType
+import pl.jutupe.ui.util.getItemBaseDrawable
 
 fun Context.resourceUri(resourceId: Int): Uri = with(resources) {
     Uri.Builder()

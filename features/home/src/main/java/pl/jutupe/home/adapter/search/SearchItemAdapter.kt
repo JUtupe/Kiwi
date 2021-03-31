@@ -3,10 +3,10 @@ package pl.jutupe.home.adapter.search
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import pl.jutupe.core.common.MediaItem
 import pl.jutupe.home.adapter.MediaItemAction
 import pl.jutupe.home.adapter.MediaItemDiffUtil
 import pl.jutupe.home.databinding.ItemSearchBinding
+import pl.jutupe.model.MediaItem
 
 class SearchItemAdapter : PagingDataAdapter<MediaItem, SearchItemViewHolder>(MediaItemDiffUtil) {
     var action: MediaItemAction? = null

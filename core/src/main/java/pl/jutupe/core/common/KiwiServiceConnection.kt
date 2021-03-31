@@ -16,6 +16,8 @@ import pl.jutupe.core.playback.KiwiPlaybackPreparer
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_ROOT_RECENTLY_SEARCHED
 import pl.jutupe.core.util.id
+import pl.jutupe.core.util.toMediaItem
+import pl.jutupe.model.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -29,7 +31,7 @@ class KiwiServiceConnection(
         id = rootMediaId,
         title = context.getString(R.string.browser_root_main),
         artist = context.getString(R.string.artist_device),
-        art = null,
+        art = null
     )
 
     val isConnected = MutableLiveData<Boolean>()
