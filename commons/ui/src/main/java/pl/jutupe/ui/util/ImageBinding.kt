@@ -1,16 +1,15 @@
-package pl.jutupe.home.util
+package pl.jutupe.ui.util
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import coil.load
-import pl.jutupe.core.common.MediaItem
-import pl.jutupe.core.common.getItemBaseDrawable
+import pl.jutupe.model.MediaItem
 
 @BindingAdapter("mediaImage")
 fun ImageView.bindMediaImage(item: MediaItem) {
     load(item.art) {
         val baseDrawable = item.getItemBaseDrawable()
-        memoryCacheKey(item.art?.toString())
+        memoryCacheKey(item.art)
         error(baseDrawable)
         placeholder(baseDrawable)
     }

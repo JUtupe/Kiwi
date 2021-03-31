@@ -1,4 +1,4 @@
-package pl.jutupe.core.common
+package pl.jutupe.model
 
 data class QueueItem(
     val id: Long,

@@ -12,10 +12,13 @@ import androidx.lifecycle.MutableLiveData
 import pl.jutupe.core.R
 import pl.jutupe.core.action.AddRecentSearchActionProvider.Companion.ACTION_ADD_RECENT_SEARCH
 import pl.jutupe.core.action.AddRecentSearchActionProvider.Companion.KEY_MEDIA_ID
-import pl.jutupe.core.playback.KiwiPlaybackPreparer
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_ROOT_RECENTLY_SEARCHED
+import pl.jutupe.core.playback.KiwiPlaybackPreparer
 import pl.jutupe.core.util.id
+import pl.jutupe.core.util.toMediaItem
+import pl.jutupe.model.MediaItem
+import pl.jutupe.model.QueueItem
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine

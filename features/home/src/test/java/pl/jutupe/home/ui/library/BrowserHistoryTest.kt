@@ -6,7 +6,7 @@ import io.mockk.verify
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
-import pl.jutupe.core.common.MediaItem
+import pl.jutupe.model.MediaItem
 
 internal class BrowserHistoryTest {
 
