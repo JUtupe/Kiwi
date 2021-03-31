@@ -14,5 +14,4 @@ dependencies {
     implementation(Libraries.appCompat)
     implementation(Libraries.material)
     implementation(Libraries.coil)
-
 }
