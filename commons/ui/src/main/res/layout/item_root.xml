@@ -11,7 +11,7 @@
 
         <variable
             name="action"
-            type="pl.jutupe.home.adapter.MediaItemAction" />
+            type="pl.jutupe.model.MediaItemAction" />
     </data>
 
     <androidx.cardview.widget.CardView

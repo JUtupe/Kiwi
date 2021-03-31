@@ -1,9 +1,9 @@
 package pl.jutupe.home.adapter.library.viewholder
 
-import pl.jutupe.home.adapter.MediaItemAction
 import pl.jutupe.home.adapter.MediaItemViewHolder
-import pl.jutupe.home.databinding.ItemPlayableBinding
 import pl.jutupe.model.MediaItem
+import pl.jutupe.model.MediaItemAction
+import pl.jutupe.ui.databinding.ItemPlayableBinding
 
 class PlayableMediaItemViewHolder(
     private val binding: ItemPlayableBinding

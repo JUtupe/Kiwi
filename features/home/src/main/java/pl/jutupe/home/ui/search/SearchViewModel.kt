@@ -13,9 +13,9 @@ import kotlinx.coroutines.launch
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.util.putPagination
-import pl.jutupe.home.adapter.MediaItemAction
 import pl.jutupe.home.data.MediaItemDataSource
 import pl.jutupe.model.MediaItem
+import pl.jutupe.model.MediaItemAction
 import timber.log.Timber
 
 class SearchViewModel(

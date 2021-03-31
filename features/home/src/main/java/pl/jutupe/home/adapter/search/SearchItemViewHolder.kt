@@ -1,9 +1,9 @@
 package pl.jutupe.home.adapter.search
 
-import pl.jutupe.home.adapter.MediaItemAction
 import pl.jutupe.home.adapter.MediaItemViewHolder
-import pl.jutupe.home.databinding.ItemSearchBinding
 import pl.jutupe.model.MediaItem
+import pl.jutupe.model.MediaItemAction
+import pl.jutupe.ui.databinding.ItemSearchBinding
 
 class SearchItemViewHolder(
     val binding: ItemSearchBinding

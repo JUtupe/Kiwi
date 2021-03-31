@@ -1,9 +1,9 @@
 package pl.jutupe.home.adapter.queue
 
 import androidx.recyclerview.widget.RecyclerView
-import pl.jutupe.home.adapter.MediaItemAction
-import pl.jutupe.home.databinding.ItemQueueBinding
+import pl.jutupe.model.MediaItemAction
 import pl.jutupe.model.QueueItem
+import pl.jutupe.ui.databinding.ItemQueueBinding
 
 class QueueItemViewHolder(
     private val binding: ItemQueueBinding
