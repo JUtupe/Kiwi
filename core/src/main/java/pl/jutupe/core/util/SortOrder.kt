@@ -6,7 +6,8 @@ data class SortOrder(
 ) {
     enum class Direction {
         ASCENDING,
-        DESCENDING
+        DESCENDING,
+        RANDOM,
     }
 
     companion object {

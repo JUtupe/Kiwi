@@ -30,27 +30,24 @@ fun ContentResolver.queryPaged(
     }
 
 private fun SortOrder.toOldAndroidSortOrderDirection(): String {
-    val field: String =
+    val column: String =
         if (type == SortOrder.DEFAULT_TYPE) {
             DEFAULT_SORT_COLUMN
         } else type
 
-    val oldDirection = direction.toOldAndroidSortOrderDirection()
-
-    return "$field $oldDirection"
-}
-
-private fun SortOrder.Direction.toOldAndroidSortOrderDirection(): String =
-    when (this) {
-        SortOrder.Direction.ASCENDING -> "ASC"
-        SortOrder.Direction.DESCENDING -> "DESC"
+    return when (direction) {
+        SortOrder.Direction.ASCENDING -> "$column ASC"
+        SortOrder.Direction.DESCENDING -> "$column DESC"
+        SortOrder.Direction.RANDOM -> "RANDOM()"
     }
+}
 
 @RequiresApi(Build.VERSION_CODES.O)
 private fun SortOrder.Direction.toAndroidSortDirection(): Int =
     when (this) {
         SortOrder.Direction.ASCENDING -> QUERY_SORT_DIRECTION_ASCENDING
         SortOrder.Direction.DESCENDING -> QUERY_SORT_DIRECTION_DESCENDING
+        SortOrder.Direction.RANDOM -> TODO()
     }
 
 @RequiresApi(Build.VERSION_CODES.O)

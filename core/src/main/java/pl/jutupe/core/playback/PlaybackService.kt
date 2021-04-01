@@ -22,12 +22,11 @@ import org.koin.android.ext.android.inject
 import pl.jutupe.core.action.AddRecentSearchActionProvider
 import pl.jutupe.core.browser.MediaBrowserTree
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
-import pl.jutupe.core.util.getPaginationOrDefault
 import pl.jutupe.core.util.toMediaSource
 import pl.jutupe.core.repository.media.MediaRepository
 import pl.jutupe.core.repository.recentPlayback.RecentPlaybackSession
 import pl.jutupe.core.repository.recentPlayback.RecentPlaybackRepository
-import pl.jutupe.core.util.Filter
+import pl.jutupe.core.util.getFilterOrDefault
 import timber.log.Timber
 
 class PlaybackService : MediaBrowserServiceCompat() {
@@ -132,8 +131,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     ) {
         Timber.d("onLoadChildren(parentId=$parentId, options=$options)")
 
-        val pagination = options.getPaginationOrDefault()
-        val filter = Filter(pagination)
+        val filter = options.getFilterOrDefault()
 
         result.detach()
         serviceScope.launch {
@@ -147,8 +145,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     override fun onSearch(query: String, extras: Bundle?, result: Result<List<MediaBrowserCompat.MediaItem>>) {
         Timber.d("onSearch(query=$query)")
 
-        val pagination = extras.getPaginationOrDefault()
-        val filter = Filter(pagination)
+        val filter = extras.getFilterOrDefault()
 
         result.detach()
         serviceScope.launch {
