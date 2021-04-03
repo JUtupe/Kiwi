@@ -8,6 +8,8 @@ import pl.jutupe.core.browser.LocalMediaBrowserTree
 import pl.jutupe.core.browser.MediaBrowserTree
 import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.playback.PlaybackService
+import pl.jutupe.core.repository.artist.ArtistLocalRepository
+import pl.jutupe.core.repository.artist.ArtistRepository
 import pl.jutupe.core.repository.media.MediaRepository
 import pl.jutupe.core.repository.recentPlayback.RecentPlaybackRepository
 import pl.jutupe.core.repository.media.MediaLocalRepository
@@ -23,7 +25,8 @@ val coreModule = module {
 
     single<MediaRepository> { MediaLocalRepository(androidContext()) }
     single<PlaylistRepository> { PlaylistLocalRepository(androidContext()) }
-    single<MediaBrowserTree> { LocalMediaBrowserTree(androidContext(), get(), get(), get()) }
+    single<ArtistRepository> { ArtistLocalRepository(androidContext()) }
+    single<MediaBrowserTree> { LocalMediaBrowserTree(androidContext(), get(), get(), get(), get()) }
 
     single { AddRecentSearchActionProvider(get()) }
 

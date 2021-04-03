@@ -6,7 +6,7 @@ import pl.jutupe.core.R
 import pl.jutupe.model.ItemType
 import pl.jutupe.model.MediaItem
 
-
+// TODO: 03.04.2021 fields based on type
 fun MediaDescriptionCompat.toMediaItem(context: Context): MediaItem =
     MediaItem.create(
         id = mediaId ?: "unknown",

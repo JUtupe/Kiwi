@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.util.Filter
-import pl.jutupe.core.util.SortOrder
 import pl.jutupe.core.util.putFilter
 import pl.jutupe.home.data.MediaItemDataSource
 import pl.jutupe.model.MediaItem
@@ -32,7 +31,7 @@ class LibraryViewModel(
     ) {
         MediaItemDataSource { pagination ->
             val options = Bundle().putFilter(
-                Filter(pagination, SortOrder(direction = SortOrder.Direction.RANDOM))
+                Filter(pagination)
             )
             connection.getItems(currentRoot.value.id, options)
         }

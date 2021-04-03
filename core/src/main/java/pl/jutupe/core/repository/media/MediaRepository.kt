@@ -13,5 +13,7 @@ interface MediaRepository {
 
     suspend fun getAlbumMembers(albumId: String, filter: Filter): List<MediaDescriptionCompat>?
 
+    suspend fun getArtistSongs(artistId: String, filter: Filter): List<MediaDescriptionCompat>?
+
     suspend fun findByMediaId(mediaId: String): MediaDescriptionCompat?
 }

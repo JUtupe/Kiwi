@@ -29,6 +29,13 @@ sealed class MediaItem (
         override val art: String?,
     ) : MediaItem(isPlayable = false)
 
+    data class Artist(
+        override val id: String,
+        override val title: String,
+        override val artist: String,
+        override val art: String?,
+    ) : MediaItem(isPlayable = false)
+
     data class Playlist(
         override val id: String,
         override val title: String,
@@ -56,6 +63,7 @@ sealed class MediaItem (
             ItemType.TYPE_PLAYLIST -> Playlist(id, title, artist, art)
             ItemType.TYPE_PLAYLIST_MEMBER -> PlaylistMember(id, title, artist, art)
             ItemType.TYPE_ALBUM -> Album(id, title, artist, art)
+            ItemType.TYPE_ARTIST -> Artist(id, title, artist, art)
         }
     }
 }
@@ -67,7 +75,8 @@ enum class ItemType(
     TYPE_SONG(1),
     TYPE_PLAYLIST(2),
     TYPE_PLAYLIST_MEMBER(3),
-    TYPE_ALBUM(4);
+    TYPE_ALBUM(4),
+    TYPE_ARTIST(5);
 
     companion object {
         fun getByValue(value: Int) = values()
