@@ -103,14 +103,20 @@ class MediaLocalRepository(
     private fun cursorToSongs(cursor: Cursor): List<MediaDescriptionCompat> {
         val songs = arrayListOf<MediaDescriptionCompat>()
 
+        val mediaIdIndex = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
+        val titleIndex = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
+        val artistIndex = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
+        val albumIndex = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
+        val albumIdIndex = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
+
         while (cursor.moveToNext()) {
-            val mediaId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID))
+            val mediaId = cursor.getLong(mediaIdIndex)
             val mediaUri = getMediaUri(mediaId).toString()
-            val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
-            val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+            val title = cursor.getString(titleIndex)
+            val artist = cursor.getString(artistIndex)
             val duration = cursor.getDuration()
-            val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
-            val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
+            val album = cursor.getString(albumIndex)
+            val albumId = cursor.getLong(albumIdIndex)
             val albumArtUri = context.getAlbumArtUri(albumId, ItemType.TYPE_SONG)
 
             val metadata = MediaMetadataCompat.Builder().apply {
@@ -141,11 +147,16 @@ class MediaLocalRepository(
     private fun cursorToAlbums(cursor: Cursor): List<MediaDescriptionCompat> {
         val albums = arrayListOf<MediaDescriptionCompat>()
 
+        val mediaIdIndex = cursor.getColumnIndex(MediaStore.Audio.Albums._ID)
+        val albumIndex = cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM)
+        val artistIndex = cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST)
+        val numberOfSongsIndex = cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS)
+
         while (cursor.moveToNext()) {
-            val mediaId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Albums._ID))
-            val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM))
-            val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ARTIST))
-            val trackCount = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Albums.NUMBER_OF_SONGS))
+            val mediaId = cursor.getLong(mediaIdIndex)
+            val title = cursor.getString(albumIndex)
+            val artist = cursor.getString(artistIndex)
+            val trackCount = cursor.getLong(numberOfSongsIndex)
             val albumArtUri = context.getAlbumArtUri(mediaId, ItemType.TYPE_ALBUM)
 
             val metadata = MediaMetadataCompat.Builder().apply {

@@ -8,7 +8,9 @@ import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
-import pl.jutupe.core.util.putPagination
+import pl.jutupe.core.util.Filter
+import pl.jutupe.core.util.SortOrder
+import pl.jutupe.core.util.putFilter
 import pl.jutupe.home.data.MediaItemDataSource
 import pl.jutupe.model.MediaItem
 import pl.jutupe.model.MediaItemAction
@@ -29,7 +31,9 @@ class LibraryViewModel(
         PagingConfig(pageSize = 30)
     ) {
         MediaItemDataSource { pagination ->
-            val options = Bundle().putPagination(pagination)
+            val options = Bundle().putFilter(
+                Filter(pagination, SortOrder(direction = SortOrder.Direction.RANDOM))
+            )
             connection.getItems(currentRoot.value.id, options)
         }
     }.flow.cachedIn(viewModelScope)

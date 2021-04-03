@@ -129,9 +129,13 @@ class PlaylistLocalRepository(
     private fun cursorToPlaylists(cursor: Cursor): List<MediaDescriptionCompat> {
         val playlists: MutableList<MediaDescriptionCompat> = ArrayList()
 
+        val mediaIdIndex = cursor.getColumnIndex(MediaStore.Audio.Playlists._ID)
+        val nameIndex = cursor.getColumnIndex(MediaStore.Audio.Playlists.NAME)
+
+
         while (cursor.moveToNext()) {
-            val mediaId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Playlists._ID))
-            val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Playlists.NAME))
+            val mediaId = cursor.getLong(mediaIdIndex)
+            val title = cursor.getString(nameIndex)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
@@ -152,16 +156,23 @@ class PlaylistLocalRepository(
     private fun cursorToPlaylistMembers(cursor: Cursor): List<MediaDescriptionCompat> {
         val members = arrayListOf<MediaDescriptionCompat>()
 
-        while (cursor.moveToNext()) {
-            val playlistMemberId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Playlists.Members._ID))
+        val playlistMemberIdIndex = cursor.getColumnIndex(MediaStore.Audio.Playlists.Members._ID)
+        val mediaIdIndex = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
+        val titleIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
+        val artistIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
+        val albumIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
+        val albumIdIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
 
-            val mediaId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Playlists.Members.AUDIO_ID))
+        while (cursor.moveToNext()) {
+            val playlistMemberId = cursor.getLong(playlistMemberIdIndex)
+
+            val mediaId = cursor.getLong(mediaIdIndex)
             val mediaUri = getMediaUri(mediaId).toString()
-            val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
-            val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+            val title = cursor.getString(titleIndex)
+            val artist = cursor.getString(artistIndex)
             val duration = cursor.getDuration()
-            val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
-            val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
+            val album = cursor.getString(albumIndex)
+            val albumId = cursor.getLong(albumIdIndex)
             val albumArtUri = context.getAlbumArtUri(albumId, ItemType.TYPE_PLAYLIST_MEMBER)
 
             val metadata = MediaMetadataCompat.Builder().apply {
