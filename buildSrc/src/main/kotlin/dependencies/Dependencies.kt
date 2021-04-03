@@ -4,6 +4,7 @@ object Releases {
     const val applicationId = "pl.jutupe.kiwi"
 
     const val minSdk = 21
+    const val maxSdk = 29
     const val compileSdk = 29
     const val targetSdk = 29
 }

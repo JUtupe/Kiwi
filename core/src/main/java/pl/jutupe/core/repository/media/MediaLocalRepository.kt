@@ -104,10 +104,10 @@ class MediaLocalRepository(
         val songs = arrayListOf<MediaDescriptionCompat>()
 
         val mediaIdIndex = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
-        val titleIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
-        val artistIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
-        val albumIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
-        val albumIdIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
+        val titleIndex = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
+        val artistIndex = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
+        val albumIndex = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
+        val albumIdIndex = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
 
         while (cursor.moveToNext()) {
             val mediaId = cursor.getLong(mediaIdIndex)

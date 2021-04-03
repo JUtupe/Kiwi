@@ -32,7 +32,7 @@ class LibraryViewModel(
     ) {
         MediaItemDataSource { pagination ->
             val options = Bundle().putFilter(
-                Filter(pagination)
+                Filter(pagination, SortOrder(direction = SortOrder.Direction.RANDOM))
             )
             connection.getItems(currentRoot.value.id, options)
         }
