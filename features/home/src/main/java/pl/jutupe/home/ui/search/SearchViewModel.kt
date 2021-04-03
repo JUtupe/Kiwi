@@ -12,10 +12,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
-import pl.jutupe.core.common.MediaItem
 import pl.jutupe.core.util.Filter
 import pl.jutupe.core.util.putFilter
-import pl.jutupe.home.adapter.MediaItemAction
 import pl.jutupe.home.data.MediaItemDataSource
 import pl.jutupe.model.MediaItem
 import pl.jutupe.model.MediaItemAction
