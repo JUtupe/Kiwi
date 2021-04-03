@@ -6,11 +6,11 @@
     <data>
         <variable
             name="item"
-            type="pl.jutupe.core.common.MediaItem" />
+            type="pl.jutupe.model.MediaItem" />
 
         <variable
             name="action"
-            type="pl.jutupe.home.adapter.MediaItemAction" />
+            type="pl.jutupe.model.MediaItemAction" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

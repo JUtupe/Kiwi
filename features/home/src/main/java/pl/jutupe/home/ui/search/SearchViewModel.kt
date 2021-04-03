@@ -17,6 +17,8 @@ import pl.jutupe.core.util.Filter
 import pl.jutupe.core.util.putFilter
 import pl.jutupe.home.adapter.MediaItemAction
 import pl.jutupe.home.data.MediaItemDataSource
+import pl.jutupe.model.MediaItem
+import pl.jutupe.model.MediaItemAction
 import timber.log.Timber
 
 class SearchViewModel(

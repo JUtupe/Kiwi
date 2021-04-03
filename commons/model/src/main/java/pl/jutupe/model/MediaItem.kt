@@ -1,6 +1,4 @@
-package pl.jutupe.core.common
-
-import android.net.Uri
+package pl.jutupe.model
 
 sealed class MediaItem (
     val isPlayable: Boolean
@@ -8,41 +6,41 @@ sealed class MediaItem (
     abstract val id: String
     abstract val title: String
     abstract val artist: String
-    abstract val art: Uri?
+    abstract val art: String?
 
     data class Song(
         override val id: String,
         override val title: String,
         override val artist: String,
-        override val art: Uri?,
+        override val art: String?,
     ) : MediaItem(isPlayable = true)
 
     data class Root(
         override val id: String,
         override val title: String,
         override val artist: String,
-        override val art: Uri?,
+        override val art: String?,
     ) : MediaItem(isPlayable = false)
 
     data class Album(
         override val id: String,
         override val title: String,
         override val artist: String,
-        override val art: Uri?,
+        override val art: String?,
     ) : MediaItem(isPlayable = false)
 
     data class Playlist(
         override val id: String,
         override val title: String,
         override val artist: String,
-        override val art: Uri?,
+        override val art: String?,
     ) : MediaItem(isPlayable = false)
 
     data class PlaylistMember(
         override val id: String,
         override val title: String,
         override val artist: String,
-        override val art: Uri?,
+        override val art: String?,
     ) : MediaItem(isPlayable = true)
 
     companion object {
@@ -50,7 +48,7 @@ sealed class MediaItem (
             id: String,
             title: String,
             artist: String,
-            art: Uri?,
+            art: String?,
             type: ItemType
         ): MediaItem = when (type) {
             ItemType.TYPE_ROOT -> Root(id, title, artist, art)
@@ -73,6 +71,6 @@ enum class ItemType(
 
     companion object {
         fun getByValue(value: Int) = values()
-                .first { it.value == value }
+            .first { it.value == value }
     }
 }

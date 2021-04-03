@@ -12,11 +12,11 @@ import pl.jutupe.core.R
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_EMPTY_ROOT
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_ROOT_RECENTLY_SEARCHED
-import pl.jutupe.core.common.ItemType
 import pl.jutupe.core.repository.media.MediaRepository
 import pl.jutupe.core.repository.playlist.PlaylistRepository
 import pl.jutupe.core.repository.recentSearch.RecentSearchRepository
 import pl.jutupe.core.util.*
+import pl.jutupe.model.ItemType
 
 class LocalMediaBrowserTree(
     private val context: Context,

@@ -3,13 +3,10 @@ package pl.jutupe.home.adapter.queue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.RecyclerView
-import pl.jutupe.core.common.MediaItem
-import pl.jutupe.core.common.QueueItem
-import pl.jutupe.home.adapter.MediaItemAction
-import pl.jutupe.home.adapter.MediaItemDiffUtil
 import pl.jutupe.home.adapter.QueueItemDiffUtil
-import pl.jutupe.home.databinding.ItemQueueBinding
+import pl.jutupe.model.MediaItemAction
+import pl.jutupe.model.QueueItem
+import pl.jutupe.ui.databinding.ItemQueueBinding
 
 class QueueItemAdapter : PagingDataAdapter<QueueItem, QueueItemViewHolder>(QueueItemDiffUtil) {
     var action: MediaItemAction? = null

@@ -1,8 +1,8 @@
 package pl.jutupe.home.data
 
 import androidx.paging.PagingSource
-import pl.jutupe.core.common.MediaItem
 import pl.jutupe.core.util.Pagination
+import pl.jutupe.model.MediaItem
 
 class MediaItemDataSource(
     private val data: suspend (Pagination) -> List<MediaItem>

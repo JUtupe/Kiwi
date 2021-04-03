@@ -9,13 +9,13 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaDescriptionCompat.STATUS_DOWNLOADED
 import android.support.v4.media.MediaMetadataCompat
-import pl.jutupe.core.common.ItemType
 import pl.jutupe.core.util.*
 import pl.jutupe.core.util.MediaStoreConst.albumProjection
 import pl.jutupe.core.util.MediaStoreConst.albumsUri
 import pl.jutupe.core.util.MediaStoreConst.mediaUri
 import pl.jutupe.core.util.MediaStoreConst.musicSelection
 import pl.jutupe.core.util.MediaStoreConst.songProjection
+import pl.jutupe.model.ItemType
 import timber.log.Timber
 
 class MediaLocalRepository(
