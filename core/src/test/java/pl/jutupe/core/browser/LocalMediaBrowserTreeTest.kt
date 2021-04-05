@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import pl.jutupe.core.repository.artist.ArtistRepository
 import pl.jutupe.core.repository.media.MediaRepository
 import pl.jutupe.core.repository.playlist.PlaylistRepository
 import pl.jutupe.core.repository.recentSearch.RecentSearchRepository
@@ -20,6 +21,7 @@ internal class LocalMediaBrowserTreeTest {
     private val context: Context = mockk()
     private val mediaRepository: MediaRepository = mockk()
     private val playlistRepository: PlaylistRepository = mockk()
+    private val artistRepository: ArtistRepository = mockk()
     private val recentSearchRepository: RecentSearchRepository = mockk()
 
     private lateinit var localMediaBrowserTree: LocalMediaBrowserTree
@@ -31,7 +33,9 @@ internal class LocalMediaBrowserTreeTest {
         every { context.resourceUri(any()) } returns mockk()
         every { context.getString(any()) } returns "test"
 
-        localMediaBrowserTree = LocalMediaBrowserTree(context, mediaRepository, playlistRepository, recentSearchRepository)
+        localMediaBrowserTree = LocalMediaBrowserTree(
+            context, mediaRepository, playlistRepository, artistRepository, recentSearchRepository
+        )
     }
 
     @Test
@@ -46,7 +50,7 @@ internal class LocalMediaBrowserTreeTest {
         }
 
         //then
-        assertEquals(3, items!!.size)
+        assertEquals(4, items!!.size)
     }
 
     @Test
@@ -89,6 +93,7 @@ internal class LocalMediaBrowserTreeTest {
 
         coEvery { playlistRepository.getMembers(invalidId, filter) } returns null
         coEvery { mediaRepository.getAlbumMembers(invalidId, filter) } returns null
+        coEvery { mediaRepository.getArtistSongs(invalidId, filter) } returns null
 
         //when
         val items = runBlocking { localMediaBrowserTree.itemsFor(invalidId, filter) }
@@ -128,6 +133,20 @@ internal class LocalMediaBrowserTreeTest {
         }
 
         @Test
+        fun `should delegate all artists request`() {
+            //given
+            val id = "kiwi.root.artists"
+            val filter = Filter()
+            coEvery { artistRepository.getAll(filter) } returns emptyList()
+
+            //when
+            runBlocking { localMediaBrowserTree.itemsFor(id, filter) }
+
+            //then
+            coVerify(exactly = 1) { artistRepository.getAll(filter) }
+        }
+
+        @Test
         fun `should delegate all playlists request`() {
             //given
             val id = "kiwi.root.playlists"
@@ -161,6 +180,8 @@ internal class LocalMediaBrowserTreeTest {
             val id = "some_playlist_id"
             val filter = Filter()
             coEvery { playlistRepository.getMembers(id, filter) } returns emptyList()
+            coEvery { artistRepository.getAll(filter) } returns emptyList()
+            coEvery { mediaRepository.getArtistSongs(id, filter) } returns null
 
             //when
             runBlocking { localMediaBrowserTree.itemsFor(id, filter) }
@@ -170,11 +191,27 @@ internal class LocalMediaBrowserTreeTest {
         }
 
         @Test
+        fun `should delegate artist songs request`() {
+            //given
+            val id = "some_artist_id"
+            val filter = Filter()
+            coEvery { mediaRepository.getArtistSongs(id, filter) } returns emptyList()
+
+            //when
+            runBlocking { localMediaBrowserTree.itemsFor(id, filter) }
+
+            //then
+            coVerify(exactly = 1) { mediaRepository.getArtistSongs(id, filter) }
+        }
+
+        @Test
         fun `should delegate album members request`() {
             //given
             val id = "some_album_id"
             val filter = Filter()
+            coEvery { artistRepository.getAll(filter) } returns emptyList()
             coEvery { playlistRepository.getMembers(id, filter) } returns null
+            coEvery { mediaRepository.getArtistSongs(id, filter) } returns null
             coEvery { mediaRepository.getAlbumMembers(id, filter) } returns emptyList()
 
             //when

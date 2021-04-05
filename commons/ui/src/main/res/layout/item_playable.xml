@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="10dp"
-                        android:text="@{item.artist}"
+                        android:text="@{item.subtitle}"
                         android:textColor="#FFFFFF"
                         android:maxLines="1"
                         android:ellipsize="end"

@@ -132,7 +132,6 @@ class PlaylistLocalRepository(
         val mediaIdIndex = cursor.getColumnIndex(MediaStore.Audio.Playlists._ID)
         val nameIndex = cursor.getColumnIndex(MediaStore.Audio.Playlists.NAME)
 
-
         while (cursor.moveToNext()) {
             val mediaId = cursor.getLong(mediaIdIndex)
             val title = cursor.getString(nameIndex)

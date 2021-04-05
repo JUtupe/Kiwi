@@ -10,11 +10,11 @@ fun ContentResolver.queryPaged(
     selection: String?, selectionArgs: Array<String>?,
     filter: Filter
 ): Cursor? {
-    val limitOffsetString = filter.let {
-        val sortOrderQuery = it.sortOrder.toAndroidSortOrderDirection()
+    val sortOrderQuery = filter.sortOrder.toAndroidSortOrderDirection()
+    val pagination = filter.pagination
+    val paginationQuery = "LIMIT ${pagination.pageSize} OFFSET ${pagination.offset}"
 
-        "$sortOrderQuery LIMIT ${it.pagination.pageSize} OFFSET ${it.pagination.offset}"
-    }
+    val limitOffsetString ="$sortOrderQuery $paginationQuery"
 
     return query(uri, projection, selection, selectionArgs, limitOffsetString)
 }

@@ -14,7 +14,9 @@ object MediaStoreConst {
 
     val playlistsUri: Uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
 
-    val albumsUri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
+    val albumsUri: Uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
+
+    val artistsUri: Uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI
 
     fun playlistMembersUri(playlistId: String): Uri =
         MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI.buildUpon()
@@ -46,6 +48,12 @@ object MediaStoreConst {
         MediaStore.Audio.Albums.ALBUM,
         MediaStore.Audio.Albums.ARTIST,
         MediaStore.Audio.Albums.NUMBER_OF_SONGS,
+    )
+
+    val artistProjection = arrayOf(
+        MediaStore.Audio.Artists._ID,
+        MediaStore.Audio.Artists.ARTIST,
+        MediaStore.Audio.Artists.NUMBER_OF_TRACKS,
     )
 
     fun getMediaUri(mediaId: Long): Uri =

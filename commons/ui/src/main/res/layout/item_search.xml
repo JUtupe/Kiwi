@@ -64,7 +64,7 @@
                     android:id="@+id/artist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{item.artist}"
+                    android:text="@{item.subtitle}"
                     android:textStyle="bold"
                     android:lines="1"
                     android:ellipsize="end"

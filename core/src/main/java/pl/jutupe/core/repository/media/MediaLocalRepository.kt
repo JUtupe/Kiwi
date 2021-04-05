@@ -12,6 +12,7 @@ import android.support.v4.media.MediaMetadataCompat
 import pl.jutupe.core.util.*
 import pl.jutupe.core.util.MediaStoreConst.albumProjection
 import pl.jutupe.core.util.MediaStoreConst.albumsUri
+import pl.jutupe.core.util.MediaStoreConst.artistsUri
 import pl.jutupe.core.util.MediaStoreConst.mediaUri
 import pl.jutupe.core.util.MediaStoreConst.musicSelection
 import pl.jutupe.core.util.MediaStoreConst.songProjection
@@ -94,6 +95,28 @@ class MediaLocalRepository(
             songProjection,
             "$musicSelection AND ALBUM_ID = ?",
             arrayOf(albumId),
+            filter
+        )
+
+        return cursorToSongs(cursor!!)
+    }
+
+    override suspend fun getArtistSongs(
+        artistId: String,
+        filter: Filter
+    ): List<MediaDescriptionCompat>? {
+        Timber.d("getArtistSongs(albumId=$artistId, filter=$filter)")
+
+        //check if album exists
+        if (!checkExistsById(artistsUri, artistId)) {
+            return null
+        }
+
+        val cursor = context.contentResolver.queryPaged(
+            mediaUri,
+            songProjection,
+            "$musicSelection AND ARTIST_ID = ?",
+            arrayOf(artistId),
             filter
         )
 
