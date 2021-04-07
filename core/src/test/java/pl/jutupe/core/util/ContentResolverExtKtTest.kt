@@ -89,7 +89,8 @@ internal class ContentResolverExtKtTest {
                         type = SortOrder.DEFAULT_TYPE,
                         direction = SortOrder.Direction.DESCENDING
                     )
-                ) to "_id DESC LIMIT 50 OFFSET 50", Filter(
+                ) to "_id DESC LIMIT 50 OFFSET 50",
+                Filter(
                     pagination = Pagination(1, 50),
                     sortOrder = SortOrder(
                         type = SortOrder.DATE_ADDED_TYPE,
