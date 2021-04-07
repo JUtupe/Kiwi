@@ -21,9 +21,11 @@ fun ContentResolver.queryPaged(
 
 private fun SortOrder.toAndroidSortOrderDirection(): String {
     val column: String =
-        if (type == SortOrder.DEFAULT_TYPE) {
-            DEFAULT_SORT_COLUMN
-        } else type
+            when (type) {
+                SortOrder.DEFAULT_TYPE -> { DEFAULT_SORT_COLUMN }
+                SortOrder.DATE_ADDED_TYPE -> { DATE_ADDED_COLUMN }
+                else -> type
+            }
 
     return when (direction) {
         SortOrder.Direction.ASCENDING -> "$column ASC"
@@ -33,3 +35,4 @@ private fun SortOrder.toAndroidSortOrderDirection(): String {
 }
 
 private const val DEFAULT_SORT_COLUMN = "_id"
+private const val DATE_ADDED_COLUMN = "date_added"

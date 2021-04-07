@@ -12,6 +12,7 @@ data class SortOrder(
 
     companion object {
         const val DEFAULT_TYPE = "SORT_ORDER_DEFAULT"
+        const val DATE_ADDED_TYPE = "SORT_ORDER_NEWEST_ITEMS"
 
         val DEFAULT_SORT_ORDER = SortOrder(
             type = DEFAULT_TYPE,
