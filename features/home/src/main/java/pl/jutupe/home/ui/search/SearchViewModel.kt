@@ -30,15 +30,12 @@ class SearchViewModel(
         PagingConfig(pageSize = 30)
     ) {
         MediaItemDataSource { pagination ->
-            val options = Bundle()
-                .putFilter(
-                    Filter(pagination)
-                )
+            val filter = Filter(pagination)
 
             if (currentQuery.value.isEmpty()) {
-                connection.getRecentSearchItems(options)
+                connection.getRecentSearchItems(filter)
             } else {
-                connection.searchItems(currentQuery.value, options)
+                connection.searchItems(currentQuery.value, filter)
             }
         }
     }.flow.cachedIn(viewModelScope)

@@ -59,7 +59,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>(
         binding.viewModel = viewModel
         mediaItemAdapter.action = viewModel.songAction
 
-        val itemsLayoutManager = GridLayoutManager(context, 2)
+        val itemsLayoutManager = GridLayoutManager(context, 6)
 
         binding.list.apply {
             adapter = mediaItemAdapter
@@ -70,8 +70,9 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>(
             object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int =
                     when (mediaItemAdapter.getItemViewType(position)) {
-                        MediaItemAdapter.TYPE_ROOT -> 2
-                        else -> 1
+                        MediaItemAdapter.TYPE_ARTIST -> 2
+                        MediaItemAdapter.TYPE_ROOT -> 6
+                        else -> 3
                     }
             }
 

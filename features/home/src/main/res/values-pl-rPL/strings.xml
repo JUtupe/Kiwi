@@ -3,7 +3,10 @@
     <string name="tab_search">Wyszukaj</string>
     <string name="tab_library">Biblioteka</string>
     <string name="tab_main">Główna</string>
+
     <string name="hint_search">Wyszukaj</string>
+
     <string name="label_search_result_for">Wyniki wyszukiwania dla: %s</string>
     <string name="label_recently_searched">Ostatnio wyszukiwane:</string>
+    <string name="label_random_artists">Losowi wykonawcy</string>
 </resources>

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="item"
-            type="pl.jutupe.model.MediaItem" />
+            type="pl.jutupe.model.MediaItem.Root" />
 
         <variable
             name="action"

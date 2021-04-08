@@ -1,7 +1,8 @@
 package pl.jutupe.model
 
 sealed class MediaItem (
-    val isPlayable: Boolean
+    val isPlayable: Boolean,
+    val type: ItemType,
 ) {
     abstract val id: String
 
@@ -15,7 +16,7 @@ sealed class MediaItem (
         override val title: String,
         val artist: String,
         override val art: String?,
-    ) : MediaItem(isPlayable = true) {
+    ) : MediaItem(isPlayable = true, ItemType.TYPE_SONG) {
 
         override val subtitle: String
             get() = artist
@@ -24,12 +25,11 @@ sealed class MediaItem (
     data class Root(
         override val id: String,
         override val title: String,
-        val artist: String,
         override val art: String?,
-    ) : MediaItem(isPlayable = false) {
+    ) : MediaItem(isPlayable = false, ItemType.TYPE_ROOT) {
 
         override val subtitle: String
-            get() = artist
+            get() = ""
     }
 
     data class Album(
@@ -37,7 +37,7 @@ sealed class MediaItem (
         override val title: String,
         val artist: String,
         override val art: String?,
-    ) : MediaItem(isPlayable = false) {
+    ) : MediaItem(isPlayable = false, ItemType.TYPE_ALBUM) {
 
         override val subtitle: String
             get() = artist
@@ -48,7 +48,7 @@ sealed class MediaItem (
         override val title: String,
         val artist: String,
         override val art: String?,
-    ) : MediaItem(isPlayable = false) {
+    ) : MediaItem(isPlayable = false, ItemType.TYPE_ARTIST) {
 
         override val subtitle: String
             get() = ""
@@ -59,7 +59,7 @@ sealed class MediaItem (
         override val title: String,
         val artist: String,
         override val art: String?,
-    ) : MediaItem(isPlayable = false) {
+    ) : MediaItem(isPlayable = false, ItemType.TYPE_PLAYLIST) {
 
         override val subtitle: String
             get() = artist
@@ -70,7 +70,7 @@ sealed class MediaItem (
         override val title: String,
         val artist: String,
         override val art: String?,
-    ) : MediaItem(isPlayable = true) {
+    ) : MediaItem(isPlayable = true, ItemType.TYPE_PLAYLIST_MEMBER) {
 
         override val subtitle: String
             get() = artist
