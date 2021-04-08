@@ -12,10 +12,13 @@ import androidx.lifecycle.MutableLiveData
 import pl.jutupe.core.R
 import pl.jutupe.core.action.AddRecentSearchActionProvider.Companion.ACTION_ADD_RECENT_SEARCH
 import pl.jutupe.core.action.AddRecentSearchActionProvider.Companion.KEY_MEDIA_ID
+import pl.jutupe.core.browser.LocalMediaBrowserTree.Companion.KIWI_ROOT_ARTISTS
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_ROOT_RECENTLY_SEARCHED
 import pl.jutupe.core.playback.KiwiPlaybackPreparer
+import pl.jutupe.core.util.Filter
 import pl.jutupe.core.util.id
+import pl.jutupe.core.util.putFilter
 import pl.jutupe.core.util.toMediaItem
 import pl.jutupe.model.MediaItem
 import pl.jutupe.model.QueueItem
@@ -31,7 +34,6 @@ class KiwiServiceConnection(
     val rootMediaItem: MediaItem = MediaItem.Root(
         id = rootMediaId,
         title = context.getString(R.string.browser_root_main),
-        artist = context.getString(R.string.artist_device),
         art = null,
     )
 
@@ -62,10 +64,13 @@ class KiwiServiceConnection(
         mediaController.transportControls.sendCustomAction(ACTION_ADD_RECENT_SEARCH, options)
     }
 
-    suspend fun getRecentSearchItems(options: Bundle): List<MediaItem> =
-        getItems(KIWI_ROOT_RECENTLY_SEARCHED, options)
+    suspend fun getRecentSearchItems(filter: Filter): List<MediaItem> =
+        getItems(KIWI_ROOT_RECENTLY_SEARCHED, filter)
 
-    suspend fun getItems(parentId: String, options: Bundle): List<MediaItem> =
+    suspend fun getRandomArtists(filter: Filter): List<MediaItem> =
+        getItems(KIWI_ROOT_ARTISTS, filter)
+
+    suspend fun getItems(parentId: String, filter: Filter): List<MediaItem> =
         suspendCoroutine<List<MediaBrowserCompat.MediaItem>> { continuation ->
             val callback = object : MediaBrowserCompat.SubscriptionCallback() {
                 override fun onChildrenLoaded(
@@ -84,10 +89,10 @@ class KiwiServiceConnection(
                     mediaBrowser.unsubscribe(parentId, this)
                 }
             }
-            mediaBrowser.subscribe(parentId, options, callback)
+            mediaBrowser.subscribe(parentId, Bundle().putFilter(filter), callback)
         }.map { it.description.toMediaItem(context) }
 
-    suspend fun searchItems(query: String, options: Bundle): List<MediaItem> =
+    suspend fun searchItems(query: String, filter: Filter): List<MediaItem> =
         suspendCoroutine<List<MediaBrowserCompat.MediaItem>> { continuation ->
             val callback = object : MediaBrowserCompat.SearchCallback() {
                 override fun onSearchResult(
@@ -102,7 +107,7 @@ class KiwiServiceConnection(
                     continuation.resumeWithException(Exception())
                 }
             }
-            mediaBrowser.search(query, options, callback)
+            mediaBrowser.search(query, Bundle().putFilter(filter), callback)
         }.map { it.description.toMediaItem(context) }
 
     fun playFromMediaId(mediaId: String, parentId: String?) {

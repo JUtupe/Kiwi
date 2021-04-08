@@ -11,7 +11,7 @@ import pl.jutupe.home.ui.search.SearchViewModel
 val homeModule = module {
     viewModel { HomeFragmentViewModel() }
 
-    viewModel { MainViewModel() }
+    viewModel { MainViewModel(get()) }
     viewModel { SearchViewModel(get()) }
     viewModel { LibraryViewModel(get()) }
 

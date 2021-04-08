@@ -4,8 +4,8 @@ package pl.jutupe.core.util
  * Simple pagination options representation.
  */
 data class Pagination(
-    val page: Int,
-    val pageSize: Int
+    val page: Int = DEFAULT_PAGE,
+    val pageSize: Int = DEFAULT_PAGE_SIZE
 ) {
 
     init {
@@ -20,12 +20,6 @@ data class Pagination(
         const val DEFAULT_PAGE_SIZE = 50
 
         const val MAX_PAGE_SIZE = 100
-        const val MIN_PAGE_SIZE = 10
-
-        val DEFAULT_PAGINATION =
-            Pagination(
-                DEFAULT_PAGE,
-                DEFAULT_PAGE_SIZE
-            )
+        const val MIN_PAGE_SIZE = 5
     }
 }

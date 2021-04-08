@@ -19,7 +19,6 @@ fun MediaDescriptionCompat.toMediaItem(context: Context): MediaItem =
 fun MediaDescriptionCompat.toRoot(context: Context) = MediaItem.Root(
     id = mediaId ?: "unknown",
     title = title?.toString() ?: context.getString(R.string.title_unknown),
-    artist = subtitle?.toString() ?: context.getString(R.string.artist_device),
     art = iconUri.toString()
 )
 

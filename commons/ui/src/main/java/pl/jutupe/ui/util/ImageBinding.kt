@@ -8,7 +8,7 @@ import pl.jutupe.model.MediaItem
 @BindingAdapter("mediaImage")
 fun ImageView.bindMediaImage(item: MediaItem) {
     load(item.art) {
-        val baseDrawable = item.getItemBaseDrawable()
+        val baseDrawable = item.type.getItemBaseDrawable()
         memoryCacheKey(item.art)
         error(baseDrawable)
         placeholder(baseDrawable)
