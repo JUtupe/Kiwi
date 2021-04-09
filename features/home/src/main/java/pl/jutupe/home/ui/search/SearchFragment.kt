@@ -26,7 +26,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
 
     private val onScrollListener by lazy {
         ScrollListener(
-            whenScrollUp =  backdropManager::close,
+            whenScrollUp = backdropManager::close,
             whenScrollDown = backdropManager::open
         )
     }
