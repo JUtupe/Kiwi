@@ -10,8 +10,7 @@ class ScrollListener(
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
-
-        if (RecyclerView.SCROLL_STATE_DRAGGING == newState) {
+        if (RecyclerView.SCROLL_STATE_DRAGGING == newState || newState == RecyclerView.SCROLL_STATE_SETTLING) {
             when (direction) {
                 UP -> whenScrollUp.invoke()
                 DOWN -> whenScrollDown.invoke()
