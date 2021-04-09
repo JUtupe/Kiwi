@@ -17,4 +17,6 @@ dependencies {
 
     implementation(Libraries.coroutines)
     implementation(Libraries.coroutinesAndroid)
+
+    testImplementation(TestLibraries.coroutines)
 }

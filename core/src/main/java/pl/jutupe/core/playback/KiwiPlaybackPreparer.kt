@@ -16,6 +16,7 @@ import pl.jutupe.core.repository.media.MediaRepository
 import pl.jutupe.core.repository.recentPlayback.RecentPlaybackRepository
 import pl.jutupe.core.util.Filter
 import pl.jutupe.core.util.Pagination
+import pl.jutupe.core.util.SortOrder
 import timber.log.Timber
 
 class KiwiPlaybackPreparer(
@@ -34,11 +35,11 @@ class KiwiPlaybackPreparer(
                 PlaybackStateCompat.ACTION_PREPARE
 
     override fun onPrepare(playWhenReady: Boolean) {
-        Timber.d("onPrepare()")
+        Timber.d("onPrepare(playWhenReady=$playWhenReady)")
 
-        //load recent song or return
         serviceScope.launch {
-            val session = recentPlaybackRepository.findRecentPlaybackSession() ?: return@launch
+            val session = recentPlaybackRepository.findRecentPlaybackSession()
+                ?: return@launch onPrepareRandom(playWhenReady)
 
             val description = session.description
 
@@ -53,11 +54,35 @@ class KiwiPlaybackPreparer(
         }
     }
 
+    private suspend fun onPrepareRandom(playWhenReady: Boolean) {
+        Timber.d("onPrepareRandom(playWhenReady=$playWhenReady)")
+
+        val songs = mediaRepository.getAllSongs(
+            Filter(
+                sortOrder = SortOrder(
+                    direction = SortOrder.Direction.RANDOM
+                )
+            )
+        )
+
+        if (songs.isNotEmpty()) {
+            val playlist = PreparedPlaylist(
+                songs = songs,
+                playWhenReady = playWhenReady
+            )
+
+            onPlaylistPrepared(playlist)
+        }
+    }
+
     override fun onPrepareFromSearch(query: String, playWhenReady: Boolean, extras: Bundle?) {
         Timber.d("onPrepareFromSearch(query=$query)")
 
-        val pagination = Pagination(Pagination.DEFAULT_PAGE, Pagination.MAX_PAGE_SIZE)
-        val filter = Filter(pagination)
+        val filter = Filter(
+            pagination = Pagination(
+                pageSize = Pagination.MAX_PAGE_SIZE
+            )
+        )
 
         serviceScope.launch {
             val songs = mediaRepository.search(query, filter)
