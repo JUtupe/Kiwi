@@ -10,17 +10,17 @@ import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.playback.PlaybackService
 import pl.jutupe.core.repository.artist.ArtistLocalRepository
 import pl.jutupe.core.repository.artist.ArtistRepository
-import pl.jutupe.core.repository.media.MediaRepository
-import pl.jutupe.core.repository.recentPlayback.RecentPlaybackRepository
 import pl.jutupe.core.repository.media.MediaLocalRepository
-import pl.jutupe.core.repository.recentPlayback.RecentPlaybackLocalRepository
+import pl.jutupe.core.repository.media.MediaRepository
 import pl.jutupe.core.repository.playlist.PlaylistLocalRepository
 import pl.jutupe.core.repository.playlist.PlaylistRepository
+import pl.jutupe.core.repository.recentPlayback.RecentPlaybackLocalRepository
+import pl.jutupe.core.repository.recentPlayback.RecentPlaybackRepository
 import pl.jutupe.core.repository.recentSearch.RecentSearchLocalRepository
 import pl.jutupe.core.repository.recentSearch.RecentSearchRepository
 
 val coreModule = module {
-    single<RecentPlaybackRepository> { RecentPlaybackLocalRepository(androidContext(), get()) }
+    single<RecentPlaybackRepository> { RecentPlaybackLocalRepository(androidContext(), get(), get()) }
     single<RecentSearchRepository> { RecentSearchLocalRepository(androidContext(), get()) }
 
     single<MediaRepository> { MediaLocalRepository(androidContext()) }
