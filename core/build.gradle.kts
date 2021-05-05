@@ -5,6 +5,9 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":commons:model"))
+    implementation(project(":commons:ui"))
+
     implementation(Libraries.media)
 
     implementation(Libraries.exoPlayer)
@@ -14,4 +17,6 @@ dependencies {
 
     implementation(Libraries.coroutines)
     implementation(Libraries.coroutinesAndroid)
+
+    testImplementation(TestLibraries.coroutines)
 }

@@ -3,14 +3,16 @@ package pl.jutupe.home.adapter.library
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import pl.jutupe.core.common.MediaItem
-import pl.jutupe.home.adapter.MediaItemAction
 import pl.jutupe.home.adapter.MediaItemDiffUtil
-import pl.jutupe.home.databinding.ItemPlayableBinding
-import pl.jutupe.home.databinding.ItemRootBinding
 import pl.jutupe.home.adapter.MediaItemViewHolder
+import pl.jutupe.home.adapter.library.viewholder.ArtistMediaItemViewHolder
 import pl.jutupe.home.adapter.library.viewholder.PlayableMediaItemViewHolder
 import pl.jutupe.home.adapter.library.viewholder.RootMediaItemViewHolder
+import pl.jutupe.model.MediaItem
+import pl.jutupe.model.MediaItemAction
+import pl.jutupe.ui.databinding.ItemArtistBinding
+import pl.jutupe.ui.databinding.ItemPlayableBinding
+import pl.jutupe.ui.databinding.ItemRootBinding
 
 class MediaItemAdapter : PagingDataAdapter<MediaItem, MediaItemViewHolder<*>>(MediaItemDiffUtil) {
     var action: MediaItemAction? = null
@@ -33,6 +35,10 @@ class MediaItemAdapter : PagingDataAdapter<MediaItem, MediaItemViewHolder<*>>(Me
                 val binding = ItemPlayableBinding.inflate(inflater, parent, false)
                 PlayableMediaItemViewHolder(binding)
             }
+            TYPE_ARTIST -> {
+                val binding = ItemArtistBinding.inflate(inflater, parent, false)
+                ArtistMediaItemViewHolder(binding)
+            }
             else -> throw IllegalArgumentException("Unknown viewType ($viewType)")
         }
     }
@@ -40,10 +46,11 @@ class MediaItemAdapter : PagingDataAdapter<MediaItem, MediaItemViewHolder<*>>(Me
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position) ?: return TYPE_PLAYABLE
 
-        return when (item) {
-           is MediaItem.Root -> TYPE_ROOT
-           is MediaItem.Song -> TYPE_PLAYABLE
-           else -> TYPE_BROWSABLE
+        return when {
+            item is MediaItem.Root -> TYPE_ROOT
+            item is MediaItem.Artist -> TYPE_ARTIST
+            item.isPlayable -> TYPE_PLAYABLE
+            else -> TYPE_BROWSABLE
         }
     }
 
@@ -51,5 +58,6 @@ class MediaItemAdapter : PagingDataAdapter<MediaItem, MediaItemViewHolder<*>>(Me
         const val TYPE_ROOT = 0
         const val TYPE_BROWSABLE = 1
         const val TYPE_PLAYABLE = 2
+        const val TYPE_ARTIST = 3
     }
 }

@@ -9,6 +9,13 @@ plugins {
 dependencies {
     kapt(Libraries.databinding)
 
+    implementation(project(":commons:model"))
+
     implementation(Libraries.appCompat)
     implementation(Libraries.material)
+    implementation(Libraries.cardView)
+    implementation(Libraries.constraintLayout)
+    implementation(Libraries.coordinatorLayout)
+
+    implementation(Libraries.coil)
 }

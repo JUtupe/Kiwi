@@ -7,9 +7,10 @@ import kotlinx.coroutines.flow.collectLatest
 import org.koin.android.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
-import pl.jutupe.home.databinding.FragmentSearchBinding
 import pl.jutupe.home.adapter.search.SearchItemAdapter
+import pl.jutupe.home.databinding.FragmentSearchBinding
 import pl.jutupe.home.ui.search.SearchViewModel.SearchViewEvent
+import pl.jutupe.home.util.ScrollListener
 import pl.jutupe.ui.util.BackdropManager
 import timber.log.Timber
 
@@ -22,6 +23,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
     private val backdropViewModel: SearchBackdropViewModel by viewModel()
 
     private lateinit var backdropManager: BackdropManager
+
+    private val onScrollListener by lazy {
+        ScrollListener(
+            whenScrollUp = backdropManager::close,
+            whenScrollDown = backdropManager::open
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +61,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
             openIconRes = R.drawable.ic_search,
             closeIconRes = R.drawable.ic_arrow_up,
         )
+
+        binding.list.addOnScrollListener(onScrollListener)
 
         binding.searchIcon.setOnClickListener {
             backdropManager.toggle()

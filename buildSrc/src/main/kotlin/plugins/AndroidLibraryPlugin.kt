@@ -45,6 +45,7 @@ class AndroidLibraryPlugin : Plugin<Project> {
 
             defaultConfig {
                 minSdkVersion(Releases.minSdk)
+                maxSdkVersion(Releases.maxSdk)
                 targetSdkVersion(Releases.targetSdk)
 
                 versionCode = (versionProps["kiwiVersionCode"] as String).toInt()

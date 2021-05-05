@@ -6,11 +6,11 @@
     <data>
         <variable
             name="item"
-            type="pl.jutupe.core.common.MediaItem" />
+            type="pl.jutupe.model.MediaItem" />
 
         <variable
             name="action"
-            type="pl.jutupe.home.adapter.MediaItemAction" />
+            type="pl.jutupe.model.MediaItemAction" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="10dp"
-                        android:text="@{item.artist}"
+                        android:text="@{item.subtitle}"
                         android:textColor="#FFFFFF"
                         android:maxLines="1"
                         android:ellipsize="end"

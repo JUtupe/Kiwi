@@ -6,6 +6,7 @@
     <string name="browser_root_main">Main directory</string>
     <string name="browser_root_songs">Songs</string>
     <string name="browser_root_albums">Albums</string>
+    <string name="browser_root_artists">Artists</string>
     <string name="browser_root_playlists">Playlists</string>
 
     <string name="playlist_recent_search">Recently searched</string>

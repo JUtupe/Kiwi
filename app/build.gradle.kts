@@ -18,6 +18,7 @@ android {
         applicationId = Releases.applicationId
 
         minSdkVersion(Releases.minSdk)
+        maxSdkVersion(Releases.maxSdk)
         targetSdkVersion(Releases.targetSdk)
 
         versionCode = (versionProps["kiwiVersionCode"] as String).toInt()
@@ -26,7 +27,6 @@ android {
 
     buildTypes {
         getByName("release") {
-            isShrinkResources = true
             isMinifyEnabled = true
 
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

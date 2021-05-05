@@ -2,36 +2,24 @@ package pl.jutupe.core.util
 
 import android.content.ContentUris
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
 
 object MediaStoreConst {
     const val musicSelection = "((${MediaStore.Audio.Media.IS_MUSIC} != 0) " +
-        "AND (${MediaStore.Audio.Media.IS_RINGTONE} == 0) " +
-        "AND (${MediaStore.Audio.Media.IS_NOTIFICATION} == 0) " +
-        "AND (${MediaStore.Audio.Media.IS_ALARM} == 0))"
+            "AND (${MediaStore.Audio.Media.IS_RINGTONE} == 0) " +
+            "AND (${MediaStore.Audio.Media.IS_NOTIFICATION} == 0) " +
+            "AND (${MediaStore.Audio.Media.IS_ALARM} == 0))"
 
-    val mediaUri: Uri =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+    val mediaUri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
 
-    val playlistsUri: Uri =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Playlists.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
+    val playlistsUri: Uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
 
-    val albumsUri =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Albums.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
+    val albumsUri: Uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
+
+    val artistsUri: Uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI
 
     fun playlistMembersUri(playlistId: String): Uri =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Playlists.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else {
-            MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
-        }.buildUpon()
+        MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI.buildUpon()
             .appendEncodedPath(playlistId)
             .appendEncodedPath("members")
             .build()
@@ -60,6 +48,12 @@ object MediaStoreConst {
         MediaStore.Audio.Albums.ALBUM,
         MediaStore.Audio.Albums.ARTIST,
         MediaStore.Audio.Albums.NUMBER_OF_SONGS,
+    )
+
+    val artistProjection = arrayOf(
+        MediaStore.Audio.Artists._ID,
+        MediaStore.Audio.Artists.ARTIST,
+        MediaStore.Audio.Artists.NUMBER_OF_TRACKS,
     )
 
     fun getMediaUri(mediaId: Long): Uri =

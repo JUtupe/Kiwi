@@ -1,6 +1,5 @@
 package pl.jutupe.home.ui.library
 
-import android.os.Bundle
 import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -8,10 +7,10 @@ import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
-import pl.jutupe.core.common.MediaItem
-import pl.jutupe.core.util.putPagination
-import pl.jutupe.home.adapter.MediaItemAction
+import pl.jutupe.core.util.Filter
 import pl.jutupe.home.data.MediaItemDataSource
+import pl.jutupe.model.MediaItem
+import pl.jutupe.model.MediaItemAction
 import timber.log.Timber
 
 class LibraryViewModel(
@@ -29,8 +28,10 @@ class LibraryViewModel(
         PagingConfig(pageSize = 30)
     ) {
         MediaItemDataSource { pagination ->
-            val options = Bundle().putPagination(pagination)
-            connection.getItems(currentRoot.value.id, options)
+            connection.getItems(
+                currentRoot.value.id,
+                Filter(pagination)
+            )
         }
     }.flow.cachedIn(viewModelScope)
 
