@@ -6,7 +6,9 @@ import coil.load
 import pl.jutupe.model.MediaItem
 
 @BindingAdapter("mediaImage")
-fun ImageView.bindMediaImage(item: MediaItem) {
+fun ImageView.bindMediaImage(item: MediaItem?) {
+    if (item == null) return
+
     load(item.art) {
         val baseDrawable = item.type.getItemBaseDrawable()
         memoryCacheKey(item.art)
