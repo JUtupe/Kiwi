@@ -6,14 +6,15 @@ import pl.jutupe.core.R
 import pl.jutupe.model.ItemType
 import pl.jutupe.model.MediaItem
 
-fun MediaDescriptionCompat.toMediaItem(context: Context): MediaItem =
-    when (ItemType.getByValue(type!!.toInt())) {
+fun MediaDescriptionCompat.toMediaItem(context: Context): MediaItem? =
+    when (type?.let { ItemType.getByValue(it.toInt()) }) {
         ItemType.TYPE_ROOT -> toRoot(context)
         ItemType.TYPE_SONG -> toSong(context)
         ItemType.TYPE_PLAYLIST -> toPlaylist(context)
         ItemType.TYPE_PLAYLIST_MEMBER -> toPlaylistMember(context)
         ItemType.TYPE_ALBUM -> toAlbum(context)
         ItemType.TYPE_ARTIST -> toArtist(context)
+        else -> null
     }
 
 fun MediaDescriptionCompat.toRoot(context: Context) = MediaItem.Root(

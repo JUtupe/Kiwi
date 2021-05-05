@@ -6,6 +6,10 @@
         <variable
             name="viewModel"
             type="pl.jutupe.home.ui.HomeFragmentViewModel" />
+
+        <variable
+            name="controllerViewModel"
+            type="pl.jutupe.home.ui.ControllerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,9 +46,19 @@
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/controller"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appbar" />
+
+        <include
+            android:id="@+id/controller"
+            layout="@layout/view_bottom_playback_controller"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            app:viewModel="@{controllerViewModel}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

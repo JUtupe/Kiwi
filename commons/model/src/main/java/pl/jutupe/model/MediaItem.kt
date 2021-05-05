@@ -89,6 +89,6 @@ enum class ItemType(
 
     companion object {
         fun getByValue(value: Int) = values()
-            .first { it.value == value }
+            .firstOrNull { it.value == value }
     }
 }

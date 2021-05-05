@@ -242,6 +242,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
         }
 
         override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
+            if (dismissedByUser) {
+                mediaSession.controller.transportControls.stop()
+            }
+
             stopForeground(true)
             isForeground = false
             stopSelf()
