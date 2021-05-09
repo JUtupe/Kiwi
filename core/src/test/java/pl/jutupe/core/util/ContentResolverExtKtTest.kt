@@ -93,7 +93,7 @@ internal class ContentResolverExtKtTest {
                 Filter(
                     pagination = Pagination(1, 50),
                     sortOrder = SortOrder(
-                        column = SortOrder.Column.DEFAULT,
+                        column = SortOrder.Column.DATE_ADDED,
                         direction = SortOrder.Direction.ASCENDING
                     )
                 ) to "date_added ASC LIMIT 50 OFFSET 50",

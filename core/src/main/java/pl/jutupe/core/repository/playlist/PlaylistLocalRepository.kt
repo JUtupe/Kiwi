@@ -172,7 +172,7 @@ class PlaylistLocalRepository(
             val duration = cursor.getDuration()
             val album = cursor.getString(albumIndex)
             val albumId = cursor.getLong(albumIdIndex)
-            val albumArtUri = context.getAlbumArtUri(albumId, ItemType.TYPE_PLAYLIST_MEMBER)
+            val albumArtUri = getAlbumArtUri(albumId)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
