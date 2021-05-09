@@ -2,6 +2,7 @@ package pl.jutupe.core.util
 
 import android.content.ContentUris
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 
 object MediaStoreConst {
@@ -10,16 +11,28 @@ object MediaStoreConst {
             "AND (${MediaStore.Audio.Media.IS_NOTIFICATION} == 0) " +
             "AND (${MediaStore.Audio.Media.IS_ALARM} == 0))"
 
-    val mediaUri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+    val mediaUri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+    } else MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
 
-    val playlistsUri: Uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
+    val playlistsUri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        MediaStore.Audio.Playlists.getContentUri(MediaStore.VOLUME_EXTERNAL)
+    } else MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
 
-    val albumsUri: Uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
+    val albumsUri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        MediaStore.Audio.Albums.getContentUri(MediaStore.VOLUME_EXTERNAL)
+    } else MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
 
-    val artistsUri: Uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI
+    val artistsUri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        MediaStore.Audio.Artists.getContentUri(MediaStore.VOLUME_EXTERNAL)
+    } else MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI
 
     fun playlistMembersUri(playlistId: String): Uri =
-        MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI.buildUpon()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            MediaStore.Audio.Playlists.getContentUri(MediaStore.VOLUME_EXTERNAL)
+        } else {
+            MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
+        }.buildUpon()
             .appendEncodedPath(playlistId)
             .appendEncodedPath("members")
             .build()

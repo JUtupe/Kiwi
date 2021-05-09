@@ -6,6 +6,7 @@ import pl.jutupe.core.R
 import pl.jutupe.core.repository.playlist.PlaylistRepository
 import pl.jutupe.core.util.Filter
 import pl.jutupe.core.util.SortOrder
+import timber.log.Timber
 
 class RecentSearchLocalRepository(
     private val context: Context,
@@ -15,6 +16,8 @@ class RecentSearchLocalRepository(
     override suspend fun addById(id: String) {
         //create recent search playlist if not exists
         playlistRepository.findById(RECENT_SEARCH_PLAYLIST_ID) ?: run {
+            Timber.i("Creating Recent Search Playlist")
+
             playlistRepository.create(
                 MediaDescriptionCompat.Builder()
                     .setMediaId(RECENT_SEARCH_PLAYLIST_ID)
@@ -35,7 +38,7 @@ class RecentSearchLocalRepository(
             RECENT_SEARCH_PLAYLIST_ID,
             filter.copy(
                 sortOrder = SortOrder(
-                    SortOrder.DEFAULT_TYPE,
+                    SortOrder.Column.DEFAULT,
                     SortOrder.Direction.DESCENDING
                 )
             )
