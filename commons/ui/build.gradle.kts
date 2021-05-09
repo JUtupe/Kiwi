@@ -7,7 +7,7 @@ plugins {
 }
 
 dependencies {
-    kapt(Libraries.databinding)
+    kapt(Libraries.dataBinding)
 
     implementation(project(":commons:model"))
 

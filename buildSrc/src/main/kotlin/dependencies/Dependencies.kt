@@ -10,24 +10,24 @@ object Releases {
 }
 
 private object Versions {
-    const val kotlin = "1.4.20"
+    const val kotlin = "1.4.32"
     const val coroutines = "1.4.3"
     const val navigation = "2.3.2"
     const val preferences = "1.1.1"
     const val timber = "4.7.1"
-    const val koin = "2.1.5"
+    const val koin = "3.0.1"
     const val core = "1.3.1"
     const val media = "1.2.1"
-    const val exoPlayer = "2.12.2"
+    const val exoPlayer = "2.13.3"
     const val coil = "1.1.0"
     const val constraintLayout = "2.0.4"
     const val coordinatorLayout = "1.1.0"
-    const val databindingCompiler = "4.1.0"
+    const val dataBindingCompiler = "4.2.0"
     const val paging = "3.0.0-alpha04"
     const val appCompat = "1.1.0"
     const val material = "1.1.0-beta01"
     const val cardView = "1.0.0"
-    const val lifecycle = "2.2.0"
+    const val lifecycle = "2.3.1"
 }
 
 object Libraries {
@@ -41,7 +41,7 @@ object Libraries {
 
     const val coil = "io.coil-kt:coil:${Versions.coil}"
 
-    const val databinding = "androidx.databinding:databinding-compiler:${Versions.databindingCompiler}"
+    const val dataBinding = "androidx.databinding:databinding-compiler:${Versions.dataBindingCompiler}"
 
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
     const val material = "com.google.android.material:material:${Versions.material}"
@@ -53,6 +53,7 @@ object Libraries {
 
     const val paging = "androidx.paging:paging-runtime:${Versions.paging}"
     const val lifecycle = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
+    const val lifecycleLiveData = "androidx.lifecycle:lifecycle-livedata:${Versions.lifecycle}"
 
     const val navigationFragment = "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
     const val navigation = "androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
@@ -64,15 +65,15 @@ object Libraries {
 
     //others
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
-    const val koin = "org.koin:koin-android:${Versions.koin}"
-    const val koinViewModel = "org.koin:koin-android-viewmodel:${Versions.koin}"
+    const val koin = "io.insert-koin:koin-android:${Versions.koin}"
+    const val koinAndroid = "io.insert-koin:koin-android:${Versions.koin}"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     const val permissions = "com.github.sembozdemir:PermissionsKt:1.0.0"
 }
 
 object TestLibraries {
-    const val junit = "org.junit.jupiter:junit-jupiter:5.7.0"
+    const val junit = "org.junit.jupiter:junit-jupiter:5.7.1"
     const val testRunner = "com.android.support.test:runner:1.0.2"
     const val mockk = "io.mockk:mockk:1.10.5"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"

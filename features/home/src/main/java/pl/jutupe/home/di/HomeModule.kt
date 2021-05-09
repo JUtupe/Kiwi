@@ -1,6 +1,6 @@
 package pl.jutupe.home.di
 
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import pl.jutupe.home.ui.ControllerViewModel
 import pl.jutupe.home.ui.HomeFragmentViewModel

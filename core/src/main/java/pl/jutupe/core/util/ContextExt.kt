@@ -16,6 +16,7 @@ fun Context.resourceUri(resourceId: Int): Uri = with(resources) {
         .build()
 }
 
+//todo
 fun Context.getAlbumArtUri(albumId: Long, type: ItemType): Uri {
     val albumArtUri = Uri.parse("content://media/external/audio/albumart")
     val baseDrawable = type.getItemBaseDrawable()

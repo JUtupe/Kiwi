@@ -10,7 +10,7 @@ import android.provider.Settings
 import android.view.View
 import com.sembozdemir.permissionskt.askPermissions
 import com.sembozdemir.permissionskt.handlePermissionsResult
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseActivity
 import pl.jutupe.main.R
 import pl.jutupe.main.databinding.ActivitySplashBinding
@@ -54,7 +54,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) = handlePermissionsResult(requestCode, permissions, grantResults)
+    ) {
+        handlePermissionsResult(requestCode, permissions, grantResults)
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
 
     override fun onDestroy() {
         binding.motionLayout.removeTransitionListener(transitionCompletedListener)

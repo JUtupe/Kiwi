@@ -13,7 +13,7 @@ fun ContentResolver.queryPaged(
     selection: String?, selectionArgs: Array<String>?,
     filter: Filter
 ): Cursor? =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
         getAndroidCursor(uri, projection, selection, selectionArgs, filter)
     } else {
         getAndroidOldCursor(uri, projection, selection, selectionArgs, filter)
