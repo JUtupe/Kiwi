@@ -73,7 +73,7 @@ object Libraries {
 }
 
 object TestLibraries {
-    const val junit = "org.junit.jupiter:junit-jupiter:5.7.1"
+    const val junit = "org.junit.jupiter:junit-jupiter:5.7.2"
     const val testRunner = "com.android.support.test:runner:1.0.2"
     const val mockk = "io.mockk:mockk:1.10.5"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"

@@ -9,6 +9,8 @@ interface PlaylistRepository {
 
     suspend fun findById(id: String): MediaDescriptionCompat?
 
+    suspend fun findByName(name: String): MediaDescriptionCompat?
+
     suspend fun create(playlist: MediaDescriptionCompat): MediaDescriptionCompat
 
     suspend fun delete(id: String)

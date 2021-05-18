@@ -29,13 +29,16 @@ object MediaStoreConst {
 
     fun playlistMembersUri(playlistId: String): Uri =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Playlists.getContentUri(MediaStore.VOLUME_EXTERNAL)
+            MediaStore.Audio.Playlists.Members.getContentUri(
+                MediaStore.VOLUME_EXTERNAL, playlistId.toLong()
+            )
         } else {
             MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
-        }.buildUpon()
-            .appendEncodedPath(playlistId)
-            .appendEncodedPath("members")
-            .build()
+                .buildUpon()
+                .appendEncodedPath(playlistId)
+                .appendEncodedPath("members")
+                .build()
+        }
 
     val songProjection = arrayOf(
         MediaStore.Audio.Media._ID,
