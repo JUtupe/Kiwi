@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
 import pl.jutupe.home.adapter.WrapperAdapter

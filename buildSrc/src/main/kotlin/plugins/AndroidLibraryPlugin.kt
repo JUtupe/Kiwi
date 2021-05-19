@@ -101,7 +101,7 @@ class AndroidLibraryPlugin : Plugin<Project> {
             implementation(Libraries.timber)
 
             implementation(Libraries.koin)
-            implementation(Libraries.koinViewModel)
+            implementation(Libraries.koinAndroid)
         }
     }
 

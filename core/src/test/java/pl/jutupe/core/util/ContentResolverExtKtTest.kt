@@ -79,21 +79,21 @@ internal class ContentResolverExtKtTest {
                 Filter(
                     pagination = Pagination(1, 50),
                     sortOrder = SortOrder(
-                        type = SortOrder.DEFAULT_TYPE,
+                        column = SortOrder.Column.DEFAULT,
                         direction = SortOrder.Direction.RANDOM
                     )
                 ) to "RANDOM() LIMIT 50 OFFSET 50",
                 Filter(
                     pagination = Pagination(1, 50),
                     sortOrder = SortOrder(
-                        type = SortOrder.DEFAULT_TYPE,
+                        column = SortOrder.Column.DEFAULT,
                         direction = SortOrder.Direction.DESCENDING
                     )
                 ) to "_id DESC LIMIT 50 OFFSET 50",
                 Filter(
                     pagination = Pagination(1, 50),
                     sortOrder = SortOrder(
-                        type = SortOrder.DATE_ADDED_TYPE,
+                        column = SortOrder.Column.DATE_ADDED,
                         direction = SortOrder.Direction.ASCENDING
                     )
                 ) to "date_added ASC LIMIT 50 OFFSET 50",

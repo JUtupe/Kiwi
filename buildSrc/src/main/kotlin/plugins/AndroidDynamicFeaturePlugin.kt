@@ -79,7 +79,7 @@ class AndroidDynamicFeaturePlugin : Plugin<Project> {
             implementation(Libraries.timber)
 
             implementation(Libraries.koin)
-            implementation(Libraries.koinViewModel)
+            implementation(Libraries.koinAndroid)
 
             implementation(Libraries.appCompat)
         }

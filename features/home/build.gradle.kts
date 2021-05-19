@@ -18,6 +18,7 @@ dependencies {
 
     implementation(Libraries.paging)
     implementation(Libraries.lifecycle)
+    implementation(Libraries.lifecycleLiveData)
 
     implementation(Libraries.coil)
 
@@ -26,5 +27,5 @@ dependencies {
     implementation(Libraries.coordinatorLayout)
     implementation(Libraries.material)
 
-    kapt(Libraries.databinding)
+    kapt(Libraries.dataBinding)
 }

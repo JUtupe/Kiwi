@@ -98,7 +98,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
         storeRecentPlaybackSession()
         super.onTaskRemoved(rootIntent)
 
-        exoPlayer.stop(true)
+        exoPlayer.stop()
+        exoPlayer.clearMediaItems()
     }
 
     override fun onDestroy() {
@@ -163,7 +164,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
         playlist: KiwiPlaybackPreparer.PreparedPlaylist
     ) {
         exoPlayer.playWhenReady = playlist.playWhenReady
-        exoPlayer.stop(true)
+        exoPlayer.stop()
+        exoPlayer.clearMediaItems()
 
         val mediaSource = playlist.songs.toMediaSource(dataSourceFactory)
 

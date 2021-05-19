@@ -10,7 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
 import pl.jutupe.home.databinding.FragmentHomeBinding

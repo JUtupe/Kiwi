@@ -48,6 +48,20 @@ class PlaylistLocalRepository(
         return cursorToPlaylists(cursor!!).firstOrNull()
     }
 
+    override suspend fun findByName(name: String): MediaDescriptionCompat? {
+        Timber.d("findByName(name=$name)")
+
+        val cursor = context.contentResolver.queryPaged(
+            playlistsUri,
+            playlistProjection,
+            "name LIKE ?",
+            arrayOf("%%$name%%"),
+            Filter()
+        )
+
+        return cursorToPlaylists(cursor!!).firstOrNull()
+    }
+
     override suspend fun removeMembersByAudioId(playlistId: String, audioId: String) {
         context.contentResolver.delete(
             playlistMembersUri(playlistId),
@@ -110,7 +124,8 @@ class PlaylistLocalRepository(
     override suspend fun addMember(playlistId: String, audioId: String) {
         val playlistMemberUri = playlistMembersUri(playlistId)
 
-        context.contentResolver.insert(playlistMemberUri,
+        context.contentResolver.insert(
+            playlistMemberUri,
             ContentValues().apply {
                 put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, 1)
                 put(MediaStore.Audio.Playlists.Members.AUDIO_ID, audioId)
@@ -172,7 +187,7 @@ class PlaylistLocalRepository(
             val duration = cursor.getDuration()
             val album = cursor.getString(albumIndex)
             val albumId = cursor.getLong(albumIdIndex)
-            val albumArtUri = context.getAlbumArtUri(albumId, ItemType.TYPE_PLAYLIST_MEMBER)
+            val albumArtUri = getAlbumArtUri(albumId)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()

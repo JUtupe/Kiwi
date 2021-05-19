@@ -5,7 +5,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.flow.collectLatest
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
 import pl.jutupe.home.adapter.library.MediaItemAdapter

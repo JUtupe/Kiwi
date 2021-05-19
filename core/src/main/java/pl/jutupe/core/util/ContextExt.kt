@@ -4,8 +4,6 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
-import pl.jutupe.model.ItemType
-import pl.jutupe.ui.util.getItemBaseDrawable
 
 fun Context.resourceUri(resourceId: Int): Uri = with(resources) {
     Uri.Builder()
@@ -16,10 +14,8 @@ fun Context.resourceUri(resourceId: Int): Uri = with(resources) {
         .build()
 }
 
-fun Context.getAlbumArtUri(albumId: Long, type: ItemType): Uri {
+fun getAlbumArtUri(albumId: Long): Uri {
     val albumArtUri = Uri.parse("content://media/external/audio/albumart")
-    val baseDrawable = type.getItemBaseDrawable()
 
     return ContentUris.withAppendedId(albumArtUri, albumId)
-        ?: resourceUri(baseDrawable)
 }

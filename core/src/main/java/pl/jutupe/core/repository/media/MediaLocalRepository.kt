@@ -140,7 +140,7 @@ class MediaLocalRepository(
             val duration = cursor.getDuration()
             val album = cursor.getString(albumIndex)
             val albumId = cursor.getLong(albumIdIndex)
-            val albumArtUri = context.getAlbumArtUri(albumId, ItemType.TYPE_SONG)
+            val albumArtUri = getAlbumArtUri(albumId)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()
@@ -180,7 +180,7 @@ class MediaLocalRepository(
             val title = cursor.getString(albumIndex)
             val artist = cursor.getString(artistIndex)
             val trackCount = cursor.getLong(numberOfSongsIndex)
-            val albumArtUri = context.getAlbumArtUri(mediaId, ItemType.TYPE_ALBUM)
+            val albumArtUri = getAlbumArtUri(mediaId)
 
             val metadata = MediaMetadataCompat.Builder().apply {
                 this.id = mediaId.toString()

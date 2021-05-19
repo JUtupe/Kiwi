@@ -15,6 +15,8 @@ dependencies {
 
     implementation(Libraries.coil)
 
+    implementation(Libraries.lifecycleLiveData)
+
     implementation(Libraries.coroutines)
     implementation(Libraries.coroutinesAndroid)
 
