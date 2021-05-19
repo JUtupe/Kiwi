@@ -99,15 +99,6 @@ class PlaylistLocalRepository(
             arrayOf(id))
     }
 
-    /*
-    @SuppressLint("NewApi")
-    override suspend fun delete(id: String) {
-        context.contentResolver.delete(
-            MediaStore.getMediaUri(context, playlistsUri)!!,
-            MediaStore.Audio.Playlists._ID + "=",
-            arrayOf(id))
-    }*/
-
     override suspend fun getMembers(
         playlistId: String,
         filter: Filter
