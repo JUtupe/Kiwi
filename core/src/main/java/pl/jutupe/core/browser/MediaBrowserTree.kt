@@ -2,13 +2,12 @@ package pl.jutupe.core.browser
 
 import android.support.v4.media.MediaBrowserCompat
 import pl.jutupe.core.util.Filter
-import pl.jutupe.core.util.Pagination
 
 interface MediaBrowserTree {
 
     suspend fun itemsFor(
         parentId: String,
-        filter: Filter
+        filter: Filter,
     ): List<MediaBrowserCompat.MediaItem>?
 
     companion object {

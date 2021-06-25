@@ -10,7 +10,7 @@ object Releases {
 }
 
 private object Versions {
-    const val kotlin = "1.4.32"
+    const val kotlin = "1.5.0"
     const val coroutines = "1.4.3"
     const val navigation = "2.3.2"
     const val preferences = "1.1.1"

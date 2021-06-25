@@ -3,7 +3,6 @@ package pl.jutupe.core.playback
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.Timeline
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 
 class KiwiQueueNavigator(
@@ -14,5 +13,5 @@ class KiwiQueueNavigator(
         player: Player,
         windowIndex: Int
     ): MediaDescriptionCompat =
-        player.currentTimeline.getWindow(windowIndex, Timeline.Window()).mediaItem.playbackProperties?.tag as MediaDescriptionCompat
+        player.getMediaItemAt(windowIndex).playbackProperties?.tag as MediaDescriptionCompat
 }

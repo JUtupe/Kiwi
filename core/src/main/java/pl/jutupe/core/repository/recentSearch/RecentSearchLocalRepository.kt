@@ -40,9 +40,9 @@ class RecentSearchLocalRepository(
         return playlistRepository.getMembers(
             playlistId,
             filter.copy(
-                sortOrder = SortOrder(
-                    SortOrder.Column.DEFAULT,
-                    SortOrder.Direction.DESCENDING
+                sortOrder = SortOrder.Directional(
+                    SortOrder.Directional.Column.DEFAULT,
+                    SortOrder.Directional.Direction.DESCENDING
                 )
             )
         )
