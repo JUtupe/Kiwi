@@ -8,8 +8,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:elevation="8dp"
-        android:outlineProvider="background"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
         android:paddingStart="16dp"
