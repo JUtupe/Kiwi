@@ -28,10 +28,26 @@ class LocalMediaBrowserTree(
 ) : MediaBrowserTree {
 
     private val rootMediaItems = arrayListOf(
-        rootCategoryOf(KIWI_ROOT_SONGS, R.string.browser_root_songs, R.drawable.background_media_root_songs),
-        rootCategoryOf(KIWI_ROOT_ALBUMS, R.string.browser_root_albums, R.drawable.background_media_root_albums),
-        rootCategoryOf(KIWI_ROOT_ARTISTS, R.string.browser_root_artists, R.drawable.background_media_root_artists),
-        rootCategoryOf(KIWI_ROOT_PLAYLISTS, R.string.browser_root_playlists, R.drawable.background_media_root_playlists),
+        rootCategoryOf(
+            KIWI_ROOT_SONGS,
+            R.string.browser_root_songs,
+            R.drawable.background_media_root_songs
+        ),
+        rootCategoryOf(
+            KIWI_ROOT_ALBUMS,
+            R.string.browser_root_albums,
+            R.drawable.background_media_root_albums
+        ),
+        rootCategoryOf(
+            KIWI_ROOT_ARTISTS,
+            R.string.browser_root_artists,
+            R.drawable.background_media_root_artists
+        ),
+        rootCategoryOf(
+            KIWI_ROOT_PLAYLISTS,
+            R.string.browser_root_playlists,
+            R.drawable.background_media_root_playlists
+        ),
     )
 
     override suspend fun itemsFor(
@@ -41,10 +57,14 @@ class LocalMediaBrowserTree(
         when (parentId) {
             KIWI_MEDIA_EMPTY_ROOT -> emptyList()
             KIWI_MEDIA_ROOT -> getRootItems(filter)
-            KIWI_ROOT_SONGS -> mediaRepository.getAllSongs(filter).toMediaItems(FLAG_PLAYABLE)
-            KIWI_ROOT_ALBUMS -> mediaRepository.getAllAlbums(filter).toMediaItems(FLAG_BROWSABLE)
-            KIWI_ROOT_ARTISTS -> artistRepository.getAll(filter).toMediaItems(FLAG_BROWSABLE)
-            KIWI_ROOT_PLAYLISTS -> playlistRepository.getAll(filter).toMediaItems(FLAG_BROWSABLE)
+            KIWI_ROOT_SONGS -> mediaRepository.getAllSongs(filter)
+                .toMediaItems(FLAG_PLAYABLE)
+            KIWI_ROOT_ALBUMS -> mediaRepository.getAllAlbums(filter)
+                .toMediaItems(FLAG_BROWSABLE)
+            KIWI_ROOT_ARTISTS -> artistRepository.getAll(filter)
+                .toMediaItems(FLAG_BROWSABLE)
+            KIWI_ROOT_PLAYLISTS -> playlistRepository.getAll(filter)
+                .toMediaItems(FLAG_BROWSABLE)
             KIWI_ROOT_RECENTLY_SEARCHED -> recentSearchRepository.findRecentSearched(filter)
                 ?.toMediaItems(FLAG_PLAYABLE)
             else -> null
@@ -64,7 +84,7 @@ class LocalMediaBrowserTree(
     }
 
     private fun getRootItems(filter: Filter): List<MediaBrowserCompat.MediaItem> =
-        if (filter.pagination.page == Pagination.DEFAULT_PAGE)
+        if (filter.pagination.offset == Pagination.DEFAULT_OFFSET)
             rootMediaItems
         else emptyList()
 
