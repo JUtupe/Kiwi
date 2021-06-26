@@ -3,6 +3,7 @@ package pl.jutupe.core.playback
 import android.net.Uri
 import android.os.Bundle
 import android.os.ResultReceiver
+import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.google.android.exoplayer2.C
@@ -17,6 +18,7 @@ import pl.jutupe.core.repository.recentPlayback.RecentPlaybackRepository
 import pl.jutupe.core.util.Filter
 import pl.jutupe.core.util.Pagination
 import pl.jutupe.core.util.SortOrder
+import pl.jutupe.core.util.getFilterOrDefault
 import timber.log.Timber
 
 class KiwiPlaybackPreparer(
@@ -57,13 +59,11 @@ class KiwiPlaybackPreparer(
     private suspend fun onPrepareRandom(playWhenReady: Boolean) {
         Timber.d("onPrepareRandom(playWhenReady=$playWhenReady)")
 
-        val songs = mediaRepository.getAllSongs(
-            Filter(
-                sortOrder = SortOrder(
-                    direction = SortOrder.Direction.RANDOM
-                )
-            )
+        val randomFilter = Filter(
+            sortOrder = SortOrder.Random
         )
+
+        val songs = mediaRepository.getAllSongs(randomFilter)
 
         if (songs.isNotEmpty()) {
             val playlist = PreparedPlaylist(
@@ -80,21 +80,21 @@ class KiwiPlaybackPreparer(
 
         val filter = Filter(
             pagination = Pagination(
-                pageSize = Pagination.MAX_PAGE_SIZE
+                limit = Pagination.MAX_LIMIT
             )
         )
 
         serviceScope.launch {
-            val songs = mediaRepository.search(query, filter)
+            mediaRepository.search(query, filter)
+                .takeIf { it.isNotEmpty() }
+                ?.let { songs ->
+                    val playlist = PreparedPlaylist(
+                        songs = songs,
+                        playWhenReady = playWhenReady
+                    )
 
-            if (songs.isNotEmpty()) {
-                val playlist = PreparedPlaylist(
-                    songs = songs,
-                    playWhenReady = playWhenReady
-                )
-
-                onPlaylistPrepared(playlist)
-            }
+                    onPlaylistPrepared(playlist)
+                }
         }
     }
 
@@ -102,29 +102,19 @@ class KiwiPlaybackPreparer(
         Timber.d("onPrepareFromMediaId(mediaId=$mediaId, extras=$extras)")
 
         serviceScope.launch {
-            mediaRepository.findByMediaId(mediaId)?.let { item ->
-                val pagination = Pagination(Pagination.DEFAULT_PAGE, Pagination.MAX_PAGE_SIZE)
-                val filter = Filter(pagination)
+            val song = mediaRepository.findByMediaId(mediaId)
 
+            song?.let { item ->
+                val filter = extras.getFilterOrDefault().apply {
+                    pagination.limit = Pagination.MAX_LIMIT
+                }
+
+                val parentId = extras?.getString(KIWI_PARENT_ID_KEY)
                 val playbackStartPositionMs =
                     extras?.getLong(MEDIA_DESCRIPTION_EXTRAS_START_PLAYBACK_POSITION_MS, C.TIME_UNSET) ?: C.TIME_UNSET
 
-                val parentId = extras?.getString(KIWI_PARENT_ID_KEY)
-
-                val songs = parentId?.let { id ->
-                    val items = browserTree.itemsFor(id, filter)
-                        ?.map { it.description }
-
-                    if (items?.isNotEmpty() == true) items
-                    else null
-                } ?: listOf(item)
-
-                val initialWindowIndex = songs.indexOf(songs.find { it.mediaId == mediaId })
-
-                if (initialWindowIndex == -1) {
-                    Timber.e("Song not in parent id mediaId=$mediaId, parentId=$parentId, songs=$songs,")
-                    throw IllegalArgumentException("song not in parentId")
-                }
+                val songs = parentId?.let { getPlaylist(item, it, filter) } ?: listOf(item)
+                val initialWindowIndex = getItemIndexOrFirst(songs, item.mediaId!!)
 
                 val playlist = PreparedPlaylist(
                     songs = songs,
@@ -136,10 +126,64 @@ class KiwiPlaybackPreparer(
                 onPlaylistPrepared(playlist)
             } ?: run {
                 Timber.w("Content for mediaId=$mediaId not found.")
-
-                //todo show error to user
             }
         }
+    }
+
+    private suspend fun getPlaylist(
+        item: MediaDescriptionCompat, parentId: String, filter: Filter
+    ): List<MediaDescriptionCompat> {
+        val songs = mutableListOf<MediaBrowserCompat.MediaItem>()
+
+        when (filter.sortOrder) {
+            is SortOrder.Directional -> {
+                var offset = 0
+
+                while (true) {
+                    val pagination = Pagination(
+                        limit = Pagination.MAX_LIMIT,
+                        offset = offset,
+                    )
+
+                    val foundSongs = browserTree.itemsFor(
+                        parentId,
+                        filter.copy(pagination = pagination)
+                    )
+
+                    if (foundSongs.isNullOrEmpty()) {
+                        break
+                    } else {
+                        songs += foundSongs
+                    }
+
+                    offset += pagination.limit
+                }
+            }
+            SortOrder.Random -> {
+                val foundSongs = browserTree.itemsFor(
+                    parentId,
+                    Filter(
+                        Pagination(limit = Pagination.MAX_LIMIT)
+                    )
+                ) ?: emptyList()
+
+                songs += foundSongs
+            }
+        }
+
+        return songs.map { it.description }
+            .takeIf { it.isNotEmpty() }
+            ?: listOf(item)
+    }
+
+    private fun getItemIndexOrFirst(songs: List<MediaDescriptionCompat>, itemId: String): Int {
+        val initialWindowIndex = songs.indexOfFirst { it.mediaId == itemId }
+
+        return if (initialWindowIndex == -1) {
+            Timber.e("Song not in parent id mediaId=${itemId}, songs=$songs,")
+
+            0 //first index
+        } else initialWindowIndex
     }
 
     override fun onPrepareFromUri(

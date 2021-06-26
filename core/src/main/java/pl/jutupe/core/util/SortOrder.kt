@@ -1,18 +1,23 @@
 package pl.jutupe.core.util
 
-data class SortOrder(
-    val column: Column = Column.DEFAULT,
-    val direction: Direction = Direction.ASCENDING,
-) {
-    enum class Direction {
-        ASCENDING,
-        DESCENDING,
-        RANDOM,
+sealed class SortOrder {
+
+    data class Directional(
+        var column: Column = Column.DEFAULT,
+        var direction: Direction = Direction.ASCENDING,
+    ) : SortOrder() {
+
+        enum class Direction {
+            ASCENDING,
+            DESCENDING,
+        }
+
+        enum class Column {
+            DEFAULT,
+            DATE_ADDED,
+        }
     }
 
-    enum class Column {
-        DEFAULT,
-        DATE_ADDED,
-    }
+    object Random : SortOrder()
 }
 

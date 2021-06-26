@@ -45,7 +45,7 @@ class SearchViewModel(
             Timber.d("onClick($item)")
 
             if (item.isPlayable) {
-                connection.playFromMediaId(item.id, null)
+                connection.playFromMediaId(item.id)
                 connection.addRecentSearchItem(item)
             }
         }

@@ -58,7 +58,7 @@ internal class LocalMediaBrowserTreeTest {
         //given
         val emptyRootId = "kiwi.root.media"
         val filter = Filter(
-            pagination = Pagination(1, 30)
+            pagination = Pagination(30, 30)
         )
 
         //when
