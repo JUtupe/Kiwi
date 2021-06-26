@@ -23,6 +23,10 @@ class BackdropManager(
 
     var onStateChangedListener: ((isVisible: Boolean) -> Unit)? = null
 
+    init {
+        updateIcon()
+    }
+
     fun toggle() {
         backdropShown = !backdropShown
 

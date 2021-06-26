@@ -14,46 +14,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/backdrop_main"
-            android:id="@+id/backdrop" />
-
         <LinearLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:clickable="true"
-            android:focusable="true"
-            android:background="@drawable/background_backdrop">
+            android:focusable="true">
 
-            <LinearLayout
-                android:id="@+id/header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="20dp"
-                android:elevation="4dp"
-                tools:ignore="UseCompoundDrawables">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Kolejka odtwarzania"/>
-
-                <ImageView
-                    android:id="@+id/filterIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_filter"
-                    android:layout_gravity="end"/>
-
-            </LinearLayout>
+            <include layout="@layout/view_backdrop_header"
+                android:id="@+id/header"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="?attr/colorSurface"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_wrapper"
                 tools:itemCount="6"/>

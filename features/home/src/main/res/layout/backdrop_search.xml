@@ -30,6 +30,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/KiwiTheme.SearchBar"
+                    android:id="@+id/input"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:hint="@string/hint_search"
