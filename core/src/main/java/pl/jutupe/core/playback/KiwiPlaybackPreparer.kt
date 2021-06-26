@@ -113,7 +113,7 @@ class KiwiPlaybackPreparer(
                 val playbackStartPositionMs =
                     extras?.getLong(MEDIA_DESCRIPTION_EXTRAS_START_PLAYBACK_POSITION_MS, C.TIME_UNSET) ?: C.TIME_UNSET
 
-                val songs = getPlaylist(item, parentId, filter)
+                val songs = parentId?.let { getPlaylist(item, it, filter) } ?: listOf(item)
                 val initialWindowIndex = getItemIndexOrFirst(songs, item.mediaId!!)
 
                 val playlist = PreparedPlaylist(
@@ -131,10 +131,8 @@ class KiwiPlaybackPreparer(
     }
 
     private suspend fun getPlaylist(
-        item: MediaDescriptionCompat, parentId: String?, filter: Filter
+        item: MediaDescriptionCompat, parentId: String, filter: Filter
     ): List<MediaDescriptionCompat> {
-        if (parentId == null) return listOf(item)
-
         val songs = mutableListOf<MediaBrowserCompat.MediaItem>()
 
         when (filter.sortOrder) {
@@ -174,6 +172,8 @@ class KiwiPlaybackPreparer(
         }
 
         return songs.map { it.description }
+            .takeIf { it.isNotEmpty() }
+            ?: listOf(item)
     }
 
     private fun getItemIndexOrFirst(songs: List<MediaDescriptionCompat>, itemId: String): Int {
