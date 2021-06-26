@@ -1,7 +1,9 @@
 package pl.jutupe.home.ui.library
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.flow.collectLatest
@@ -76,8 +78,18 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>(
                     }
             }
 
+        binding.header.apply {
+            backButton.setOnClickListener { libraryBackCallback.handleOnBackPressed() }
+            backButton.visibility = View.GONE
+        }
+
+        viewModel.getCurrentRoot().observe(viewLifecycleOwner) { currentRoot ->
+            binding.header.title.text = currentRoot.title
+        }
+
         viewModel.isInRoot.observe(viewLifecycleOwner) { isRoot ->
             libraryBackCallback.isEnabled = !isRoot
+            binding.header.backButton.isVisible = !isRoot
         }
 
         viewModel.events.observe(viewLifecycleOwner, this::onViewEvent)

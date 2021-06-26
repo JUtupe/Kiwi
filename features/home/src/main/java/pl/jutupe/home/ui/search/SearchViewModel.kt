@@ -72,6 +72,18 @@ class SearchViewModel(
         }
     }
 
+    fun onSearchButtonClicked() {
+        events.value = SearchViewEvent.ShowSearchKeyboard
+    }
+
+    fun onHideSearchButtonClicked() {
+        events.value = SearchViewEvent.HideSearchKeyboard
+    }
+
+    fun onSearchDoneClicked() {
+        events.value = SearchViewEvent.HideSearchKeyboard
+    }
+
     private fun updatePager(query: String) {
         currentQuery.value = query
         events.value = SearchViewEvent.RefreshAdapter
@@ -80,8 +92,12 @@ class SearchViewModel(
     sealed class SearchViewEvent {
         object RefreshAdapter : SearchViewEvent()
 
-        class SetBackdropSearchTitle(val text: String): SearchViewEvent()
+        class SetBackdropSearchTitle(val text: String) : SearchViewEvent()
 
-        object SetBackdropRecentlySearchedTitle: SearchViewEvent()
+        object SetBackdropRecentlySearchedTitle : SearchViewEvent()
+
+        object ShowSearchKeyboard : SearchViewEvent()
+
+        object HideSearchKeyboard : SearchViewEvent()
     }
 }
