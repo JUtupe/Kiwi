@@ -45,8 +45,12 @@ class SearchViewModel(
             Timber.d("onClick($item)")
 
             if (item.isPlayable) {
+                val shouldAddToRecent = currentQuery.value.isNotEmpty()
                 connection.playFromMediaId(item.id)
-                connection.addRecentSearchItem(item)
+
+                if (shouldAddToRecent) {
+                    connection.addRecentSearchItem(item)
+                }
             }
         }
 

@@ -27,9 +27,13 @@ class AddRecentSearchActionProvider(
         CoroutineScope(Dispatchers.IO).launch {
             val recentSearchMediaId = extras?.getString(KEY_MEDIA_ID)
 
-            recentSearchMediaId?.let {
-                recentSearchRepository.addById(it)
-            } ?: run { Timber.e("%s action performed without mediaId", ACTION_ADD_RECENT_SEARCH) }
+            recentSearchMediaId?.runCatching {
+                recentSearchRepository.addById(this)
+            }?.onFailure {
+                Timber.e(it, "Failed to add recent searched song to playlist: ")
+            } ?: run {
+                Timber.e("%s action performed without mediaId", ACTION_ADD_RECENT_SEARCH)
+            }
         }
     }
 

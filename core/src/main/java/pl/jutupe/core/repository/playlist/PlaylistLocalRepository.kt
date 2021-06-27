@@ -96,7 +96,8 @@ class PlaylistLocalRepository(
         context.contentResolver.delete(
             playlistsUri,
             MediaStore.Audio.Playlists._ID + "=",
-            arrayOf(id))
+            arrayOf(id)
+        )
     }
 
     override suspend fun getMembers(
@@ -171,7 +172,7 @@ class PlaylistLocalRepository(
         val members = arrayListOf<MediaDescriptionCompat>()
 
         val playlistMemberIdIndex = cursor.getColumnIndex(MediaStore.Audio.Playlists.Members._ID)
-        val mediaIdIndex = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
+        val mediaIdIndex = cursor.getColumnIndex(MediaStore.Audio.Playlists.Members.AUDIO_ID)
         val titleIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
         val artistIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
         val albumIndex = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
