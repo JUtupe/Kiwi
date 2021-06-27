@@ -39,7 +39,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(
         binding.header.apply {
             backButton.visibility = View.GONE
             extraButton.visibility = View.GONE
-            title.text = "Hello :)"
+            title.text = resources.getStringArray(R.array.welcome_message).random()
         }
 
         lifecycleScope.launch {
