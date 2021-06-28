@@ -11,7 +11,7 @@ fun ImageView.bindMediaImage(item: MediaItem?) {
 
     load(item.art) {
         val baseDrawable = item.type.getItemBaseDrawable()
-        memoryCacheKey(item.art)
+        memoryCacheKey(item.type.name + item.art)
         error(baseDrawable)
         placeholder(baseDrawable)
     }
