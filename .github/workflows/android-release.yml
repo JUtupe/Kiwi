@@ -8,7 +8,7 @@ on:
         required: true
 
 jobs:
-  createrelease:
+  create-release:
     name: Build release app
     runs-on: ubuntu-latest
 
@@ -42,10 +42,10 @@ jobs:
       - name: Bump android version
         run: bash ./gradlew bumpVersion --newVersionName ${{ github.event.inputs.versionName }}
 
-      - name: Build release APK
+      - name: Build release AAB
         run: bash ./gradlew bundleRelease
 
-      - name: Sign release APK
+      - name: Sign release AAB
         uses: r0adkll/sign-android-release@v1
         id: release_app
         with:
