@@ -9,7 +9,7 @@ on:
 
 jobs:
   setup-release:
-    name: Setup release config
+    name: Setup release
     runs-on: ubuntu-latest
 
     steps:
@@ -30,6 +30,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+
+      - name: Create release branch
+        run: git checkout -b release/v${{ github.event.inputs.versionName }}
+
+      - name: Initialize mandatory git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email noreply@github.com
 
       - name: Bump android version
         run: bash ./gradlew bumpVersion --newVersionName ${{ github.event.inputs.versionName }}
@@ -90,6 +98,31 @@ jobs:
     needs: [build-aab, build-apk]
 
     steps:
+      - name: Commit version update
+        run: |
+          git add versions.properties
+          git commit -m "Prepare release ${{ github.event.inputs.versionName }}"
+          echo "::set-output name=commit::$(git rev-parse HEAD)"
+
+      - name: Push new release branch
+        run: git push origin release/v${{ github.event.inputs.versionName }}
+
+      - name: Create pull request into develop
+        uses: thomaseizinger/create-pull-request@1.0.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          head: release/v${{ github.event.inputs.versionName }}
+          base: develop
+          title: v${{ github.event.inputs.versionName }} into develop
+
+      - name: Create pull request into master
+        uses: thomaseizinger/create-pull-request@1.0.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          head: release/v${{ github.event.inputs.versionName }}
+          base: master
+          title: v${{ github.event.inputs.versionName }} into master
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
