@@ -4,12 +4,9 @@ on:
   push:
   pull_request:
 
-env:
-  DETEKT_RELEASE_TAG: v1.15.0
-
 jobs:
-  test:
-    name: Test
+  unit-test:
+    name: Unit tests
     runs-on: ubuntu-latest
 
     steps:
@@ -29,20 +26,5 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Unit tests
+      - name: Gradle test
         run: bash ./gradlew test
-
-  ktlint:
-    name: Ktlint
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: ktlint
-        uses: ScaCap/action-ktlint@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          android: true
