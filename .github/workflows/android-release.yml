@@ -119,14 +119,14 @@ jobs:
         track: internal
 
   notify-release:
-    - name: Notify about release
-      runs-on: ubuntu-latest
-      needs: release
+    name: Notify about release
+    runs-on: ubuntu-latest
+    needs: release
 
-      steps:
-        - name: Discord notification
-          env:
-            DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          uses: Ilshidur/action-discord@master
-          with:
-            args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been released on google play.'
+    steps:
+    - name: Discord notification
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      uses: Ilshidur/action-discord@master
+      with:
+        args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been released on google play.'
