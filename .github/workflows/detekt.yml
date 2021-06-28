@@ -3,8 +3,6 @@ name: Scan with Detekt
 on:
   push:
   pull_request:
-  schedule:
-    - cron: '43 7 * * 2'
   workflow_dispatch:
 
 env:
