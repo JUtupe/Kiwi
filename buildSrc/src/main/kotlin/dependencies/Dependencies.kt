@@ -19,7 +19,7 @@ private object Versions {
     const val core = "1.3.1"
     const val media = "1.2.1"
     const val exoPlayer = "2.13.3"
-    const val coil = "1.1.0"
+    const val coil = "1.2.2"
     const val constraintLayout = "2.0.4"
     const val coordinatorLayout = "1.1.0"
     const val dataBindingCompiler = "4.2.0"
