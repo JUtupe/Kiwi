@@ -27,7 +27,7 @@ jobs:
           java-version: 1.8
 
       - name: Gradle build
-        run: ./gradlew build
+        run: bash ./gradlew build
 
   test:
     name: Unit Tests
