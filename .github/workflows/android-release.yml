@@ -42,37 +42,37 @@ jobs:
       - name: Bump android version
         run: bash ./gradlew bumpVersion --newVersionName ${{ github.event.inputs.versionName }}
 
-  build-aab:
-    name: Build release .aab
-    runs-on: ubuntu-latest
-    needs: setup-release
+#  build-aab:
+#    name: Build release .aab
+#    runs-on: ubuntu-latest
+#    needs: setup-release
+#
+#    steps:
+      - name: Build release AAB
+        run: bash ./gradlew bundleRelease
 
-    steps:
-    - name: Build release AAB
-      run: bash ./gradlew bundleRelease
+      - name: Sign release AAB
+        uses: r0adkll/sign-android-release@v1
+        id: release_app
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-    - name: Sign release AAB
-      uses: r0adkll/sign-android-release@v1
-      id: release_app
-      with:
-        releaseDirectory: app/build/outputs/bundle/release
-        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-        alias: ${{ secrets.ALIAS }}
-        keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-        keyPassword: ${{ secrets.KEY_PASSWORD }}
+      - name: Upload AAB
+        uses: actions/upload-artifact@v1
+        with:
+          name: kiwi-v${{ github.event.inputs.versionName }}
+          path: ${{steps.release_app.outputs.signedReleaseFile}}
 
-    - name: Upload AAB
-      uses: actions/upload-artifact@v1
-      with:
-        name: kiwi-v${{ github.event.inputs.versionName }}
-        path: ${{steps.release_app.outputs.signedReleaseFile}}
-
-  build-apk:
-    name: Build release .apk
-    runs-on: ubuntu-latest
-    needs: setup-release
-
-    steps:
+#  build-apk:
+#    name: Build release .apk
+#    runs-on: ubuntu-latest
+#    needs: setup-release
+#
+#    steps:
       - name: Build release APK
         run: bash ./gradlew assembleRelease --stacktrace
 
@@ -92,12 +92,12 @@ jobs:
           name: kiwi-v${{ github.event.inputs.versionName }}
           path: ${{steps.release_app.outputs.signedReleaseFile}}
 
-  create-release:
-    name: Build release .apk
-    runs-on: ubuntu-latest
-    needs: [build-aab, build-apk]
-
-    steps:
+#  create-release:
+#    name: Create release
+#    runs-on: ubuntu-latest
+#    needs: [build-aab, build-apk]
+#
+#    steps:
       - name: Commit version update
         run: |
           git add versions.properties
@@ -132,12 +132,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  release:
-    name: Release app on google play
-    runs-on: ubuntu-latest
-    needs: [create-release]
-
-    steps:
+#  release:
+#    name: Release app on google play
+#    runs-on: ubuntu-latest
+#    needs: [create-release]
+#
+#    steps:
     - name: Create service_account.json
       id: createServiceAccount
       run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
@@ -151,15 +151,15 @@ jobs:
         releaseFile: app/build/outputs/bundle/release/app-release.aab
         track: internal
 
-  notify-release:
-    name: Notify about release
-    runs-on: ubuntu-latest
-    needs: release
-
-    steps:
+#  notify-release:
+#    name: Notify about release
+#    runs-on: ubuntu-latest
+#    needs: release
+#
+#    steps:
     - name: Discord notification
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       uses: Ilshidur/action-discord@master
       with:
-        args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been released on google play.'
+        args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} : {{ github.event.inputs.versionName }} has been released on google play.'
