@@ -53,7 +53,7 @@ jobs:
 
       - name: Sign release AAB
         uses: r0adkll/sign-android-release@v1
-        id: release_app
+        id: release_aab
         with:
           releaseDirectory: app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: kiwi-v${{ github.event.inputs.versionName }}
-          path: ${{steps.release_app.outputs.signedReleaseFile}}
+          path: ${{steps.release_aab.outputs.signedReleaseFile}}
 
 #  build-apk:
 #    name: Build release .apk
@@ -78,7 +78,7 @@ jobs:
 
       - name: Sign release APK
         uses: r0adkll/sign-android-release@v1
-        id: release_app
+        id: release_apk
         with:
           releaseDirectory: app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
@@ -90,7 +90,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: kiwi-v${{ github.event.inputs.versionName }}
-          path: ${{steps.release_app.outputs.signedReleaseFile}}
+          path: ${{steps.release_apk.outputs.signedReleaseFile}}
 
 #  create-release:
 #    name: Create release
@@ -127,8 +127,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ${{steps.release_app.outputs.signedReleaseFile}}
-            app/build/outputs/bundle/release/app-release.aab
+            ${{steps.release_aab.outputs.signedReleaseFile}}
+            ${{steps.release_apk.outputs.signedReleaseFile}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -148,7 +148,7 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: pl.jutupe.kiwi
-          releaseFile: app/build/outputs/bundle/release/app-release.aab
+          releaseFile: ${{steps.release_aab.outputs.signedReleaseFile}}
           track: internal
 
 #  notify-release:
