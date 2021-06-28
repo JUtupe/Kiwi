@@ -36,4 +36,4 @@ jobs:
 
     steps:
       - name: Unit tests
-        run: ./gradlew test
+        run: bash ./gradlew test
