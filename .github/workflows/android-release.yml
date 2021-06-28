@@ -138,18 +138,18 @@ jobs:
 #    needs: [create-release]
 #
 #    steps:
-    - name: Create service_account.json
-      id: createServiceAccount
-      run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
+      - name: Create service_account.json
+        id: createServiceAccount
+        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
 
-    - name: Deploy to Play Store (INTERNAL)
-      id: deploy
-      uses: r0adkll/upload-google-play@v1
-      with:
-        serviceAccountJson: service_account.json
-        packageName: pl.jutupe.kiwi
-        releaseFile: app/build/outputs/bundle/release/app-release.aab
-        track: internal
+      - name: Deploy to Play Store (INTERNAL)
+        id: deploy
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: pl.jutupe.kiwi
+          releaseFile: app/build/outputs/bundle/release/app-release.aab
+          track: internal
 
 #  notify-release:
 #    name: Notify about release
@@ -157,9 +157,9 @@ jobs:
 #    needs: release
 #
 #    steps:
-    - name: Discord notification
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      uses: Ilshidur/action-discord@master
-      with:
-        args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} : {{ github.event.inputs.versionName }} has been released on google play.'
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} : {{ github.event.inputs.versionName }} has been released on google play.'
