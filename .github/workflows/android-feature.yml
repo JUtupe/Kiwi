@@ -5,8 +5,8 @@ on:
   pull_request:
 
 jobs:
-  build:
-    name: Build
+  test:
+    name: Test
     runs-on: ubuntu-latest
 
     steps:
@@ -26,14 +26,5 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Gradle build
-        run: bash ./gradlew assemble
-
-  test:
-    name: Unit Tests
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
       - name: Unit tests
-        run: bash ./gradlew test
+          run: bash ./gradlew test
