@@ -3,6 +3,7 @@ name: Feature CI
 on:
   push:
   pull_request:
+  tags-ignore:
 
 jobs:
   unit-test:

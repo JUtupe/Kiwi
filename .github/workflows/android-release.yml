@@ -123,9 +123,16 @@ jobs:
           base: master
           title: v${{ github.event.inputs.versionName }} into master
 
-      - name: Release
+      - name: Create git tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v5.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create git release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
           files: |
             ${{steps.release_aab.outputs.signedReleaseFile}}
             ${{steps.release_apk.outputs.signedReleaseFile}}
