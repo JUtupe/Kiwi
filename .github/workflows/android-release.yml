@@ -1,11 +1,9 @@
 name: Release Internal
 
 on:
-  workflow_dispatch:
-    inputs:
-      versionName:
-        description: 'Name of version (x.x.x)'
-        required: true
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   setup-release:
@@ -111,17 +109,17 @@ jobs:
         uses: thomaseizinger/create-pull-request@1.0.0
         with:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          head: release/v${{ github.event.inputs.versionName }}
+          head: ${{ github.ref }}
           base: develop
-          title: v${{ github.event.inputs.versionName }} into develop
+          title: ${GITHUB_REF##*/} into develop
 
       - name: Create pull request into master
         uses: thomaseizinger/create-pull-request@1.0.0
         with:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          head: release/v${{ github.event.inputs.versionName }}
+          head: ${{ github.ref }}
           base: master
-          title: v${{ github.event.inputs.versionName }} into master
+          title: ${GITHUB_REF##*/} into master
 
       - name: Release
         uses: softprops/action-gh-release@v1
