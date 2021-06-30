@@ -1,24 +1,31 @@
 package pl.jutupe.core.util
 
 import android.os.Bundle
-import pl.jutupe.core.util.SortOrderExt.KEY_DIRECTION
-import pl.jutupe.core.util.SortOrderExt.KEY_TYPE
 
 fun Bundle?.getSortOrderOrDefault(): SortOrder {
-    val type = this?.getString(KEY_TYPE, SortOrder.DEFAULT_TYPE) ?: SortOrder.DEFAULT_TYPE
-    val direction = this?.getString(KEY_DIRECTION,
-        SortOrder.Direction.ASCENDING.toString()
-    ) ?: SortOrder.Direction.ASCENDING.toString()
+    val isRandom = this?.getBoolean(KEY_RANDOM) ?: false
+    val column = this?.getString(KEY_COLUMN) ?: SortOrder.Directional.Column.DEFAULT.toString()
+    val direction = this?.getString(KEY_DIRECTION) ?: SortOrder.Directional.Direction.ASCENDING.toString()
 
-    return SortOrder(type, SortOrder.Direction.valueOf(direction))
+    return if (isRandom) {
+        SortOrder.Random
+    } else SortOrder.Directional(
+        SortOrder.Directional.Column.valueOf(column),
+        SortOrder.Directional.Direction.valueOf(direction),
+    )
 }
 
 fun Bundle.putSortOrder(sortOrder: SortOrder) = apply {
-    this.putString(KEY_TYPE, sortOrder.type)
-    this.putString(KEY_DIRECTION, sortOrder.direction.toString())
+    when (sortOrder) {
+        is SortOrder.Directional -> {
+            putString(KEY_COLUMN, sortOrder.column.toString())
+            putString(KEY_DIRECTION, sortOrder.direction.toString())
+        }
+        SortOrder.Random ->
+            putBoolean(KEY_RANDOM, true)
+    }
 }
 
-object SortOrderExt {
-    const val KEY_TYPE = "pl.jutupe.sort_type"
-    const val KEY_DIRECTION = "pl.jutupe.sort_direction"
-}
+private const val KEY_RANDOM = "pl.jutupe.sort_random"
+private const val KEY_COLUMN = "pl.jutupe.sort_column"
+private const val KEY_DIRECTION = "pl.jutupe.sort_direction"

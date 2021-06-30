@@ -5,11 +5,12 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import android.view.View
 import com.sembozdemir.permissionskt.askPermissions
 import com.sembozdemir.permissionskt.handlePermissionsResult
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseActivity
 import pl.jutupe.main.R
 import pl.jutupe.main.databinding.ActivitySplashBinding
@@ -53,7 +54,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) = handlePermissionsResult(requestCode, permissions, grantResults)
+    ) {
+        handlePermissionsResult(requestCode, permissions, grantResults)
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
 
     override fun onDestroy() {
         binding.motionLayout.removeTransitionListener(transitionCompletedListener)
@@ -73,10 +78,12 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>(
     }
 
     private fun requestStoragePermissions() {
-        askPermissions(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) {
+        val permissions = mutableListOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
+        askPermissions(*permissions.toTypedArray()) {
             onShowRationale { showRationaleDialog { it.retry() } }
             onGranted { openMainActivity() }
             onDenied { requestStoragePermissions() }

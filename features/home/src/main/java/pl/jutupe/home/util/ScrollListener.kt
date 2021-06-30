@@ -3,8 +3,8 @@ package pl.jutupe.home.util
 import androidx.recyclerview.widget.RecyclerView
 
 class ScrollListener(
-    private val whenScrollUp: () -> Unit,
-    private val whenScrollDown: () -> Unit
+    private var whenScrollUp: (() -> Unit)? = null,
+    private var whenScrollDown: (() -> Unit)? = null,
 ) : RecyclerView.OnScrollListener() {
     private var direction: Int = IDLE
 
@@ -12,8 +12,8 @@ class ScrollListener(
         super.onScrollStateChanged(recyclerView, newState)
         if (RecyclerView.SCROLL_STATE_DRAGGING == newState || newState == RecyclerView.SCROLL_STATE_SETTLING) {
             when (direction) {
-                UP -> whenScrollUp.invoke()
-                DOWN -> whenScrollDown.invoke()
+                UP -> whenScrollUp?.invoke()
+                DOWN -> whenScrollDown?.invoke()
             }
         }
     }

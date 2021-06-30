@@ -40,9 +40,7 @@ internal class KiwiPlaybackPreparerTest {
             //given
             val playWhenReady = true
             val expectedFilter = Filter(
-                sortOrder = SortOrder(
-                    direction = SortOrder.Direction.RANDOM
-                )
+                sortOrder = SortOrder.Random
             )
             val randomSongs = mockk<List<MediaDescriptionCompat>> {
                 every { isEmpty() } returns false
@@ -73,7 +71,7 @@ internal class KiwiPlaybackPreparerTest {
             val playWhenReady = true
             val expectedFilter = Filter(
                 pagination = Pagination(
-                    pageSize = Pagination.MAX_PAGE_SIZE
+                    limit = Pagination.MAX_LIMIT
                 )
             )
             val queriedSongs = mockk<List<MediaDescriptionCompat>> {

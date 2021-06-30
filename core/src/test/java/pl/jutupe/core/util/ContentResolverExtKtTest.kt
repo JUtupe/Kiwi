@@ -71,30 +71,27 @@ internal class ContentResolverExtKtTest {
         fun sortOrderArguments(): Stream<Pair<Filter, String>> = Arrays.stream(
             arrayOf(
                 Filter(
-                    pagination = Pagination(1, 50)
+                    pagination = Pagination(50, 50)
                 ) to "_id ASC LIMIT 50 OFFSET 50",
                 Filter(
-                    pagination = Pagination(2, 50)
+                    pagination = Pagination(50, 100)
                 ) to "_id ASC LIMIT 50 OFFSET 100",
                 Filter(
-                    pagination = Pagination(1, 50),
-                    sortOrder = SortOrder(
-                        type = SortOrder.DEFAULT_TYPE,
-                        direction = SortOrder.Direction.RANDOM
-                    )
+                    pagination = Pagination(50, 50),
+                    sortOrder = SortOrder.Random
                 ) to "RANDOM() LIMIT 50 OFFSET 50",
                 Filter(
-                    pagination = Pagination(1, 50),
-                    sortOrder = SortOrder(
-                        type = SortOrder.DEFAULT_TYPE,
-                        direction = SortOrder.Direction.DESCENDING
+                    pagination = Pagination(50, 50),
+                    sortOrder = SortOrder.Directional(
+                        column = SortOrder.Directional.Column.DEFAULT,
+                        direction = SortOrder.Directional.Direction.DESCENDING
                     )
                 ) to "_id DESC LIMIT 50 OFFSET 50",
                 Filter(
-                    pagination = Pagination(1, 50),
-                    sortOrder = SortOrder(
-                        type = SortOrder.DATE_ADDED_TYPE,
-                        direction = SortOrder.Direction.ASCENDING
+                    pagination = Pagination(50, 50),
+                    sortOrder = SortOrder.Directional(
+                        column = SortOrder.Directional.Column.DATE_ADDED,
+                        direction = SortOrder.Directional.Direction.ASCENDING
                     )
                 ) to "date_added ASC LIMIT 50 OFFSET 50",
             )

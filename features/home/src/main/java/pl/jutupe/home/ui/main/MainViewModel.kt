@@ -13,11 +13,9 @@ class MainViewModel(
 
     private val defaultArtistsFilter = Filter(
         pagination = Pagination(
-            pageSize = 6
+            limit = 6
         ),
-        sortOrder = SortOrder(
-            direction = SortOrder.Direction.RANDOM
-        )
+        sortOrder = SortOrder.Random
     )
 
     val artists = flow {

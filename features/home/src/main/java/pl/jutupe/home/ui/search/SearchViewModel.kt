@@ -1,6 +1,5 @@
 package pl.jutupe.home.ui.search
 
-import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -13,7 +12,6 @@ import kotlinx.coroutines.launch
 import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.util.Filter
-import pl.jutupe.core.util.putFilter
 import pl.jutupe.home.data.MediaItemDataSource
 import pl.jutupe.model.MediaItem
 import pl.jutupe.model.MediaItemAction
@@ -47,8 +45,12 @@ class SearchViewModel(
             Timber.d("onClick($item)")
 
             if (item.isPlayable) {
-                connection.playFromMediaId(item.id, null)
-                connection.addRecentSearchItem(item)
+                val shouldAddToRecent = currentQuery.value.isNotEmpty()
+                connection.playFromMediaId(item.id)
+
+                if (shouldAddToRecent) {
+                    connection.addRecentSearchItem(item)
+                }
             }
         }
 
@@ -74,6 +76,18 @@ class SearchViewModel(
         }
     }
 
+    fun onSearchButtonClicked() {
+        events.value = SearchViewEvent.ShowSearchKeyboard
+    }
+
+    fun onHideSearchButtonClicked() {
+        events.value = SearchViewEvent.HideSearchKeyboard
+    }
+
+    fun onSearchDoneClicked() {
+        events.value = SearchViewEvent.HideSearchKeyboard
+    }
+
     private fun updatePager(query: String) {
         currentQuery.value = query
         events.value = SearchViewEvent.RefreshAdapter
@@ -82,8 +96,12 @@ class SearchViewModel(
     sealed class SearchViewEvent {
         object RefreshAdapter : SearchViewEvent()
 
-        class SetBackdropSearchTitle(val text: String): SearchViewEvent()
+        class SetBackdropSearchTitle(val text: String) : SearchViewEvent()
 
-        object SetBackdropRecentlySearchedTitle: SearchViewEvent()
+        object SetBackdropRecentlySearchedTitle : SearchViewEvent()
+
+        object ShowSearchKeyboard : SearchViewEvent()
+
+        object HideSearchKeyboard : SearchViewEvent()
     }
 }

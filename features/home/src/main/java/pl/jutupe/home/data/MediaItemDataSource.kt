@@ -11,16 +11,16 @@ class MediaItemDataSource(
     override suspend fun load(
         params: LoadParams<Int>
     ): LoadResult<Int, MediaItem> {
-        val position = params.key ?: Pagination.DEFAULT_PAGE
-        val pagination = Pagination(position, params.loadSize)
+        val position = params.key ?: Pagination.DEFAULT_OFFSET
+        val pagination = Pagination(params.loadSize, position)
 
         return try {
             val items = data(pagination)
 
             LoadResult.Page(
                 data = items,
-                prevKey = if (position == Pagination.DEFAULT_PAGE) null else position - 1,
-                nextKey = if (items.isEmpty()) null else position + 1
+                prevKey = if (position == Pagination.DEFAULT_OFFSET) null else position - pagination.limit,
+                nextKey = if (items.isEmpty()) null else position + pagination.limit
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

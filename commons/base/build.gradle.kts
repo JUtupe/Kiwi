@@ -7,5 +7,5 @@ plugins {
 }
 
 dependencies {
-    kapt(Libraries.databinding)
+    kapt(Libraries.dataBinding)
 }

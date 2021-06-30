@@ -2,20 +2,17 @@ name: Feature CI
 
 on:
   push:
-    branches:
-      - '*'
-      - '*/*'
-      - '!master'
-      - '!release*'
+    tags-ignore:
+      - '*.*'
+  pull_request:
 
 jobs:
-  test:
-    name: Run Unit Tests
-
+  unit-test:
+    name: Unit tests
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clone repository
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Gradle cache
@@ -31,5 +28,5 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Unit tests
-        run: bash ./gradlew test --stacktrace
+      - name: Gradle test
+        run: bash ./gradlew test

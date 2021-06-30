@@ -134,7 +134,10 @@ class KiwiServiceConnection(
             mediaBrowser.search(query, Bundle().putFilter(filter), callback)
         }.mapNotNull { it.description.toMediaItem(context) }
 
-    fun playFromMediaId(mediaId: String, parentId: String?) {
+    fun playFromMediaId(
+        mediaId: String,
+        parentId: String? = null
+    ) {
         val extras = Bundle().apply {
             putString(KiwiPlaybackPreparer.KIWI_PARENT_ID_KEY, parentId)
         }

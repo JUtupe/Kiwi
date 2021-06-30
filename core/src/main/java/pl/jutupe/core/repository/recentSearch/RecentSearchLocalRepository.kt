@@ -6,6 +6,7 @@ import pl.jutupe.core.R
 import pl.jutupe.core.repository.playlist.PlaylistRepository
 import pl.jutupe.core.util.Filter
 import pl.jutupe.core.util.SortOrder
+import timber.log.Timber
 
 class RecentSearchLocalRepository(
     private val context: Context,
@@ -14,34 +15,41 @@ class RecentSearchLocalRepository(
 
     override suspend fun addById(id: String) {
         //create recent search playlist if not exists
-        playlistRepository.findById(RECENT_SEARCH_PLAYLIST_ID) ?: run {
+        val recentSearchPlaylist = getRecentSearchPlaylist() ?: run {
+            Timber.i("Creating Recent Search Playlist")
+
             playlistRepository.create(
                 MediaDescriptionCompat.Builder()
-                    .setMediaId(RECENT_SEARCH_PLAYLIST_ID)
                     .setTitle(context.getString(R.string.playlist_recent_search))
                     .build()
             )
         }
 
         //remove member with given id
-        playlistRepository.removeMembersByAudioId(RECENT_SEARCH_PLAYLIST_ID, id)
+        runCatching {
+            playlistRepository.removeMembersByAudioId(recentSearchPlaylist.mediaId!!, id)
+        }
 
         //add member to first position
-        playlistRepository.addMember(RECENT_SEARCH_PLAYLIST_ID, id)
+        playlistRepository.addMember(recentSearchPlaylist.mediaId!!, id)
     }
 
-    override suspend fun findRecentSearched(filter: Filter): List<MediaDescriptionCompat>? =
-        playlistRepository.getMembers(
-            RECENT_SEARCH_PLAYLIST_ID,
+    override suspend fun findRecentSearched(filter: Filter): List<MediaDescriptionCompat>? {
+        val playlistId = getRecentSearchPlaylist()?.mediaId ?: return null
+
+        return playlistRepository.getMembers(
+            playlistId,
             filter.copy(
-                sortOrder = SortOrder(
-                    SortOrder.DEFAULT_TYPE,
-                    SortOrder.Direction.DESCENDING
+                sortOrder = SortOrder.Directional(
+                    SortOrder.Directional.Column.DEFAULT,
+                    SortOrder.Directional.Direction.DESCENDING
                 )
             )
         )
-
-    companion object {
-        private const val RECENT_SEARCH_PLAYLIST_ID = "11111111"
     }
+
+    private suspend fun getRecentSearchPlaylist(): MediaDescriptionCompat? =
+        playlistRepository.findByName(
+            name = context.getString(R.string.playlist_recent_search)
+        )
 }

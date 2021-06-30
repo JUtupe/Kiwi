@@ -1,10 +1,13 @@
 package pl.jutupe.home.ui.search
 
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collectLatest
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.jutupe.base.view.BaseFragment
 import pl.jutupe.home.R
 import pl.jutupe.home.adapter.search.SearchItemAdapter
@@ -27,7 +30,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
     private val onScrollListener by lazy {
         ScrollListener(
             whenScrollUp = backdropManager::close,
-            whenScrollDown = backdropManager::open
         )
     }
 
@@ -49,23 +51,45 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
 
         viewModel.events.observe(viewLifecycleOwner, this::onViewEvent)
 
-        binding.list.apply {
-            adapter = searchAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
-
         backdropManager = BackdropManager(
-            binding.searchIcon,
+            binding.header.extraButton,
             binding.content,
             binding.backdrop.root,
             openIconRes = R.drawable.ic_search,
             closeIconRes = R.drawable.ic_arrow_up,
         )
 
-        binding.list.addOnScrollListener(onScrollListener)
+        binding.list.apply {
+            adapter = searchAdapter
+            addOnScrollListener(onScrollListener)
+        }
 
-        binding.searchIcon.setOnClickListener {
-            backdropManager.toggle()
+        binding.backdrop.input.setOnEditorActionListener { _, actionId, _ ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    viewModel.onSearchDoneClicked()
+                    backdropManager.close()
+
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.header.apply {
+            extraButton.setOnClickListener {
+                backdropManager.toggle()
+
+                val isContentVisible = backdropManager.isVisible()
+
+                if (isContentVisible) {
+                    viewModel.onSearchButtonClicked()
+                } else {
+                    viewModel.onHideSearchButtonClicked()
+                }
+            }
+            extraButton.visibility = View.VISIBLE
+            backButton.visibility = View.GONE
         }
 
         backdropViewModel.searchText.observe(viewLifecycleOwner) { value ->
@@ -76,17 +100,31 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
     private fun onViewEvent(event: SearchViewEvent) {
         when (event) {
             is SearchViewEvent.SetBackdropSearchTitle ->
-                binding.title.text = getString(R.string.label_search_result_for, event.text)
+                binding.header.title.text = getString(R.string.label_search_result_for, event.text)
             SearchViewEvent.SetBackdropRecentlySearchedTitle ->
-                binding.title.text = getString(R.string.label_recently_searched)
+                binding.header.title.text = getString(R.string.label_recently_searched)
             SearchViewEvent.RefreshAdapter ->
                 searchAdapter.refresh()
+            SearchViewEvent.HideSearchKeyboard -> {
+                val inputMethodManager: InputMethodManager? =
+                    getSystemService(requireContext(), InputMethodManager::class.java)
+
+                binding.backdrop.input.clearFocus()
+                inputMethodManager?.hideSoftInputFromWindow(
+                    view?.windowToken,
+                    InputMethodManager.HIDE_IMPLICIT_ONLY
+                )
+            }
+            SearchViewEvent.ShowSearchKeyboard -> {
+                val inputMethodManager: InputMethodManager? =
+                    getSystemService(requireContext(), InputMethodManager::class.java)
+
+                binding.backdrop.input.requestFocus()
+                inputMethodManager?.showSoftInput(
+                    binding.backdrop.input,
+                    InputMethodManager.SHOW_IMPLICIT
+                )
+            }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        backdropManager.open()
     }
 }
