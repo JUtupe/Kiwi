@@ -8,5 +8,8 @@
 .cxx
 local.properties
 
+# CI data
+service_account.json
+
 # Project exclude paths
 /buildSrc/build/
