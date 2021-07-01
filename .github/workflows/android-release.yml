@@ -85,8 +85,10 @@ jobs:
     needs: setup-release
 
     steps:
-      - name: checkout release branch
-        run: git checkout release/v${{ github.event.inputs.versionName }}
+      - name: Checkout release branch
+        uses: actions/checkout@v2
+        with:
+          ref: release/v${{ github.event.inputs.versionName }}
 
       - name: Gradle cache
         uses: actions/cache@v2
@@ -123,8 +125,8 @@ jobs:
     steps:
       - name: Checkout release branch
         uses: actions/checkout@v2
-          with:
-            ref: release/v${{ github.event.inputs.versionName }}
+        with:
+          ref: release/v${{ github.event.inputs.versionName }}
 
       - name: Create git tag
         id: tag_version
@@ -178,8 +180,8 @@ jobs:
     steps:
       - name: Checkout release branch
         uses: actions/checkout@v2
-          with:
-            ref: release/v${{ github.event.inputs.versionName }}
+        with:
+          ref: release/v${{ github.event.inputs.versionName }}
 
       - name: Create service_account.json
         id: createServiceAccount
