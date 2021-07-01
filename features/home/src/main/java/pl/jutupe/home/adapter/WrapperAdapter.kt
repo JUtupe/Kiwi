@@ -28,7 +28,11 @@ class WrapperAdapter(
         private val binding: ItemWrapperBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(manager: RecyclerView.LayoutManager, adapter: RecyclerView.Adapter<*>, header: WrapperHeader?) {
+        fun bind(
+            manager: RecyclerView.LayoutManager,
+            adapter: RecyclerView.Adapter<*>,
+            header: WrapperHeader?
+        ) {
             binding.manager = manager
             binding.adapter = adapter
             binding.header = header
@@ -41,5 +45,5 @@ class WrapperAdapter(
 
 fun RecyclerView.Adapter<*>.wrap(
     manager: RecyclerView.LayoutManager,
-    header: WrapperAdapter.WrapperHeader? = null
+    header: WrapperAdapter.WrapperHeader? = null,
 ) = WrapperAdapter(this, manager, header)

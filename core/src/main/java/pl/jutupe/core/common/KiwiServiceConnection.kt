@@ -136,11 +136,13 @@ class KiwiServiceConnection(
 
     fun playFromMediaId(
         mediaId: String,
-        parentId: String? = null
+        parentId: String? = null,
+        filter: Filter? = null,
     ) {
         val extras = Bundle().apply {
             putString(KiwiPlaybackPreparer.KIWI_PARENT_ID_KEY, parentId)
         }
+        filter?.let { extras.putFilter(it) }
 
         mediaController.transportControls.playFromMediaId(mediaId, extras)
     }
