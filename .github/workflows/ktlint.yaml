@@ -2,6 +2,9 @@ name: Ktlint
 
 on:
   pull_request:
+    branches:
+      - '!master'
+      - '!release*'
 
 jobs:
   ktlint:
