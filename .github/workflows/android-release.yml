@@ -49,8 +49,8 @@ jobs:
     steps:
       - name: Checkout release branch
         uses: actions/checkout@v2
-          with:
-            ref: release/v${{ github.event.inputs.versionName }}
+        with:
+          ref: release/v${{ github.event.inputs.versionName }}
 
       - name: Gradle cache
         uses: actions/cache@v2
