@@ -3,7 +3,11 @@ name: Feature CI
 on:
   push:
     tags-ignore:
-      - '*.*'
+    branches:
+      - '*'
+      - '*/*'
+      - '!master'
+      - '!release*'
   pull_request:
 
 jobs:
