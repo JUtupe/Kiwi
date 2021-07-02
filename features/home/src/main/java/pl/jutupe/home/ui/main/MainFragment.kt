@@ -21,17 +21,24 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(
     override val viewModel: MainViewModel by viewModel()
 
     private val artistsAdapter = MediaItemAdapter()
+    private val recentlyAddedAdapter = MediaItemAdapter(isCompactMode = true)
 
     private val adapters by lazy {
         ConcatAdapter(
             artistsAdapter.wrap(
                 GridLayoutManager(requireContext(), 3),
-                WrapperAdapter.WrapperHeader(getString(R.string.label_random_artists))
+                WrapperAdapter.WrapperHeader(getString(R.string.label_random_artists)),
             ),
+            recentlyAddedAdapter.wrap(
+                GridLayoutManager(requireContext(), 2),
+                WrapperAdapter.WrapperHeader(getString(R.string.label_recently_added))
+            )
         )
     }
 
     override fun onInitDataBinding() {
+        recentlyAddedAdapter.action = viewModel.recentlyAddedAction
+
         binding.list.apply {
             adapter = adapters
         }
@@ -45,6 +52,11 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(
         lifecycleScope.launch {
             viewModel.artists.collectLatest {
                 artistsAdapter.submitData(PagingData.from(it))
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.recentlyAdded.collectLatest {
+                recentlyAddedAdapter.submitData(PagingData.from(it))
             }
         }
     }

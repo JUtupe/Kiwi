@@ -8,5 +8,6 @@
 
     <string name="label_search_result_for">Search results for: %s</string>
     <string name="label_recently_searched">Recently searched:</string>
+    <string name="label_recently_added">Recently added</string>
     <string name="label_random_artists">Random artists</string>
 </resources>
