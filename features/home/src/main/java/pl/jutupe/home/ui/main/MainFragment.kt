@@ -2,7 +2,6 @@ package pl.jutupe.home.ui.main
 
 import android.view.View
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.flow.collectLatest
@@ -31,8 +30,8 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(
             ),
             recentlyAddedAdapter.wrap(
                 GridLayoutManager(requireContext(), 2),
-                WrapperAdapter.WrapperHeader(getString(R.string.label_recently_added))
-            )
+                WrapperAdapter.WrapperHeader(getString(R.string.label_recently_added)),
+            ),
         )
     }
 
@@ -51,12 +50,12 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(
 
         lifecycleScope.launch {
             viewModel.artists.collectLatest {
-                artistsAdapter.submitData(PagingData.from(it))
+                artistsAdapter.submitData(it)
             }
         }
         lifecycleScope.launch {
             viewModel.recentlyAdded.collectLatest {
-                recentlyAddedAdapter.submitData(PagingData.from(it))
+                recentlyAddedAdapter.submitData(it)
             }
         }
     }
