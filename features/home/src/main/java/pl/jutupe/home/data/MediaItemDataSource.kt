@@ -1,6 +1,8 @@
 package pl.jutupe.home.data
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import pl.jutupe.core.util.Pagination
 import pl.jutupe.model.MediaItem
 
@@ -17,13 +19,24 @@ class MediaItemDataSource(
         return try {
             val items = data(pagination)
 
+            val prevKey =
+                if (position == Pagination.DEFAULT_OFFSET) null
+                else position - pagination.limit
+
+            val nextKey =
+                if (items.isEmpty()) null
+                else position + pagination.limit
+
             LoadResult.Page(
                 data = items,
-                prevKey = if (position == Pagination.DEFAULT_OFFSET) null else position - pagination.limit,
-                nextKey = if (items.isEmpty()) null else position + pagination.limit
+                prevKey = prevKey,
+                nextKey = nextKey,
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
     }
+
+    @ExperimentalPagingApi
+    override fun getRefreshKey(state: PagingState<Int, MediaItem>): Int? = null
 }

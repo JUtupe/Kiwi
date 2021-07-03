@@ -28,6 +28,7 @@
             android:padding="8dp"
             android:textStyle="bold"
             android:text="@{header.text}"
+            android:textAlignment="center"
             visibleOrGone="@{header != null}"
             tools:text="@string/label_random_artists"/>
 
