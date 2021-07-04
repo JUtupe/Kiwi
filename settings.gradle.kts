@@ -1,4 +1,3 @@
-include(":commons:model")
 include(
     ":app",
     ":core",

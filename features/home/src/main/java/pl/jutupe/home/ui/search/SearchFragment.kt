@@ -1,26 +1,38 @@
 package pl.jutupe.home.ui.search
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.flow.collectLatest
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import pl.jutupe.base.view.BaseFragment
-import pl.jutupe.home.R
-import pl.jutupe.home.adapter.search.SearchItemAdapter
-import pl.jutupe.home.databinding.FragmentSearchBinding
-import pl.jutupe.home.ui.search.SearchViewModel.SearchViewEvent
-import pl.jutupe.home.util.ScrollListener
-import pl.jutupe.ui.util.BackdropManager
-import timber.log.Timber
+import android.view.ViewGroup
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
+import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import pl.jutupe.model.MediaItem
+import pl.jutupe.ui.items.SearchItem
 
-class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
-    layoutId = R.layout.fragment_search
-) {
-    private val searchAdapter = SearchItemAdapter()
+class SearchFragment : Fragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = ComposeView(requireContext()).apply {
+        val viewModel = getViewModel<SearchViewModel>()
+
+        setContent {
+            Text(text = "TEST")
+            SearchContent(viewModel)
+        }
+    }
+    /*private val searchAdapter = SearchItemAdapter()
 
     override val viewModel: SearchViewModel by viewModel()
     private val backdropViewModel: SearchBackdropViewModel by viewModel()
@@ -125,6 +137,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
                     InputMethodManager.SHOW_IMPLICIT
                 )
             }
+        }
+    }*/
+}
+
+@Composable
+fun SearchContent(viewModel: SearchViewModel = getViewModel()) {
+    val modelSearchItems: LazyPagingItems<MediaItem> = viewModel.items.collectAsLazyPagingItems()
+
+    LazyColumn {
+        items(modelSearchItems) { searchItem ->
+            SearchItem(item = searchItem!!, action = viewModel.songAction)
         }
     }
 }

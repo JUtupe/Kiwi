@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.view.GestureDetector
 import android.view.MotionEvent
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -59,7 +58,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragmentViewModel>(
     }
     private val gestureDetector = GestureDetector(context, controllerGestureListener)
 
-    val fragments = listOf<Pair<() -> Fragment, Int>>(
+    val fragments = listOf(
         { MainFragment() } to R.string.tab_main,
         { LibraryFragment() } to R.string.tab_library,
         { SearchFragment() } to R.string.tab_search

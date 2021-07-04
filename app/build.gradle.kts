@@ -1,5 +1,6 @@
 import dependencies.Libraries
 import dependencies.Releases
+import dependencies.Versions
 import util.versionProps
 
 plugins {
@@ -12,14 +13,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion(Releases.compileSdk)
+    compileSdk = Releases.compileSdk
 
     defaultConfig {
         applicationId = Releases.applicationId
 
-        minSdkVersion(Releases.minSdk)
-        maxSdkVersion(Releases.maxSdk)
-        targetSdkVersion(Releases.targetSdk)
+        minSdk = Releases.minSdk
+        maxSdk = Releases.maxSdk
+        targetSdk = Releases.targetSdk
 
         versionCode = (versionProps["kiwiVersionCode"] as String).toInt()
         versionName = versionProps["kiwiVersionName"] as String
@@ -48,7 +49,12 @@ android {
     }
 
     buildFeatures {
+        compose = true
         dataBinding = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.compose
     }
 }
 
@@ -61,6 +67,9 @@ dependencies {
     implementation(project(":commons:ui"))
     implementation(project(":features:home"))
     implementation(project(":features:settings"))
+
+    implementation(Libraries.composeRuntime)
+    implementation(Libraries.composeTooling)
 
     implementation(platform(Libraries.firebaseBoM))
     implementation(Libraries.firebaseAnalytics)

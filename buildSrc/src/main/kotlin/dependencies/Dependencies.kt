@@ -9,22 +9,23 @@ object Releases {
     const val targetSdk = 30
 }
 
-private object Versions {
-    const val kotlin = "1.5.0"
-    const val coroutines = "1.4.3"
+object Versions {
+    const val kotlin = "1.5.10"
+    const val coroutines = "1.5.0"
+    const val compose = "1.0.0-rc01"
     const val navigation = "2.3.2"
     const val preferences = "1.1.1"
     const val timber = "4.7.1"
-    const val koin = "3.0.1"
+    const val koin = "3.1.2"
     const val core = "1.6.0"
     const val media = "1.2.1"
     const val exoPlayer = "2.13.3"
     const val coil = "1.2.2"
     const val constraintLayout = "2.0.4"
     const val coordinatorLayout = "1.1.0"
-    const val dataBindingCompiler = "4.2.0"
+    const val dataBindingCompiler = "7.0.0-beta05"
     const val paging = "3.1.0-alpha02"
-    const val appCompat = "1.1.0"
+    const val appCompat = "1.3.0"
     const val material = "1.1.0-beta01"
     const val cardView = "1.0.0"
     const val lifecycle = "2.3.1"
@@ -40,6 +41,16 @@ object Libraries {
     const val exoPlayerMediaSession = "com.google.android.exoplayer:extension-mediasession:${Versions.exoPlayer}"
 
     const val coil = "io.coil-kt:coil:${Versions.coil}"
+    const val coilCompose = "com.google.accompanist:accompanist-coil:0.13.0"
+
+    //compose
+    const val compose = "androidx.compose.ui:ui:${Versions.compose}"
+    const val composeRuntime = "androidx.compose.runtime:runtime:${Versions.compose}"
+    const val composeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.compose}"
+    const val composeTooling = "androidx.compose.ui:ui-tooling:${Versions.compose}"
+    const val composeFoundation = "androidx.compose.foundation:foundation:${Versions.compose}"
+    const val composeMaterial = "androidx.compose.material:material:${Versions.compose}"
+    const val composeMaterialIcons = "androidx.compose.material:material-icons-core:${Versions.compose}"
 
     const val dataBinding = "androidx.databinding:databinding-compiler:${Versions.dataBindingCompiler}"
 
@@ -52,6 +63,8 @@ object Libraries {
     const val coordinatorLayout = "androidx.coordinatorlayout:coordinatorlayout:${Versions.coordinatorLayout}"
 
     const val paging = "androidx.paging:paging-runtime:${Versions.paging}"
+    const val pagingCompose = "androidx.paging:paging-compose:1.0.0-alpha11"
+
     const val lifecycle = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
     const val lifecycleLiveData = "androidx.lifecycle:lifecycle-livedata:${Versions.lifecycle}"
 
@@ -67,6 +80,7 @@ object Libraries {
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     const val koin = "io.insert-koin:koin-android:${Versions.koin}"
     const val koinAndroid = "io.insert-koin:koin-android:${Versions.koin}"
+    const val koinCompose = "io.insert-koin:koin-androidx-compose:${Versions.koin}"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     const val permissions = "com.github.sembozdemir:PermissionsKt:1.0.0"

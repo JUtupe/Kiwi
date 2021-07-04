@@ -17,11 +17,14 @@ dependencies {
     implementation(Libraries.navigation)
 
     implementation(Libraries.paging)
+    implementation(Libraries.pagingCompose)
+
     implementation(Libraries.lifecycle)
     implementation(Libraries.lifecycleLiveData)
 
     implementation(Libraries.coil)
 
+    implementation(Libraries.appCompat)
     implementation(Libraries.cardView)
     implementation(Libraries.constraintLayout)
     implementation(Libraries.coordinatorLayout)

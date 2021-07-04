@@ -13,7 +13,6 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import util.versionProps
 
 @Suppress("unused")
@@ -27,6 +26,7 @@ class AndroidLibraryPlugin : Plugin<Project> {
         with(project) {
             applyPlugins()
             androidConfig()
+            compose()
             dependenciesConfig()
             testDependenciesConfig()
         }
@@ -44,9 +44,9 @@ class AndroidLibraryPlugin : Plugin<Project> {
             compileSdkVersion(Releases.compileSdk)
 
             defaultConfig {
-                minSdkVersion(Releases.minSdk)
-                maxSdkVersion(Releases.maxSdk)
-                targetSdkVersion(Releases.targetSdk)
+                minSdk = Releases.minSdk
+                maxSdk = Releases.maxSdk
+                targetSdk = Releases.targetSdk
 
                 versionCode = (versionProps["kiwiVersionCode"] as String).toInt()
                 versionName = versionProps["kiwiVersionName"] as String
@@ -62,6 +62,11 @@ class AndroidLibraryPlugin : Plugin<Project> {
 
             (buildFeatures as LibraryBuildFeatures).apply {
                 dataBinding = true
+                compose = true
+            }
+
+            composeOptions {
+                kotlinCompilerExtensionVersion = Versions.compose
             }
 
             compileOptions {
@@ -72,12 +77,6 @@ class AndroidLibraryPlugin : Plugin<Project> {
             testOptions {
                 unitTests.isReturnDefaultValues = true
                 unitTests.isIncludeAndroidResources = true
-            }
-        }
-
-        tasks.withType<KotlinCompile>() {
-            kotlinOptions {
-                jvmTarget = "1.8"
             }
         }
 
@@ -102,6 +101,21 @@ class AndroidLibraryPlugin : Plugin<Project> {
 
             implementation(Libraries.koin)
             implementation(Libraries.koinAndroid)
+        }
+    }
+
+    private fun Project.compose() {
+        dependencies {
+            implementation(Libraries.compose)
+            implementation(Libraries.composeRuntime)
+            implementation(Libraries.composeLiveData)
+            implementation(Libraries.composeTooling)
+            implementation(Libraries.composeFoundation)
+
+            implementation(Libraries.composeMaterial)
+            implementation(Libraries.composeMaterialIcons)
+
+            implementation(Libraries.koinCompose)
         }
     }
 
