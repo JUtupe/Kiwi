@@ -38,12 +38,16 @@
 
             <KeyAttribute
                 motion:motionTarget="@+id/imageView"
-                motion:framePosition="50"
+                motion:framePosition="0"
                 android:rotation="180" />
             <KeyAttribute
                 motion:motionTarget="@+id/imageView"
+                motion:framePosition="50"
+                android:rotation="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/imageView"
                 motion:framePosition="100"
-                android:rotation="180" />
+                android:rotation="0" />
         </KeyFrameSet>
     </Transition>
 

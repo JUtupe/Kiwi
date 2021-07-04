@@ -5,4 +5,5 @@
 
     <item name="home_navigation" type="id" />
     <item name="settings_navigation" type="id" />
+    <item name="theme_navigation" type="id" />
 </resources>

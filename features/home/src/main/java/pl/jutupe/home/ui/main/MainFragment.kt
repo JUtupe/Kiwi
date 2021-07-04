@@ -25,11 +25,11 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(
     private val adapters by lazy {
         ConcatAdapter(
             artistsAdapter.wrap(
-                GridLayoutManager(requireContext(), 3),
+                { GridLayoutManager(requireContext(), 3) },
                 WrapperAdapter.WrapperHeader(getString(R.string.label_random_artists)),
             ),
             recentlyAddedAdapter.wrap(
-                GridLayoutManager(requireContext(), 2),
+                { GridLayoutManager(requireContext(), 2) },
                 WrapperAdapter.WrapperHeader(getString(R.string.label_recently_added)),
             ),
         )

@@ -2,12 +2,13 @@ package pl.jutupe.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.jutupe.home.databinding.ItemWrapperBinding
 
 class WrapperAdapter(
     private val adapter: RecyclerView.Adapter<*>,
-    private val layoutManager: RecyclerView.LayoutManager,
+    private val layoutManager: () -> GridLayoutManager,
     private val header: WrapperHeader? = null,
 ): RecyclerView.Adapter<WrapperAdapter.WrapperViewHolder>() {
 
@@ -29,11 +30,11 @@ class WrapperAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            manager: RecyclerView.LayoutManager,
+            manager: () -> GridLayoutManager,
             adapter: RecyclerView.Adapter<*>,
             header: WrapperHeader?
         ) {
-            binding.manager = manager
+            binding.manager = manager()
             binding.adapter = adapter
             binding.header = header
             binding.executePendingBindings()
@@ -44,6 +45,6 @@ class WrapperAdapter(
 }
 
 fun RecyclerView.Adapter<*>.wrap(
-    manager: RecyclerView.LayoutManager,
+    manager: () -> GridLayoutManager,
     header: WrapperAdapter.WrapperHeader? = null,
 ) = WrapperAdapter(this, manager, header)

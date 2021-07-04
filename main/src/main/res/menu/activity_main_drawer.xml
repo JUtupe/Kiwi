@@ -11,5 +11,8 @@
         <item
             android:id="@id/settings_navigation"
             android:title="@string/menu_settings" />
+        <item
+            android:id="@id/theme_navigation"
+            android:title="@string/menu_theme" />
     </group>
 </menu>
