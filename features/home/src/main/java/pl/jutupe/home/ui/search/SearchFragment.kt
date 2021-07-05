@@ -4,18 +4,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import pl.jutupe.model.MediaItem
+import androidx.compose.ui.unit.dp
+
 import pl.jutupe.ui.items.SearchItem
 
 class SearchFragment : Fragment() {
@@ -141,13 +151,45 @@ class SearchFragment : Fragment() {
     }*/
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SearchContent(viewModel: SearchViewModel = getViewModel()) {
+fun SearchContent(
+    viewModel: SearchViewModel = getViewModel(),
+) {
+    //todo observe adapter refresh
     val modelSearchItems: LazyPagingItems<MediaItem> = viewModel.items.collectAsLazyPagingItems()
-
-    LazyColumn {
-        items(modelSearchItems) { searchItem ->
-            SearchItem(item = searchItem!!, action = viewModel.songAction)
-        }
-    }
+    var text by remember { mutableStateOf("") }
+    val backdropState = rememberBackdropScaffoldState(BackdropValue.Revealed)
+    
+    BackdropScaffold(
+        modifier = Modifier
+            .padding(top = 0.dp),
+        scaffoldState = backdropState,
+        appBar = {},
+        persistentAppBar = false,
+        peekHeight = 100.dp,
+        backLayerContent = {
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                value = text,
+                onValueChange = {
+                    text = it
+                    viewModel.onSearchTextChanged(it)
+                },
+                maxLines = 1
+            )
+        },
+        frontLayerScrimColor = Color.Transparent,
+        frontLayerContent = {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                items(modelSearchItems) { searchItem ->
+                    SearchItem(item = searchItem!!, action = viewModel.songAction)
+                }
+            }
+        },
+    )
 }
