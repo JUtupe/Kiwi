@@ -4,7 +4,8 @@
 
     <application>
         <activity android:name=".ui.main.MainActivity"
-            android:theme="@style/KiwiTheme"/>
+            android:theme="@style/KiwiTheme"
+            android:windowSoftInputMode="adjustNothing"/>
 
         <activity android:name=".ui.splash.SplashActivity"
             android:theme="@style/KiwiTheme.Splash">
