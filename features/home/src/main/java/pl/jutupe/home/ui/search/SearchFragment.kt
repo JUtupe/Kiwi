@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +26,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.paging.compose.LazyPagingItems
@@ -46,7 +46,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View = ComposeView(requireContext()).apply {
         val viewModel = getViewModel<SearchViewModel>()
 
@@ -58,9 +58,8 @@ class SearchFragment : Fragment() {
     }
 }
 
-//todo fix bottom space on drag
-//todo fix keyboard focus (two onclick in one time)
-@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
+//todo fix keyboard focus (two onclick in one time) (focus issue)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class, ExperimentalUnitApi::class)
 @Composable
 fun SearchContent(
     viewModel: SearchViewModel = getViewModel(),
@@ -125,7 +124,8 @@ fun SearchContent(
                                 BackdropValue.Revealed ->
                                     IconButton(onClick = {
                                         composeScope.launch {
-                                            localFocusManager.clearFocus()
+                                            searchFocusRequester.freeFocus()
+                                            localFocusManager.clearFocus(true)
                                             keyboardController?.hide()
                                             backdropState.conceal()
                                         }
@@ -145,7 +145,8 @@ fun SearchContent(
                 LazyColumn(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
-                        .fillMaxSize()
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     items(modelSearchItems) { searchItem ->
                         SearchItem(
@@ -153,7 +154,6 @@ fun SearchContent(
                             onClick = { viewModel.onSearchItemClicked(it) },
                             onMoreClick = { viewModel.onSearchItemMoreClicked(it) },
                         )
-                        Spacer(Modifier.height(8.dp))
                     }
                 }
             }

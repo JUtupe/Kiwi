@@ -12,7 +12,7 @@ object Releases {
 object Versions {
     const val kotlin = "1.5.10"
     const val coroutines = "1.5.0"
-    const val compose = "1.0.0-rc01"
+    const val compose = "1.0.0-rc02"
     const val navigation = "2.3.2"
     const val preferences = "1.1.1"
     const val timber = "4.7.1"
@@ -51,6 +51,7 @@ object Libraries {
     const val composeFoundation = "androidx.compose.foundation:foundation:${Versions.compose}"
     const val composeMaterial = "androidx.compose.material:material:${Versions.compose}"
     const val composeMaterialIcons = "androidx.compose.material:material-icons-core:${Versions.compose}"
+    const val composePager = "com.google.accompanist:accompanist-pager:0.14.0"
 
     const val dataBinding = "androidx.databinding:databinding-compiler:${Versions.dataBindingCompiler}"
 

@@ -1,62 +1,128 @@
 package pl.jutupe.home.ui.main
 
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.GridLayoutManager
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import pl.jutupe.base.view.BaseFragment
+import android.view.ViewGroup
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
+import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import pl.jutupe.home.R
-import pl.jutupe.home.adapter.WrapperAdapter
-import pl.jutupe.home.adapter.library.MediaItemAdapter
-import pl.jutupe.home.adapter.wrap
-import pl.jutupe.home.databinding.FragmentMainBinding
+import pl.jutupe.home.ui.Header
+import pl.jutupe.model.MediaItem
+import pl.jutupe.ui.items.ArtistItem
+import pl.jutupe.ui.items.PlayableItem
+import pl.jutupe.ui.theme.KiwiTheme
 
-class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(
-    layoutId = R.layout.fragment_main
+class MainFragment : Fragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = ComposeView(requireContext()).apply {
+        val viewModel = getViewModel<MainViewModel>()
+
+        setContent {
+            KiwiTheme {
+                MainContent(viewModel)
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MainContent(
+    viewModel: MainViewModel = getViewModel()
 ) {
-    override val viewModel: MainViewModel by viewModel()
+    val recentlyAdded: LazyPagingItems<MediaItem> = viewModel.recentlyAdded.collectAsLazyPagingItems()
+    val artists: LazyPagingItems<MediaItem> = viewModel.artists.collectAsLazyPagingItems()
+    val allWelcomeMessages = stringArrayResource(id = R.array.welcome_message)
+    val welcomeMessage = remember { allWelcomeMessages.random() }
 
-    private val artistsAdapter = MediaItemAdapter()
-    private val recentlyAddedAdapter = MediaItemAdapter(isCompactMode = true)
+    Surface(
+        shape = MaterialTheme.shapes.large
+    ) {
+        Column(Modifier.fillMaxSize()) {
+            Header(title = welcomeMessage)
 
-    private val adapters by lazy {
-        ConcatAdapter(
-            artistsAdapter.wrap(
-                GridLayoutManager(requireContext(), 3),
-                WrapperAdapter.WrapperHeader(getString(R.string.label_random_artists)),
-            ),
-            recentlyAddedAdapter.wrap(
-                GridLayoutManager(requireContext(), 2),
-                WrapperAdapter.WrapperHeader(getString(R.string.label_recently_added)),
-            ),
-        )
-    }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = spacedBy(8.dp),
+            ) {
+                item {
+                    SectionLabel(stringResource(id = R.string.label_random_artists))
 
-    override fun onInitDataBinding() {
-        recentlyAddedAdapter.action = viewModel.recentlyAddedAction
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = spacedBy(8.dp),
+                        contentPadding = PaddingValues(8.dp),
+                    ) {
+                        items(artists) { item ->
+                            ArtistItem(
+                                modifier = Modifier
+                                    .widthIn(max = 150.dp),
+                                artist = item as MediaItem.Artist,
+                                onClick = {  },
+                            )
+                        }
+                    }
+                }
 
-        binding.list.apply {
-            adapter = adapters
-        }
+                item {
+                    SectionLabel(stringResource(id = R.string.label_recently_added))
 
-        binding.header.apply {
-            backButton.visibility = View.GONE
-            extraButton.visibility = View.GONE
-            title.text = resources.getStringArray(R.array.welcome_message).random()
-        }
-
-        lifecycleScope.launch {
-            viewModel.artists.collectLatest {
-                artistsAdapter.submitData(it)
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = spacedBy(8.dp),
+                        contentPadding = PaddingValues(8.dp),
+                    ) {
+                        items(recentlyAdded) { item ->
+                            PlayableItem(
+                                modifier = Modifier
+                                    .size(150.dp),
+                                item = item!!,
+                                onClick = { viewModel.onSongClicked(item) }
+                            )
+                        }
+                    }
+                }
             }
         }
-        lifecycleScope.launch {
-            viewModel.recentlyAdded.collectLatest {
-                recentlyAddedAdapter.submitData(it)
-            }
-        }
     }
+}
+
+@Composable
+fun SectionLabel(label: String) {
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        text = label,
+        textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.h6,
+    )
 }

@@ -24,6 +24,7 @@ dependencies {
     implementation(Libraries.composeFoundation)
     implementation(Libraries.composeMaterial)
     implementation(Libraries.composeMaterialIcons)
+    implementation(Libraries.composePager)
 
     implementation(Libraries.coil)
     implementation(Libraries.coilCompose)
