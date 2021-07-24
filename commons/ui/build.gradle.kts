@@ -1,5 +1,4 @@
 import dependencies.Libraries
-import extensions.kapt
 
 plugins {
     id("common-android-library")
@@ -7,8 +6,6 @@ plugins {
 }
 
 dependencies {
-    kapt(Libraries.dataBinding)
-
     implementation(project(":commons:model"))
 
     implementation(Libraries.appCompat)

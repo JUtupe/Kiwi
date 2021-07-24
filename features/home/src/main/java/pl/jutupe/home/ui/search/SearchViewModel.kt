@@ -25,7 +25,7 @@ class SearchViewModel(
     private val _currentQuery = MutableStateFlow("")
     private var searchJob: Job? = null
 
-    private lateinit var currentItemsSource: MediaItemDataSource
+    private var currentItemsSource: MediaItemDataSource? = null
     private val itemsSource: MediaItemDataSource
         get() = MediaItemDataSource { pagination ->
             val filter = Filter(pagination)
@@ -65,7 +65,7 @@ class SearchViewModel(
                 else text
 
             _currentQuery.emit(query)
-            currentItemsSource.invalidate()
+            currentItemsSource?.invalidate()
         }
     }
 

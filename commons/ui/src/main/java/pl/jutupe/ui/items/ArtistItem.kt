@@ -16,10 +16,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.jutupe.model.MediaItem
 import pl.jutupe.ui.ARTIST_BACKGROUND
 import pl.jutupe.ui.R
+import pl.jutupe.ui.theme.KiwiTheme
 import pl.jutupe.ui.util.mediaItemPainter
 
 @Composable
@@ -61,6 +63,19 @@ fun ArtistItem(
             painter = mediaItemPainter(artist),
             contentScale = ContentScale.Crop,
             contentDescription = null,
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun ArtistItemPreview() {
+    KiwiTheme {
+        ArtistItem(
+            modifier = Modifier
+                .height(150.dp)
+                .width(150.dp),
+            artist = MediaItem.Artist("", "title", "Artist artist artist aaaaa aaa", null),
         )
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.jutupe.model.MediaItem
 import pl.jutupe.ui.R
+import pl.jutupe.ui.theme.KiwiTheme
 import pl.jutupe.ui.util.mediaItemPainter
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -83,7 +84,9 @@ fun SearchItem(
 @Composable
 @Preview
 private fun SearchItemPreview() {
-    SearchItem(
-        item = MediaItem.Song("", "title", "artist", null),
-    )
+    KiwiTheme {
+        SearchItem(
+            item = MediaItem.Song("", "title", "artist", null),
+        )
+    }
 }

@@ -2,9 +2,7 @@ package pl.jutupe.ui.items
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -17,10 +15,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pl.jutupe.model.MediaItem
 import pl.jutupe.ui.R
+import pl.jutupe.ui.theme.KiwiTheme
 import pl.jutupe.ui.util.mediaItemPainter
 
 @Composable
@@ -54,6 +54,19 @@ fun RootItem(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.h3,
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun RootItemPreview() {
+    KiwiTheme {
+        RootItem(
+            modifier = Modifier
+                .width(300.dp)
+                .height(120.dp),
+            item = MediaItem.Root("", "title", null),
         )
     }
 }

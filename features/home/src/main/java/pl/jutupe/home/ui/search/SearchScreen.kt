@@ -1,10 +1,7 @@
 package pl.jutupe.home.ui.search
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,46 +19,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 import pl.jutupe.home.R
-import pl.jutupe.home.ui.Header
+import pl.jutupe.home.ui.controller.BottomMediaController
 import pl.jutupe.model.MediaItem
 import pl.jutupe.ui.items.SearchItem
-import pl.jutupe.ui.theme.KiwiTheme
-
-class SearchFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View = ComposeView(requireContext()).apply {
-        val viewModel = getViewModel<SearchViewModel>()
-
-        setContent {
-            KiwiTheme {
-                SearchContent(viewModel)
-            }
-        }
-    }
-}
+import pl.jutupe.ui.util.BackdropHeader
 
 //todo fix keyboard focus (two onclick in one time) (focus issue)
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class, ExperimentalUnitApi::class)
 @Composable
-fun SearchContent(
+fun SearchScreen(
     viewModel: SearchViewModel = getViewModel(),
 ) {
     val backdropState = rememberBackdropScaffoldState(BackdropValue.Concealed)
@@ -80,7 +57,7 @@ fun SearchContent(
         scaffoldState = backdropState,
         appBar = {},
         peekHeight = 0.dp,
-        headerHeight = Header.HEADER_HEIGHT,
+        headerHeight = BackdropHeader.HEADER_HEIGHT,
         backLayerContent = {
             TextField(
                 modifier = Modifier
@@ -115,8 +92,12 @@ fun SearchContent(
         frontLayerScrimColor = Color.Transparent,
         frontLayerShape = MaterialTheme.shapes.large,
         frontLayerContent = {
-            Column(Modifier.fillMaxSize()) {
-                Header(
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.surface)
+            ) {
+                BackdropHeader(
                     title = headerForQuery(headerQuery),
                     endIcon = {
                         Crossfade(targetState = backdropState.targetValue) {
@@ -153,6 +134,13 @@ fun SearchContent(
                             item = searchItem!!,
                             onClick = { viewModel.onSearchItemClicked(it) },
                             onMoreClick = { viewModel.onSearchItemMoreClicked(it) },
+                        )
+                    }
+
+                    item {
+                        Spacer(
+                            modifier = Modifier
+                                .height(BottomMediaController.CONTROLLER_HEIGHT)
                         )
                     }
                 }

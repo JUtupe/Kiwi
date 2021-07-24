@@ -1,9 +1,5 @@
 package pl.jutupe.home.ui.main
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.spacedBy
@@ -15,44 +11,24 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import org.koin.androidx.compose.getViewModel
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 import pl.jutupe.home.R
-import pl.jutupe.home.ui.Header
+import pl.jutupe.home.ui.controller.BottomMediaController
 import pl.jutupe.model.MediaItem
 import pl.jutupe.ui.items.ArtistItem
 import pl.jutupe.ui.items.PlayableItem
-import pl.jutupe.ui.theme.KiwiTheme
-
-class MainFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = ComposeView(requireContext()).apply {
-        val viewModel = getViewModel<MainViewModel>()
-
-        setContent {
-            KiwiTheme {
-                MainContent(viewModel)
-            }
-        }
-    }
-}
+import pl.jutupe.ui.util.BackdropHeader
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainContent(
+fun MainScreen(
     viewModel: MainViewModel = getViewModel()
 ) {
     val recentlyAdded: LazyPagingItems<MediaItem> = viewModel.recentlyAdded.collectAsLazyPagingItems()
@@ -64,7 +40,7 @@ fun MainContent(
         shape = MaterialTheme.shapes.large
     ) {
         Column(Modifier.fillMaxSize()) {
-            Header(title = welcomeMessage)
+            BackdropHeader(title = welcomeMessage)
 
             LazyColumn(
                 modifier = Modifier
@@ -85,7 +61,7 @@ fun MainContent(
                                 modifier = Modifier
                                     .widthIn(max = 150.dp),
                                 artist = item as MediaItem.Artist,
-                                onClick = {  },
+                                onClick = { },
                             )
                         }
                     }
@@ -109,6 +85,13 @@ fun MainContent(
                             )
                         }
                     }
+                }
+
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .height(BottomMediaController.CONTROLLER_HEIGHT)
+                    )
                 }
             }
         }

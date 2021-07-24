@@ -1,38 +1,93 @@
 package pl.jutupe.main.ui.main
 
 import android.os.Bundle
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
-import pl.jutupe.main.R
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.jutupe.home.ui.HomePage
+import pl.jutupe.home.ui.HomeScreen
+import pl.jutupe.home.ui.controller.BottomMediaControllerViewModel
+import pl.jutupe.home.ui.library.LibraryViewModel
+import pl.jutupe.home.ui.main.MainViewModel
+import pl.jutupe.home.ui.search.SearchViewModel
+import pl.jutupe.main.ui.drawer.DrawerScreen
+import pl.jutupe.main.ui.drawer.KiwiDrawer
+import pl.jutupe.ui.theme.KiwiTheme
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
+
+    private val controllerViewModel by viewModel<BottomMediaControllerViewModel>()
+
+    private val mainViewModel by viewModel<MainViewModel>()
+    private val libraryViewModel by viewModel<LibraryViewModel>()
+    private val searchViewModel by viewModel<SearchViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val navView: NavigationView = findViewById(R.id.nav_view)
+        //todo remove after koin fix
+        val homePages = listOf(
+            HomePage.Main(mainViewModel),
+            HomePage.Library(libraryViewModel),
+            HomePage.Search(searchViewModel),
+        )
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        val screens = listOf(
+            DrawerScreen.Home,
+            DrawerScreen.Settings,
+        )
 
-        navView.setupWithNavController(navController)
-        navView.setVersionText()
-    }
+        setContent {
+            val navController = rememberNavController()
+            val scope = rememberCoroutineScope()
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+            val currentRoute = navBackStackEntry?.destination?.route ?: ""
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(findViewById(R.id.drawer)) || super.onSupportNavigateUp()
-    }
+            KiwiTheme {
+                Scaffold(
+                    scaffoldState = rememberScaffoldState(drawerState = drawerState),
+                    drawerContent = {
+                        KiwiDrawer(
+                            screens = screens,
+                            currentRoute = currentRoute,
+                        ) {
+                            if (it.route != currentRoute) {
+                                navController.navigate(it.route)
+                            }
+                        }
+                    },
+                    drawerShape = RectangleShape,
+                    drawerBackgroundColor = MaterialTheme.colors.surface,
+                ) {
+                    NavHost(navController, startDestination = DrawerScreen.Home.route) {
+                        composable(DrawerScreen.Home.route) {
+                            HomeScreen(
+                                onBack = {
+                                    scope.launch {
+                                        drawerState.open()
+                                    }
+                                },
+                                pages = homePages,
+                                controllerViewModel
+                            )
+                        }
 
-    private fun NavigationView.setVersionText() {
-        val header = getHeaderView(0)
-        val versionText = header.findViewById<TextView>(R.id.version)
-        versionText.text = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+                        composable(DrawerScreen.Settings.route) {
+                            Text(text = "test")
+                        }
+                    }
+                }
+            }
+        }
     }
 }

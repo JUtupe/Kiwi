@@ -1,6 +1,7 @@
 package pl.jutupe.home.ui.library
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
@@ -23,7 +24,7 @@ class LibraryViewModel(
 
     private val history = BrowserHistory(mutableListOf(currentRoot.value))
 
-    private lateinit var currentItemsSource: MediaItemDataSource
+    private var currentItemsSource: MediaItemDataSource? = null
     private val itemsSource: MediaItemDataSource
         get() = MediaItemDataSource { pagination ->
             connection.getItems(
@@ -67,6 +68,6 @@ class LibraryViewModel(
         currentRoot.value = newRoot
         isInRoot.value = newRoot.id == connection.rootMediaId
 
-        currentItemsSource.invalidate()
+        currentItemsSource?.invalidate()
     }
 }

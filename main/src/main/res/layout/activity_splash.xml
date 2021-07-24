@@ -8,7 +8,7 @@
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorSurface"
+        android:background="#37474F"
         app:layoutDescription="@xml/activity_splash_scene">
 
         <ImageView

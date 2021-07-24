@@ -12,9 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.jutupe.model.MediaItem
 import pl.jutupe.ui.DARK_GRADIENT
+import pl.jutupe.ui.theme.KiwiTheme
 import pl.jutupe.ui.util.mediaItemPainter
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -85,5 +87,18 @@ fun PlayableItem(
                 }
             }
         }
+    }
+}
+
+@Composable
+@Preview
+private fun PlayableItemPreview() {
+    KiwiTheme {
+        PlayableItem(
+            modifier = Modifier
+                .size(200.dp),
+            moreButtonVisible = true,
+            item = MediaItem.Song("", "title", "artist", null),
+        )
     }
 }

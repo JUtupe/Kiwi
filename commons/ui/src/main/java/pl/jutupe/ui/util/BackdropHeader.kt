@@ -1,4 +1,4 @@
-package pl.jutupe.home.ui
+package pl.jutupe.ui.util
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -10,7 +10,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Header(
+fun BackdropHeader(
     title: String,
     startIcon: @Composable () -> Unit = { },
     endIcon: @Composable () -> Unit = { },
@@ -18,7 +18,7 @@ fun Header(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(Header.HEADER_HEIGHT)
+            .height(BackdropHeader.HEADER_HEIGHT)
             .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -39,6 +39,6 @@ fun Header(
     }
 }
 
-object Header {
+object BackdropHeader {
     val HEADER_HEIGHT = 64.dp
 }
