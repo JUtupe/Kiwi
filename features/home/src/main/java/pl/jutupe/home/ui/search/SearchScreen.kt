@@ -27,6 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import pl.jutupe.home.R
@@ -35,7 +38,6 @@ import pl.jutupe.model.MediaItem
 import pl.jutupe.ui.items.SearchItem
 import pl.jutupe.ui.util.BackdropHeader
 
-//todo fix keyboard focus (two onclick in one time) (focus issue)
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class, ExperimentalUnitApi::class)
 @Composable
 fun SearchScreen(
@@ -50,8 +52,20 @@ fun SearchScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val localFocusManager = LocalFocusManager.current
 
-    val headerQuery: String by viewModel.getCurrentQuery().collectAsState("")
-    val inputQuery: String by viewModel.searchQuery.collectAsState("")
+    val headerQuery by viewModel.getCurrentQuery().collectAsState("")
+    val inputQuery by viewModel.searchQuery.collectAsState("")
+
+    LaunchedEffect(backdropState) {
+        snapshotFlow { backdropState.isConcealed }
+            .distinctUntilChanged()
+            .filter { it }
+            .collect {
+                searchFocusRequester.freeFocus()
+                localFocusManager.clearFocus(true)
+                keyboardController?.hide()
+                backdropState.conceal()
+            }
+    }
 
     BackdropScaffold(
         scaffoldState = backdropState,
@@ -67,6 +81,12 @@ fun SearchScreen(
                 value = inputQuery,
                 onValueChange = { value ->
                     viewModel.searchQuery.value = value
+                },
+                placeholder = {
+                    Text(
+                        text = stringResource(id = R.string.hint_search),
+                        color = Color.Gray,
+                    )
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(percent = 100),
@@ -91,6 +111,7 @@ fun SearchScreen(
         },
         frontLayerScrimColor = Color.Transparent,
         frontLayerShape = MaterialTheme.shapes.large,
+        frontLayerElevation = 0.dp,
         frontLayerContent = {
             Column(
                 modifier = Modifier
@@ -103,14 +124,9 @@ fun SearchScreen(
                         Crossfade(targetState = backdropState.targetValue) {
                             when (it) {
                                 BackdropValue.Revealed ->
-                                    IconButton(onClick = {
-                                        composeScope.launch {
-                                            searchFocusRequester.freeFocus()
-                                            localFocusManager.clearFocus(true)
-                                            keyboardController?.hide()
-                                            backdropState.conceal()
-                                        }
-                                    }) { Icon(Icons.Rounded.KeyboardArrowUp, null) }
+                                    IconButton(onClick = { /* handled by effect */ }) {
+                                        Icon(Icons.Rounded.KeyboardArrowUp, null)
+                                    }
                                 BackdropValue.Concealed ->
                                     IconButton(onClick = {
                                         composeScope.launch {
@@ -118,7 +134,9 @@ fun SearchScreen(
                                             keyboardController?.show()
                                             backdropState.reveal()
                                         }
-                                    }) { Icon(Icons.Rounded.Search, null) }
+                                    }) {
+                                        Icon(Icons.Rounded.Search, null)
+                                    }
                             }
                         }
                     }

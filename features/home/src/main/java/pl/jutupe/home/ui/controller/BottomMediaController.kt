@@ -4,11 +4,11 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -20,6 +20,7 @@ object BottomMediaController {
     val CONTROLLER_HEIGHT = 70.dp
 }
 
+//todo all sides padding
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun BottomMediaController(
@@ -31,7 +32,7 @@ fun BottomMediaController(
     Card(
         modifier = modifier
             .height(BottomMediaController.CONTROLLER_HEIGHT),
-        shape = MaterialTheme.shapes.medium.copy(CornerSize(0.dp)),
+        shape = RectangleShape,
     ) {
         Row(
             modifier = Modifier
