@@ -38,6 +38,7 @@ import pl.jutupe.model.MediaItem
 import pl.jutupe.ui.items.SearchItem
 import pl.jutupe.ui.util.BackdropHeader
 
+//todo scrim color
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class, ExperimentalUnitApi::class)
 @Composable
 fun SearchScreen(
@@ -143,9 +144,9 @@ fun SearchScreen(
                 )
                 LazyColumn(
                     modifier = Modifier
-                        .padding(horizontal = 8.dp)
                         .fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(8.dp),
                 ) {
                     items(modelSearchItems) { searchItem ->
                         SearchItem(

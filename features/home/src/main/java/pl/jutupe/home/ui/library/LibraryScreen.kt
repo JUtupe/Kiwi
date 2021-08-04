@@ -66,8 +66,8 @@ fun LibraryScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize(),
-                contentPadding = PaddingValues(8.dp),
                 verticalArrangement = spacedBy(8.dp),
+                contentPadding = PaddingValues(8.dp),
             ) {
                 items(libraryItems) { item ->
                     PlayableItem(

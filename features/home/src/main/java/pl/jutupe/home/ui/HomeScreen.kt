@@ -2,15 +2,16 @@ package pl.jutupe.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import pl.jutupe.home.R
@@ -50,6 +54,15 @@ fun HomeScreen(
 
     val isPlaying by bottomMediaControllerViewModel.isPlaying.observeAsState()
     val nowPlaying by bottomMediaControllerViewModel.nowPlaying.observeAsState()
+
+    LaunchedEffect(scaffoldState.bottomSheetState) {
+        snapshotFlow { scaffoldState.bottomSheetState.isCollapsed }
+            .distinctUntilChanged()
+            .filter { it }
+            .collect {
+                bottomMediaControllerViewModel.onDownSwiped()
+            }
+    }
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -110,11 +123,13 @@ fun HomeScreen(
             )
         },
         sheetPeekHeight = 0.dp,
+        sheetBackgroundColor = Color.Transparent,
+        sheetShape = MaterialTheme.shapes.small,
+        sheetElevation = 0.dp,
         sheetContent = {
             nowPlaying?.let { itemPlaying ->
                 BottomMediaController(
                     modifier = Modifier
-                        .height(70.dp)
                         .fillMaxWidth(),
                     currentItem = itemPlaying,
                     isPlaying = isPlaying == true,

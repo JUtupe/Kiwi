@@ -36,6 +36,8 @@ class BottomMediaControllerViewModel(
     }
 
     fun onDownSwiped() {
-        connection.stop()
+        if (connection.isConnected.value == true) {
+            connection.stop()
+        }
     }
 }

@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 pages = homePages,
-                                controllerViewModel
+                                controllerViewModel,
                             )
                         }
 
