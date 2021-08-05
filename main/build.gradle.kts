@@ -1,4 +1,4 @@
-import dependencies.*
+import dependencies.Libraries
 
 plugins {
     id("common-android-library")
@@ -8,11 +8,12 @@ dependencies {
     implementation(project(":commons:ui"))
     implementation(project(":commons:base"))
 
-    implementation(project(":navigation"))
+    implementation(project(":features:home"))
+    implementation(project(":features:settings"))
+
+    implementation(Libraries.composeActivity)
+    implementation(Libraries.composeNavigation)
 
     implementation(Libraries.constraintLayout)
     implementation(Libraries.permissions)
-
-    implementation(Libraries.navigation)
-    implementation(Libraries.navigationFragment)
 }

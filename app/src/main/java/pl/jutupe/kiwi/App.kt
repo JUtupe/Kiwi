@@ -30,7 +30,7 @@ class App : Application() {
                     coreModule,
                     homeModule,
                     settingsModule,
-                    mainModule
+                    mainModule,
                 )
             )
         }

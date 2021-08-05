@@ -1,5 +1,4 @@
-import dependencies.*
-import extensions.kapt
+import dependencies.Libraries
 
 plugins {
     id("common-android-library")
@@ -12,20 +11,24 @@ dependencies {
     implementation(project(":commons:ui"))
     implementation(project(":commons:model"))
 
-    implementation(project(":navigation"))
-
-    implementation(Libraries.navigation)
-
     implementation(Libraries.paging)
+    implementation(Libraries.pagingCompose)
+
+    implementation(Libraries.composeActivity)
+    implementation(Libraries.composeNavigation)
+
+    implementation(Libraries.composePager)
+    implementation(Libraries.composePagerIndicators)
+
     implementation(Libraries.lifecycle)
     implementation(Libraries.lifecycleLiveData)
 
     implementation(Libraries.coil)
+    implementation(Libraries.coilCompose)
 
+    implementation(Libraries.appCompat)
     implementation(Libraries.cardView)
     implementation(Libraries.constraintLayout)
     implementation(Libraries.coordinatorLayout)
     implementation(Libraries.material)
-
-    kapt(Libraries.dataBinding)
 }

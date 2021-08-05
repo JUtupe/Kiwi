@@ -1,9 +1,7 @@
-include(":commons:model")
 include(
     ":app",
     ":core",
     ":main",
-    ":navigation",
     ":features:home",
     ":features:settings",
     ":commons:base",

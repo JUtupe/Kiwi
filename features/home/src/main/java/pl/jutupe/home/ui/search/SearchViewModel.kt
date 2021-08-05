@@ -8,100 +8,89 @@ import androidx.paging.cachedIn
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import pl.jutupe.base.SingleLiveData
 import pl.jutupe.core.common.KiwiServiceConnection
 import pl.jutupe.core.util.Filter
 import pl.jutupe.home.data.MediaItemDataSource
 import pl.jutupe.model.MediaItem
-import pl.jutupe.model.MediaItemAction
 import timber.log.Timber
 
 class SearchViewModel(
     private val connection: KiwiServiceConnection
 ) : ViewModel() {
 
-    private val currentQuery = MutableStateFlow("")
+    val searchQuery = MutableStateFlow("")
+    private val _currentQuery = MutableStateFlow("")
     private var searchJob: Job? = null
+
+    private var currentItemsSource: MediaItemDataSource? = null
+    private val itemsSource: MediaItemDataSource
+        get() = MediaItemDataSource { pagination ->
+            val filter = Filter(pagination)
+
+            if (_currentQuery.value.isEmpty()) {
+                connection.getRecentSearchItems(filter)
+            } else {
+                connection.searchItems(_currentQuery.value, filter)
+            }
+        }
 
     val items = Pager(
         PagingConfig(pageSize = 30)
     ) {
-        MediaItemDataSource { pagination ->
-            val filter = Filter(pagination)
-
-            if (currentQuery.value.isEmpty()) {
-                connection.getRecentSearchItems(filter)
-            } else {
-                connection.searchItems(currentQuery.value, filter)
-            }
+        itemsSource.also {
+            currentItemsSource = it
         }
     }.flow.cachedIn(viewModelScope)
 
-    val events = SingleLiveData<SearchViewEvent>()
-
-    val songAction = object : MediaItemAction {
-        override fun onClick(item: MediaItem) {
-            Timber.d("onClick($item)")
-
-            if (item.isPlayable) {
-                val shouldAddToRecent = currentQuery.value.isNotEmpty()
-                connection.playFromMediaId(item.id)
-
-                if (shouldAddToRecent) {
-                    connection.addRecentSearchItem(item)
-                }
+    init {
+        viewModelScope.launch {
+            searchQuery.collectLatest {
+                onSearchTextChanged(it)
             }
-        }
-
-        override fun onMoreClick(item: MediaItem) {
-            Timber.d("onMoreClick($item)")
         }
     }
 
-    fun onSearchTextChanged(text: String?) {
+    private fun onSearchTextChanged(text: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
+            searchQuery.emit(text)
+
             delay(500)
 
-            if (text.isNullOrBlank()) {
-                updatePager("")
+            val query =
+                if (text.isBlank()) ""
+                else text
 
-                events.value = SearchViewEvent.SetBackdropRecentlySearchedTitle
-            } else {
-                updatePager(text)
+            _currentQuery.emit(query)
+            currentItemsSource?.invalidate()
+        }
+    }
 
-                events.value = SearchViewEvent.SetBackdropSearchTitle(text)
+    fun onSearchItemClicked(item: MediaItem) {
+        Timber.d("onSearchItemClicked($item)")
+
+        if (item.isPlayable) {
+            val shouldAddToRecent = _currentQuery.value.isNotEmpty()
+            connection.playFromMediaId(item.id)
+
+            if (shouldAddToRecent) {
+                connection.addRecentSearchItem(item)
             }
         }
     }
 
-    fun onSearchButtonClicked() {
-        events.value = SearchViewEvent.ShowSearchKeyboard
+    fun onSearchClearClicked() {
+        viewModelScope.launch {
+            searchQuery.emit("")
+        }
     }
 
-    fun onHideSearchButtonClicked() {
-        events.value = SearchViewEvent.HideSearchKeyboard
+    fun onSearchItemMoreClicked(item: MediaItem) {
+        Timber.d("onSearchMoreClicked($item)")
     }
 
-    fun onSearchDoneClicked() {
-        events.value = SearchViewEvent.HideSearchKeyboard
-    }
-
-    private fun updatePager(query: String) {
-        currentQuery.value = query
-        events.value = SearchViewEvent.RefreshAdapter
-    }
-
-    sealed class SearchViewEvent {
-        object RefreshAdapter : SearchViewEvent()
-
-        class SetBackdropSearchTitle(val text: String) : SearchViewEvent()
-
-        object SetBackdropRecentlySearchedTitle : SearchViewEvent()
-
-        object ShowSearchKeyboard : SearchViewEvent()
-
-        object HideSearchKeyboard : SearchViewEvent()
-    }
+    fun getCurrentQuery(): StateFlow<String> = _currentQuery
 }

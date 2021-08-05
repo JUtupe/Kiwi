@@ -6,5 +6,5 @@ data class RecentPlaybackSession (
     val description: MediaDescriptionCompat,
     val position: Long
 ) {
-    val parentId: String = "1" //todo store parent id
+    val parentId: String = "1" // todo store parent id
 }
