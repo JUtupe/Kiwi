@@ -33,7 +33,7 @@ object Versions {
 object Libraries {
     const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
-    //android
+    // android
     const val core = "androidx.core:core-ktx:${Versions.core}"
     const val media = "androidx.media:media:${Versions.media}"
     const val exoPlayer = "com.google.android.exoplayer:exoplayer:${Versions.exoPlayer}"
@@ -42,7 +42,7 @@ object Libraries {
     const val coil = "io.coil-kt:coil:${Versions.coil}"
     const val coilCompose = "com.google.accompanist:accompanist-coil:0.13.0"
 
-    //compose
+    // compose
     const val compose = "androidx.compose.ui:ui:${Versions.compose}"
     const val composeRuntime = "androidx.compose.runtime:runtime:${Versions.compose}"
     const val composeActivity = "androidx.activity:activity-compose:1.3.0"
@@ -74,7 +74,7 @@ object Libraries {
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics-ktx"
     const val firebasePerformance = "com.google.firebase:firebase-perf-ktx"
 
-    //others
+    // others
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
     const val koin = "io.insert-koin:koin-android:${Versions.koin}"
