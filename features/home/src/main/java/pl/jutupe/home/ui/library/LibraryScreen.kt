@@ -29,7 +29,11 @@ import pl.jutupe.ui.items.PlayableItem
 import pl.jutupe.ui.items.RootItem
 import pl.jutupe.ui.util.BackdropHeader
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
+@OptIn(
+    ExperimentalMaterialApi::class,
+    ExperimentalAnimationApi::class,
+    ExperimentalFoundationApi::class,
+)
 @Composable
 fun LibraryScreen(
     viewModel: LibraryViewModel = getViewModel()

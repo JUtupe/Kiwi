@@ -38,7 +38,7 @@ import pl.jutupe.model.MediaItem
 import pl.jutupe.ui.items.SearchItem
 import pl.jutupe.ui.util.BackdropHeader
 
-//todo scrim color
+// todo scrim color
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class, ExperimentalUnitApi::class)
 @Composable
 fun SearchScreen(

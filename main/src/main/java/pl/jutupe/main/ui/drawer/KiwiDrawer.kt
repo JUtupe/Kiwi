@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import pl.jutupe.main.R
 import pl.jutupe.ui.theme.KiwiTheme
 
-//todo fix ripple effect recomposition
+// todo fix ripple effect recomposition
 @Composable
 fun KiwiDrawer(
     screens: List<DrawerScreen>,

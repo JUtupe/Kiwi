@@ -23,7 +23,7 @@ object BottomMediaController {
     val CONTROLLER_HEIGHT = 70.dp
 }
 
-//todo swipe gestures listener
+// todo swipe gestures listener
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun BottomMediaController(

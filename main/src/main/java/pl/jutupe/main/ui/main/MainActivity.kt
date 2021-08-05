@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //todo remove after koin fix
+        // todo remove after koin fix
         val homePages = listOf(
             HomePage.Main(mainViewModel),
             HomePage.Library(libraryViewModel),

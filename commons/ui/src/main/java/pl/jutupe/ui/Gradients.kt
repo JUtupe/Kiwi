@@ -3,7 +3,6 @@ package pl.jutupe.ui
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-
 val ARTIST_BACKGROUND = Brush.linearGradient(
     colors = listOf(
         Color(0xFF8BE0C2),
