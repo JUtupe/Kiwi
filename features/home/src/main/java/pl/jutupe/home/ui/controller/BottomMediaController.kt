@@ -3,13 +3,15 @@ package pl.jutupe.home.ui.controller
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,7 +25,6 @@ object BottomMediaController {
     val CONTROLLER_HEIGHT = 70.dp
 }
 
-// todo swipe gestures listener
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun BottomMediaController(
@@ -31,12 +32,38 @@ fun BottomMediaController(
     currentItem: MediaItem,
     isPlaying: Boolean = false,
     onPlayPauseClicked: () -> Unit = { },
+    onLeftSwiped: () -> Unit = { },
+    onRightSwiped: () -> Unit = { },
 ) {
+    var swipeSkipped = remember { false }
+
     Box(
         modifier = modifier
             .padding(vertical = 8.dp, horizontal = 12.dp)
             .height(BottomMediaController.CONTROLLER_HEIGHT)
             .background(Color.Transparent)
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures(
+                    onDragEnd = { swipeSkipped = false },
+                ) { change, dragAmount ->
+                    if (swipeSkipped) return@detectHorizontalDragGestures
+
+                    val threshold = 50
+
+                    when {
+                        dragAmount < -threshold -> {
+                            onLeftSwiped()
+                            swipeSkipped = true
+                            change.consumePositionChange()
+                        }
+                        dragAmount > threshold -> {
+                            onRightSwiped()
+                            swipeSkipped = true
+                            change.consumePositionChange()
+                        }
+                    }
+                }
+            }
     ) {
         Card(
             shape = MaterialTheme.shapes.small,
@@ -70,8 +97,7 @@ fun BottomMediaController(
                     checked = isPlaying,
                     onCheckedChange = { onPlayPauseClicked() },
                     modifier = Modifier
-                        .size(56.dp)
-                        .padding(8.dp),
+                        .size(56.dp),
                 ) {
                     if (isPlaying) {
                         Icon(painterResource(id = R.drawable.ic_pause), null)
