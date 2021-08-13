@@ -133,7 +133,9 @@ fun HomeScreen(
                         .fillMaxWidth(),
                     currentItem = itemPlaying,
                     isPlaying = isPlaying == true,
-                    onPlayPauseClicked = { bottomMediaControllerViewModel.onPlayPauseClicked() }
+                    onPlayPauseClicked = { bottomMediaControllerViewModel.onPlayPauseClicked() },
+                    onLeftSwiped = { bottomMediaControllerViewModel.onLeftSwiped() },
+                    onRightSwiped = { bottomMediaControllerViewModel.onRightSwiped() },
                 )
             }
         },
