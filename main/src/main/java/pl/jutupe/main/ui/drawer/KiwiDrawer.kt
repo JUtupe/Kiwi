@@ -64,10 +64,12 @@ fun KiwiDrawer(
                     text = stringResource(id = R.string.app_name)
                         .uppercase(),
                     fontSize = 32.sp,
+                    color = Color.White,
                 )
 
                 Text(
-                    text = versionName
+                    text = versionName,
+                    color = Color.White,
                 )
             }
         }
@@ -81,7 +83,7 @@ fun KiwiDrawer(
             Text(
                 text = stringResource(id = screen.titleRes)
                     .uppercase(),
-                color = Color.White,
+                color = MaterialTheme.colors.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 fontSize = 20.sp,
@@ -94,7 +96,7 @@ fun KiwiDrawer(
                         if (currentRoute == screen.route) {
                             Modifier.border(
                                 width = 1.5.dp,
-                                color = Color.White,
+                                color = MaterialTheme.colors.onSurface,
                                 shape = buttonShape,
                             )
                         } else Modifier
@@ -130,6 +132,11 @@ sealed class DrawerScreen(
         titleRes = R.string.menu_settings,
         route = "settings"
     )
+
+    object Theme : DrawerScreen(
+        titleRes = R.string.menu_theme,
+        route = "theme"
+    )
 }
 
 @Preview
@@ -138,9 +145,27 @@ private fun KiwiDrawerPreview() {
     val screens = listOf(
         DrawerScreen.Home,
         DrawerScreen.Settings,
+        DrawerScreen.Theme,
     )
 
     KiwiTheme {
+        KiwiDrawer(
+            screens = screens,
+            currentRoute = screens.first().route
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun KiwiDrawerPreviewLight() {
+    val screens = listOf(
+        DrawerScreen.Home,
+        DrawerScreen.Settings,
+        DrawerScreen.Theme,
+    )
+
+    KiwiTheme(KiwiTheme.Light) {
         KiwiDrawer(
             screens = screens,
             currentRoute = screens.first().route

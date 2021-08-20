@@ -23,6 +23,9 @@ dependencies {
     implementation(Libraries.composeMaterialIcons)
     implementation(Libraries.composePager)
 
+    implementation(Libraries.dataStore)
+    implementation(Libraries.dataStorePreferences)
+
     implementation(Libraries.coil)
     implementation(Libraries.coilCompose)
 }

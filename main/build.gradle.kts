@@ -10,6 +10,7 @@ dependencies {
 
     implementation(project(":features:home"))
     implementation(project(":features:settings"))
+    implementation(project(":features:theme"))
 
     implementation(Libraries.composeActivity)
     implementation(Libraries.composeNavigation)

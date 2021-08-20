@@ -1,0 +1,4 @@
+<resources>
+    <string name="theme_name_light">Kiwi light theme</string>
+    <string name="theme_name_dark">Kiwi dark theme</string>
+</resources>

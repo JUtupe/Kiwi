@@ -114,7 +114,7 @@ fun HomeScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { onBack() }) {
-                        Icon(Icons.Rounded.Menu, null)
+                        Icon(Icons.Rounded.Menu, null, tint = Color.White)
                     }
                 },
                 backgroundColor = MaterialTheme.colors.primary,

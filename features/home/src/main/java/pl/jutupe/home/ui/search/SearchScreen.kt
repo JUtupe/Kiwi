@@ -103,6 +103,7 @@ fun SearchScreen(
                     onDone = { keyboardController?.hide() },
                 ),
                 colors = textFieldColors(
+                    textColor = MaterialTheme.colors.onSecondary,
                     backgroundColor = Color.White,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,

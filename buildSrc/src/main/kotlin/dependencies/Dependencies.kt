@@ -28,6 +28,7 @@ object Versions {
     const val material = "1.1.0-beta01"
     const val cardView = "1.0.0"
     const val lifecycle = "2.3.1"
+    const val dataStore = "1.0.0"
 }
 
 object Libraries {
@@ -59,6 +60,9 @@ object Libraries {
     const val material = "com.google.android.material:material:${Versions.material}"
     const val cardView = "androidx.cardview:cardview:${Versions.cardView}"
     const val preferences = "androidx.preference:preference:${Versions.preferences}"
+
+    const val dataStore = "androidx.datastore:datastore:${Versions.dataStore}"
+    const val dataStorePreferences = "androidx.datastore:datastore-preferences:${Versions.dataStore}"
 
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
     const val coordinatorLayout = "androidx.coordinatorlayout:coordinatorlayout:${Versions.coordinatorLayout}"
