@@ -12,8 +12,11 @@ dependencies {
     implementation(project(":features:settings"))
     implementation(project(":features:theme"))
 
+    implementation(Libraries.splashScreen)
+
     implementation(Libraries.composeActivity)
     implementation(Libraries.composeNavigation)
+    implementation(Libraries.composeSystemUi)
 
     implementation(Libraries.constraintLayout)
     implementation(Libraries.permissions)

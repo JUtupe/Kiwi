@@ -84,7 +84,7 @@ fun PlayableItem(
 
                     if (moreButtonVisible) {
                         IconButton(onClick = { onMoreClick(item) }) {
-                            Icon(Icons.Rounded.MoreVert, null)
+                            Icon(Icons.Rounded.MoreVert, null, tint = Color.White)
                         }
                     }
                 }

@@ -19,7 +19,6 @@ android {
         applicationId = Releases.applicationId
 
         minSdk = Releases.minSdk
-        maxSdk = Releases.maxSdk
         targetSdk = Releases.targetSdk
 
         versionCode = (versionProps["kiwiVersionCode"] as String).toInt()

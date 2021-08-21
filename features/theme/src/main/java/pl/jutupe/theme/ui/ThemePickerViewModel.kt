@@ -11,10 +11,7 @@ class ThemePickerViewModel(
 
     val currentTheme: Flow<KiwiTheme> = themeDataStore.currentThemeFlow
 
-    fun getAllThemes(): List<KiwiTheme> = listOf(
-        KiwiTheme.Dark,
-        KiwiTheme.Light,
-    )
+    val allThemes: Flow<List<KiwiTheme>> = themeDataStore.allThemes
 
     suspend fun onThemeClicked(theme: KiwiTheme) {
         themeDataStore.saveCurrentTheme(theme)

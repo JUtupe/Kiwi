@@ -3,11 +3,12 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-  <group android:scaleX="0.25523436"
+  <group
+      android:name="container"
+      android:scaleX="0.25523436"
       android:scaleY="0.25523436"
       android:translateX="21.33"
       android:translateY="21.33">
-    <group>
       <clip-path
           android:pathData="M0,0h256v256h-256z"/>
       <path
@@ -28,6 +29,5 @@
       <path
           android:pathData="M128,115C129.707,115 131.398,115.336 132.975,115.99C134.552,116.643 135.985,117.6 137.192,118.808C138.4,120.015 139.357,121.448 140.01,123.025C140.664,124.602 141,126.293 141,128C141,129.707 140.664,131.398 140.01,132.975C139.357,134.552 138.4,135.985 137.192,137.192C135.985,138.4 134.552,139.357 132.975,140.01C131.398,140.664 129.707,141 128,141L128,128V115Z"
           android:fillColor="#000000"/>
-    </group>
   </group>
 </vector>

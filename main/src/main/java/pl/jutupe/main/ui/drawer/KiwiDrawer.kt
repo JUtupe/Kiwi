@@ -96,7 +96,7 @@ fun KiwiDrawer(
                         if (currentRoute == screen.route) {
                             Modifier.border(
                                 width = 1.5.dp,
-                                color = MaterialTheme.colors.onSurface,
+                                color = MaterialTheme.colors.onSecondary,
                                 shape = buttonShape,
                             )
                         } else Modifier
