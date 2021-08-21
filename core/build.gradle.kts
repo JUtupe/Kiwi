@@ -1,4 +1,5 @@
-import dependencies.*
+import dependencies.Libraries
+import dependencies.TestLibraries
 
 plugins {
     id("common-android-library")
@@ -16,6 +17,9 @@ dependencies {
     implementation(Libraries.coil)
 
     implementation(Libraries.lifecycleLiveData)
+
+    implementation(Libraries.dataStore)
+    implementation(Libraries.dataStorePreferences)
 
     implementation(Libraries.coroutines)
     implementation(Libraries.coroutinesAndroid)
