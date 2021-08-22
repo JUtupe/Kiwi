@@ -178,7 +178,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     private fun getActivityPendingIntent() =
         packageManager?.getLaunchIntentForPackage(packageName)?.let { sessionIntent ->
-            val flags =  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 PendingIntent.FLAG_IMMUTABLE
             } else 0
 

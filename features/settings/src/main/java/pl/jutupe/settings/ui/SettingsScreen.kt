@@ -36,8 +36,6 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize(),
             shape = MaterialTheme.shapes.large,
-        ) {
-
-        }
+        ) { }
     }
 }
