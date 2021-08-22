@@ -19,7 +19,6 @@ android {
         applicationId = Releases.applicationId
 
         minSdk = Releases.minSdk
-        maxSdk = Releases.maxSdk
         targetSdk = Releases.targetSdk
 
         versionCode = (versionProps["kiwiVersionCode"] as String).toInt()
@@ -67,6 +66,7 @@ dependencies {
     implementation(project(":commons:ui"))
     implementation(project(":features:home"))
     implementation(project(":features:settings"))
+    implementation(project(":features:theme"))
 
     implementation(Libraries.composeRuntime)
     implementation(Libraries.composeTooling)

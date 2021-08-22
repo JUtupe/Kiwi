@@ -30,17 +30,19 @@ class KiwiNotificationManager(
     init {
         val mediaController = MediaControllerCompat(context, sessionToken)
 
-        notificationManager = PlayerNotificationManager.createWithNotificationChannel(
+        notificationManager = PlayerNotificationManager.Builder(
             context,
-            NOW_PLAYING_CHANNEL_ID,
-            R.string.notification_channel_now_playing,
-            R.string.notification_channel_now_playing_description,
             NOW_PLAYING_NOTIFICATION_ID,
+            NOW_PLAYING_CHANNEL_ID,
             DescriptionAdapter(mediaController),
-            notificationListener
-        ).apply {
+        )
+            .setSmallIconResourceId(R.drawable.ic_notification)
+            .setNotificationListener(notificationListener)
+            .setChannelNameResourceId(R.string.notification_channel_now_playing)
+            .setChannelDescriptionResourceId(R.string.notification_channel_now_playing_description)
+            .build()
+        .apply {
             setMediaSessionToken(sessionToken)
-            setSmallIcon(R.drawable.ic_notification)
             setUseChronometer(true)
 
             //don't display fast forward buttons

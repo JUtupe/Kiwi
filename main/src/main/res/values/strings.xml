@@ -3,6 +3,7 @@
 
     <string name="menu_home">Main Page</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_theme">Themes</string>
 
     <string name="label_permission_settings">Permissions</string>
     <string name="label_permission_settings_message">Allow the application to search for songs on your device, this permission is required for the application to function properly.</string>

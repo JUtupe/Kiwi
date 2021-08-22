@@ -3,12 +3,12 @@
     package="pl.jutupe.main">
 
     <application>
-        <activity android:name=".ui.main.MainActivity"
-            android:theme="@style/KiwiTheme"
-            android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:windowSoftInputMode="adjustNothing"
+            android:exported="true"
+            android:theme="@style/Theme.KiwiSplash" >
 
-        <activity android:name=".ui.splash.SplashActivity"
-            android:theme="@style/KiwiTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

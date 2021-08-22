@@ -7,6 +7,8 @@ import pl.jutupe.core.di.coreModule
 import pl.jutupe.home.di.homeModule
 import pl.jutupe.main.di.mainModule
 import pl.jutupe.settings.di.settingsModule
+import pl.jutupe.theme.di.themeModule
+import pl.jutupe.ui.di.uiModule
 import timber.log.Timber
 
 class App : Application() {
@@ -30,6 +32,8 @@ class App : Application() {
                     coreModule,
                     homeModule,
                     settingsModule,
+                    uiModule,
+                    themeModule,
                     mainModule,
                 )
             )

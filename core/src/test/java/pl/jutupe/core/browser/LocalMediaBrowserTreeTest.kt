@@ -1,6 +1,7 @@
 package pl.jutupe.core.browser
 
 import android.content.Context
+import android.support.v4.media.MediaMetadataCompat
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -29,7 +30,11 @@ internal class LocalMediaBrowserTreeTest {
     @BeforeEach
     fun setUp() {
         mockkStatic("pl.jutupe.core.util.ContextExtKt")
+        mockkConstructor(MediaMetadataCompat.Builder::class)
 
+        every {
+            anyConstructed<MediaMetadataCompat.Builder>().build()
+        } returns mockk(relaxed = true)
         every { context.resourceUri(any()) } returns mockk()
         every { context.getString(any()) } returns "test"
 

@@ -2,7 +2,10 @@ package plugins
 
 import com.android.build.api.dsl.LibraryBuildFeatures
 import com.android.build.gradle.BaseExtension
-import dependencies.*
+import dependencies.Libraries
+import dependencies.Releases
+import dependencies.TestLibraries
+import dependencies.Versions
 import extensions.implementation
 import extensions.testImplementation
 import org.gradle.api.JavaVersion
@@ -45,7 +48,6 @@ class AndroidLibraryPlugin : Plugin<Project> {
 
             defaultConfig {
                 minSdk = Releases.minSdk
-                maxSdk = Releases.maxSdk
                 targetSdk = Releases.targetSdk
 
                 versionCode = (versionProps["kiwiVersionCode"] as String).toInt()

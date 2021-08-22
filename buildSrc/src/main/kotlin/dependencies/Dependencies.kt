@@ -4,9 +4,8 @@ object Releases {
     const val applicationId = "pl.jutupe.kiwi"
 
     const val minSdk = 21
-    const val maxSdk = 30
-    const val compileSdk = 30
-    const val targetSdk = 30
+    const val compileSdk = 31
+    const val targetSdk = 31
 }
 
 object Versions {
@@ -14,12 +13,11 @@ object Versions {
     const val coroutines = "1.5.0"
     const val compose = "1.0.0"
     const val composePager = "0.14.0"
-    const val preferences = "1.1.1"
     const val timber = "4.7.1"
     const val koin = "3.1.2"
     const val core = "1.6.0"
-    const val media = "1.2.1"
-    const val exoPlayer = "2.13.3"
+    const val media = "1.4.1"
+    const val exoPlayer = "2.15.0"
     const val coil = "1.2.2"
     const val constraintLayout = "2.0.4"
     const val coordinatorLayout = "1.1.0"
@@ -28,6 +26,7 @@ object Versions {
     const val material = "1.1.0-beta01"
     const val cardView = "1.0.0"
     const val lifecycle = "2.3.1"
+    const val dataStore = "1.0.0"
 }
 
 object Libraries {
@@ -54,11 +53,16 @@ object Libraries {
     const val composeMaterialIcons = "androidx.compose.material:material-icons-core:${Versions.compose}"
     const val composePager = "com.google.accompanist:accompanist-pager:${Versions.composePager}"
     const val composePagerIndicators = "com.google.accompanist:accompanist-pager-indicators:${Versions.composePager}"
+    const val composeSystemUi = "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
 
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
     const val material = "com.google.android.material:material:${Versions.material}"
     const val cardView = "androidx.cardview:cardview:${Versions.cardView}"
-    const val preferences = "androidx.preference:preference:${Versions.preferences}"
+
+    const val splashScreen = "androidx.core:core-splashscreen:1.0.0-alpha01"
+
+    const val dataStore = "androidx.datastore:datastore:${Versions.dataStore}"
+    const val dataStorePreferences = "androidx.datastore:datastore-preferences:${Versions.dataStore}"
 
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
     const val coordinatorLayout = "androidx.coordinatorlayout:coordinatorlayout:${Versions.coordinatorLayout}"

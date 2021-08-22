@@ -2,6 +2,8 @@
 <resources>
     <string name="menu_home">Strona główna</string>
     <string name="menu_settings">Ustawienia</string>
+    <string name="menu_theme">Motywy</string>
+
     <string name="label_settings">Ustawienia</string>
     <string name="label_permission_settings">Uprawnienia</string>
     <string name="label_permission_rationale">Uprawnienia</string>

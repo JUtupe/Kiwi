@@ -9,6 +9,7 @@ import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -69,6 +70,7 @@ fun PlayableItem(
                             textAlign = TextAlign.Start,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
+                            color = Color.White,
                         )
 
                         Text(
@@ -76,12 +78,13 @@ fun PlayableItem(
                             textAlign = TextAlign.Start,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
+                            color = Color.White
                         )
                     }
 
                     if (moreButtonVisible) {
                         IconButton(onClick = { onMoreClick(item) }) {
-                            Icon(Icons.Rounded.MoreVert, null)
+                            Icon(Icons.Rounded.MoreVert, null, tint = Color.White)
                         }
                     }
                 }

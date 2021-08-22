@@ -3,6 +3,7 @@ package pl.jutupe.core.playback
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
@@ -22,11 +23,11 @@ import org.koin.android.ext.android.inject
 import pl.jutupe.core.action.AddRecentSearchActionProvider
 import pl.jutupe.core.browser.MediaBrowserTree
 import pl.jutupe.core.browser.MediaBrowserTree.Companion.KIWI_MEDIA_ROOT
-import pl.jutupe.core.util.toMediaSource
 import pl.jutupe.core.repository.media.MediaRepository
-import pl.jutupe.core.repository.recentPlayback.RecentPlaybackSession
 import pl.jutupe.core.repository.recentPlayback.RecentPlaybackRepository
+import pl.jutupe.core.repository.recentPlayback.RecentPlaybackSession
 import pl.jutupe.core.util.getFilterOrDefault
+import pl.jutupe.core.util.toMediaSource
 import timber.log.Timber
 
 class PlaybackService : MediaBrowserServiceCompat() {
@@ -177,7 +178,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     private fun getActivityPendingIntent() =
         packageManager?.getLaunchIntentForPackage(packageName)?.let { sessionIntent ->
-            PendingIntent.getActivity(this, 0, sessionIntent, 0)
+            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE
+            } else 0
+
+            PendingIntent.getActivity(
+                this,
+                0,
+                sessionIntent,
+                flags
+            )
         }
 
     private fun storeRecentPlaybackSession() {
@@ -195,7 +205,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         }
     }
 
-    private inner class PlayerEventListener : Player.EventListener {
+    private inner class PlayerEventListener : Player.Listener {
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, state: Int) {
             when (state) {
@@ -221,7 +231,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
             }
         }
 
-        override fun onPlayerError(error: ExoPlaybackException) {
+        override fun onPlayerError(error: PlaybackException) {
             Timber.e(error)
         }
     }

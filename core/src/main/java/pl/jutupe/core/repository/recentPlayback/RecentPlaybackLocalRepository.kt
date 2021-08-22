@@ -1,6 +1,13 @@
 package pl.jutupe.core.repository.recentPlayback
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.flow.first
 import pl.jutupe.core.repository.media.MediaRepository
 import timber.log.Timber
 
@@ -9,25 +16,23 @@ class RecentPlaybackLocalRepository(
     private val mediaRepository: MediaRepository
 ) : RecentPlaybackRepository {
 
-    private val sharedPreferences = context.getSharedPreferences(
-        RECENT_SONG_SHARED_PREFERENCES, Context.MODE_PRIVATE
-    )
+    private val recentPlaybackDataStore = context.recentPlaybackDataStore
 
     override suspend fun save(playbackSession: RecentPlaybackSession) {
         Timber.d("save(playbackSession=$playbackSession)")
-        with(sharedPreferences.edit()) {
-            putString(RECENT_MEDIA_ID_KEY, playbackSession.description.mediaId)
-            putLong(RECENT_POSITION_KEY, playbackSession.position)
-            apply()
+
+        recentPlaybackDataStore.edit { preferences ->
+            preferences[RECENT_MEDIA_ID_KEY] = playbackSession.description.mediaId!!
+            preferences[RECENT_POSITION_KEY] = playbackSession.position
         }
     }
 
     override suspend fun findRecentPlaybackSession(): RecentPlaybackSession? {
-        val mediaId = sharedPreferences.getString(RECENT_MEDIA_ID_KEY, null)
-        val position = sharedPreferences.getLong(RECENT_POSITION_KEY, 0)
+        val data = recentPlaybackDataStore.data.first()
 
-        mediaId?.let {
-            mediaRepository.findByMediaId(it)?.let { song ->
+        data[RECENT_MEDIA_ID_KEY]?.let { mediaId ->
+            mediaRepository.findByMediaId(mediaId)?.let { song ->
+                val position = data[RECENT_POSITION_KEY] ?: 0
                 val session = RecentPlaybackSession(song, position)
 
                 Timber.d("recent playback session found ($session)")
@@ -40,8 +45,13 @@ class RecentPlaybackLocalRepository(
     }
 
     companion object {
-        const val RECENT_SONG_SHARED_PREFERENCES = "pl.jutupe.kiwi.recent_playback_session_shared_preferences"
-        const val RECENT_MEDIA_ID_KEY = "media.id"
-        const val RECENT_POSITION_KEY = "position"
+        private const val RECENT_SONG_SHARED_PREFERENCES =
+            "pl.jutupe.kiwi.recent_playback_session_shared_preferences"
+        private val RECENT_MEDIA_ID_KEY = stringPreferencesKey("media.id")
+        private val RECENT_POSITION_KEY = longPreferencesKey("position")
+
+        private val Context.recentPlaybackDataStore: DataStore<Preferences> by preferencesDataStore(
+            name = RECENT_SONG_SHARED_PREFERENCES
+        )
     }
 }
