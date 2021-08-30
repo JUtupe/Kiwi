@@ -7,7 +7,8 @@
             android:name=".ui.main.MainActivity"
             android:windowSoftInputMode="adjustNothing"
             android:exported="true"
-            android:theme="@style/Theme.KiwiSplash" >
+            android:theme="@style/Theme.KiwiSplash"
+            android:configChanges="orientation|screenSize|keyboardHidden" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

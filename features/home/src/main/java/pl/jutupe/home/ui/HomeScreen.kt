@@ -47,7 +47,7 @@ fun HomeScreen(
 ) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(
-        pageCount = 3,
+        pageCount = pages.size,
         initialOffscreenLimit = 2
     )
     val scaffoldState = rememberBottomSheetScaffoldState()
