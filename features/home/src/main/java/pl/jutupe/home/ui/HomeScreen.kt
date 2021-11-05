@@ -10,8 +10,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -32,16 +34,17 @@ import pl.jutupe.home.R
 import pl.jutupe.home.ui.controller.BottomMediaController
 import pl.jutupe.home.ui.controller.BottomMediaControllerViewModel
 import pl.jutupe.home.ui.library.LibraryScreen
-import pl.jutupe.home.ui.library.LibraryViewModel
 import pl.jutupe.home.ui.main.MainScreen
-import pl.jutupe.home.ui.main.MainViewModel
 import pl.jutupe.home.ui.search.SearchScreen
-import pl.jutupe.home.ui.search.SearchViewModel
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
+@OptIn(
+    ExperimentalPagerApi::class,
+    ExperimentalMaterialApi::class,
+)
 @Composable
 fun HomeScreen(
     onBack: () -> Unit = { },
+    onShowPlayback: () -> Unit = { },
     pages: List<HomePage> = emptyList(),
     bottomMediaControllerViewModel: BottomMediaControllerViewModel = getViewModel(),
 ) {
@@ -51,9 +54,6 @@ fun HomeScreen(
         initialOffscreenLimit = 2
     )
     val scaffoldState = rememberBottomSheetScaffoldState()
-
-    val isPlaying by bottomMediaControllerViewModel.isPlaying.observeAsState()
-    val nowPlaying by bottomMediaControllerViewModel.nowPlaying.observeAsState()
 
     LaunchedEffect(scaffoldState.bottomSheetState) {
         snapshotFlow { scaffoldState.bottomSheetState.isCollapsed }
@@ -124,20 +124,12 @@ fun HomeScreen(
         },
         sheetPeekHeight = 0.dp,
         sheetBackgroundColor = Color.Transparent,
-        sheetShape = MaterialTheme.shapes.small,
+        sheetShape = MaterialTheme.shapes.large,
         sheetElevation = 0.dp,
         sheetContent = {
-            nowPlaying?.let { itemPlaying ->
-                BottomMediaController(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    currentItem = itemPlaying,
-                    isPlaying = isPlaying == true,
-                    onPlayPauseClicked = { bottomMediaControllerViewModel.onPlayPauseClicked() },
-                    onLeftSwiped = { bottomMediaControllerViewModel.onLeftSwiped() },
-                    onRightSwiped = { bottomMediaControllerViewModel.onRightSwiped() },
-                )
-            }
+            BottomMediaController(
+                onPlaybackOpenClicked = { onShowPlayback() }
+            )
         },
     ) {
         HorizontalPager(
@@ -156,18 +148,18 @@ sealed class HomePage(
     val titleRes: Int,
 ) {
 
-    class Main(viewModel: MainViewModel) : HomePage(
-        content = { MainScreen(viewModel) },
+    class Main : HomePage(
+        content = { MainScreen() },
         titleRes = R.string.tab_main,
     )
 
-    class Library(viewModel: LibraryViewModel) : HomePage(
-        content = { LibraryScreen(viewModel) },
+    class Library : HomePage(
+        content = { LibraryScreen() },
         titleRes = R.string.tab_library,
     )
 
-    class Search(viewModel: SearchViewModel) : HomePage(
-        content = { SearchScreen(viewModel) },
+    class Search : HomePage(
+        content = { SearchScreen() },
         titleRes = R.string.tab_search,
     )
 }

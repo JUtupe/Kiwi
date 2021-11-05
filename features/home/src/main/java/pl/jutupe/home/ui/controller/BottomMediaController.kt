@@ -3,10 +3,12 @@ package pl.jutupe.home.ui.controller
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,6 +18,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.koin.androidx.compose.getViewModel
 import pl.jutupe.home.R
 import pl.jutupe.model.MediaItem
 import pl.jutupe.ui.theme.KiwiTheme
@@ -28,12 +31,33 @@ object BottomMediaController {
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun BottomMediaController(
+    bottomMediaControllerViewModel: BottomMediaControllerViewModel = getViewModel(),
+    onPlaybackOpenClicked: () -> Unit = { },
+) {
+    val isPlaying by bottomMediaControllerViewModel.isPlaying.observeAsState()
+    val nowPlaying by bottomMediaControllerViewModel.nowPlaying.observeAsState()
+
+    nowPlaying?.let {
+        BottomMediaControllerContent(
+            currentItem = it,
+            isPlaying = isPlaying == true,
+            onPlayPauseClicked = { bottomMediaControllerViewModel.onPlayPauseClicked() },
+            onLeftSwiped = { bottomMediaControllerViewModel.onLeftSwiped() },
+            onRightSwiped = { bottomMediaControllerViewModel.onRightSwiped() },
+            onPlaybackOpenClicked = { onPlaybackOpenClicked() }
+        )
+    }
+}
+
+@Composable
+fun BottomMediaControllerContent(
     modifier: Modifier = Modifier,
     currentItem: MediaItem,
     isPlaying: Boolean = false,
     onPlayPauseClicked: () -> Unit = { },
     onLeftSwiped: () -> Unit = { },
     onRightSwiped: () -> Unit = { },
+    onPlaybackOpenClicked: () -> Unit = { },
 ) {
     var swipeSkipped = remember { false }
 
@@ -42,6 +66,7 @@ fun BottomMediaController(
             .padding(vertical = 8.dp, horizontal = 12.dp)
             .height(BottomMediaController.CONTROLLER_HEIGHT)
             .background(Color.Transparent)
+            .clickable { onPlaybackOpenClicked() }
             .pointerInput(Unit) {
                 detectHorizontalDragGestures(
                     onDragEnd = { swipeSkipped = false },
@@ -112,11 +137,11 @@ fun BottomMediaController(
 
 @Preview
 @Composable
-fun BottomMediaControllerPreview() {
+fun BottomMediaControllerContentPreview() {
     val item = MediaItem.Song("id", "title", "artist", null)
 
     KiwiTheme {
-        BottomMediaController(
+        BottomMediaControllerContent(
             modifier = Modifier
                 .width(500.dp),
             currentItem = item,

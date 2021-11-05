@@ -4,8 +4,8 @@ include(
     ":main",
     ":features:home",
     ":features:settings",
+    ":features:playback",
     ":features:theme",
-    ":commons:base",
     ":commons:ui",
     ":commons:model"
 )

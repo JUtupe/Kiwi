@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import pl.jutupe.ui.R
 
 sealed class KiwiTheme(
@@ -83,6 +84,8 @@ private fun getRoundedShapes() = Shapes(
     large = RoundedCornerShape(
         topStart = dimensionResource(R.dimen.radius_large),
         topEnd = dimensionResource(R.dimen.radius_large),
+        bottomStart = 0.dp,
+        bottomEnd = 0.dp,
     ),
 )
 

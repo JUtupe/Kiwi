@@ -6,11 +6,11 @@ plugins {
 
 dependencies {
     implementation(project(":commons:ui"))
-    implementation(project(":commons:base"))
 
     implementation(project(":features:home"))
     implementation(project(":features:settings"))
     implementation(project(":features:theme"))
+    implementation(project(":features:playback"))
 
     implementation(Libraries.splashScreen)
 
@@ -18,6 +18,5 @@ dependencies {
     implementation(Libraries.composeNavigation)
     implementation(Libraries.composeSystemUi)
 
-    implementation(Libraries.constraintLayout)
     implementation(Libraries.permissions)
 }

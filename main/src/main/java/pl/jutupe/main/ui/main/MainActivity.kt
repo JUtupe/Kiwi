@@ -8,8 +8,14 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
@@ -21,19 +27,14 @@ import com.sembozdemir.permissionskt.askPermissions
 import com.sembozdemir.permissionskt.handlePermissionsResult
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.jutupe.home.ui.HomePage
 import pl.jutupe.home.ui.HomeScreen
-import pl.jutupe.home.ui.controller.BottomMediaControllerViewModel
-import pl.jutupe.home.ui.library.LibraryViewModel
-import pl.jutupe.home.ui.main.MainViewModel
-import pl.jutupe.home.ui.search.SearchViewModel
 import pl.jutupe.main.R
 import pl.jutupe.main.ui.drawer.DrawerScreen
 import pl.jutupe.main.ui.drawer.KiwiDrawer
+import pl.jutupe.playback.PlaybackScreen
 import pl.jutupe.settings.ui.SettingsScreen
 import pl.jutupe.theme.ui.ThemePickerScreen
-import pl.jutupe.theme.ui.ThemePickerViewModel
 import pl.jutupe.ui.theme.KiwiTheme
 import pl.jutupe.ui.theme.ThemeDataStore
 
@@ -41,20 +42,11 @@ class MainActivity : ComponentActivity() {
 
     private val themeDataStore by inject<ThemeDataStore>()
 
-    private val controllerViewModel by viewModel<BottomMediaControllerViewModel>()
-
-    // todo remove after koin fix
-    private val mainViewModel by viewModel<MainViewModel>()
-    private val libraryViewModel by viewModel<LibraryViewModel>()
-    private val searchViewModel by viewModel<SearchViewModel>()
-
-    private val themePickerViewModel by viewModel<ThemePickerViewModel>()
-
     private val homePages by lazy {
         listOf(
-            HomePage.Main(mainViewModel),
-            HomePage.Library(libraryViewModel),
-            HomePage.Search(searchViewModel),
+            HomePage.Main(),
+            HomePage.Library(),
+            HomePage.Search(),
         )
     }
 
@@ -130,6 +122,9 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
+    @OptIn(
+        ExperimentalAnimationApi::class,
+    )
     fun MainContent(screens: List<DrawerScreen>, pages: List<HomePage>) {
         val scope = rememberCoroutineScope()
         val navController = rememberNavController()
@@ -137,6 +132,7 @@ class MainActivity : ComponentActivity() {
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val currentTheme by themeDataStore.currentThemeFlow.collectAsState(null)
         val systemUiController = rememberSystemUiController()
+        var playbackShown by remember { mutableStateOf(false) }
 
         val currentRoute = navBackStackEntry?.destination?.route ?: ""
 
@@ -170,7 +166,10 @@ class MainActivity : ComponentActivity() {
                 drawerShape = RectangleShape,
                 drawerBackgroundColor = MaterialTheme.colors.surface,
             ) {
-                NavHost(navController, startDestination = DrawerScreen.Home.route) {
+                NavHost(navController, startDestination = DrawerScreen.Home.route,
+                    modifier = Modifier
+                        .background(color = MaterialTheme.colors.primary),
+                ) {
                     composable(DrawerScreen.Home.route) {
                         HomeScreen(
                             onBack = {
@@ -178,8 +177,8 @@ class MainActivity : ComponentActivity() {
                                     drawerState.open()
                                 }
                             },
+                            onShowPlayback = { playbackShown = true },
                             pages = pages,
-                            controllerViewModel,
                         )
                     }
 
@@ -200,9 +199,20 @@ class MainActivity : ComponentActivity() {
                                     drawerState.open()
                                 }
                             },
-                            themePickerViewModel,
                         )
                     }
+                }
+
+                AnimatedVisibility(
+                    visible = playbackShown,
+                    enter = slideInVertically(
+                        initialOffsetY = { it }
+                    ),
+                    exit = slideOutVertically(
+                        targetOffsetY = { it }
+                    )
+                ) {
+                    PlaybackScreen(onBack = { playbackShown = false })
                 }
             }
         }

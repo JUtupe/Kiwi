@@ -17,6 +17,9 @@ inline val MediaMetadataCompat.artist
 inline val MediaMetadataCompat.duration
     get() = getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
 
+inline val MediaDescriptionCompat.duration
+    get() = extras?.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
+
 inline val MediaMetadataCompat.album
     get() = getString(MediaMetadataCompat.METADATA_KEY_ALBUM)
 

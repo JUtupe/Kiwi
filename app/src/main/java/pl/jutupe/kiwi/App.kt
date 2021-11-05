@@ -6,6 +6,7 @@ import org.koin.core.context.startKoin
 import pl.jutupe.core.di.coreModule
 import pl.jutupe.home.di.homeModule
 import pl.jutupe.main.di.mainModule
+import pl.jutupe.playback.di.playbackModule
 import pl.jutupe.settings.di.settingsModule
 import pl.jutupe.theme.di.themeModule
 import pl.jutupe.ui.di.uiModule
@@ -31,6 +32,7 @@ class App : Application() {
                 listOf(
                     coreModule,
                     homeModule,
+                    playbackModule,
                     settingsModule,
                     uiModule,
                     themeModule,

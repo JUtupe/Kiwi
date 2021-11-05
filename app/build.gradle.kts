@@ -65,6 +65,7 @@ dependencies {
     implementation(project(":main"))
     implementation(project(":commons:ui"))
     implementation(project(":features:home"))
+    implementation(project(":features:playback"))
     implementation(project(":features:settings"))
     implementation(project(":features:theme"))
 

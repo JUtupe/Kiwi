@@ -9,22 +9,17 @@ object Releases {
 }
 
 object Versions {
-    const val kotlin = "1.5.10"
+    const val kotlin = "1.5.31"
     const val coroutines = "1.5.0"
-    const val compose = "1.0.0"
+    const val compose = "1.0.5"
     const val composePager = "0.14.0"
     const val timber = "4.7.1"
-    const val koin = "3.1.2"
+    const val koin = "3.1.3"
     const val core = "1.6.0"
     const val media = "1.4.1"
     const val exoPlayer = "2.15.0"
     const val coil = "1.2.2"
-    const val constraintLayout = "2.0.4"
-    const val coordinatorLayout = "1.1.0"
     const val paging = "3.1.0-alpha02"
-    const val appCompat = "1.3.0"
-    const val material = "1.1.0-beta01"
-    const val cardView = "1.0.0"
     const val lifecycle = "2.3.1"
     const val dataStore = "1.0.0"
 }
@@ -55,17 +50,10 @@ object Libraries {
     const val composePagerIndicators = "com.google.accompanist:accompanist-pager-indicators:${Versions.composePager}"
     const val composeSystemUi = "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
 
-    const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
-    const val material = "com.google.android.material:material:${Versions.material}"
-    const val cardView = "androidx.cardview:cardview:${Versions.cardView}"
-
     const val splashScreen = "androidx.core:core-splashscreen:1.0.0-alpha01"
 
     const val dataStore = "androidx.datastore:datastore:${Versions.dataStore}"
     const val dataStorePreferences = "androidx.datastore:datastore-preferences:${Versions.dataStore}"
-
-    const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
-    const val coordinatorLayout = "androidx.coordinatorlayout:coordinatorlayout:${Versions.coordinatorLayout}"
 
     const val paging = "androidx.paging:paging-runtime:${Versions.paging}"
     const val pagingCompose = "androidx.paging:paging-compose:1.0.0-alpha12"

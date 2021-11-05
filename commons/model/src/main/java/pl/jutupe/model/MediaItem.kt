@@ -16,6 +16,7 @@ sealed class MediaItem (
         override val title: String,
         val artist: String,
         override val art: String?,
+        val duration: Long = 0L
     ) : MediaItem(isPlayable = true, ItemType.TYPE_SONG) {
 
         override val subtitle: String

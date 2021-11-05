@@ -27,7 +27,8 @@ fun MediaDescriptionCompat.toSong(context: Context) = MediaItem.Song(
     id = mediaId ?: "unknown",
     title = title?.toString() ?: context.getString(R.string.title_unknown),
     artist = subtitle?.toString() ?: context.getString(R.string.artist_device),
-    art = iconUri.toString()
+    art = iconUri.toString(),
+    duration = duration ?: 0,
 )
 
 fun MediaDescriptionCompat.toPlaylist(context: Context) = MediaItem.Playlist(
