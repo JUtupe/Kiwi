@@ -13,6 +13,9 @@ class PlaybackViewModel(
     val nowPlaying: LiveData<MediaItem?>
         get() = connection.nowPlaying
 
+    val nextSong: LiveData<MediaItem?>
+        get() = connection.nextSong
+
     val isPlaying: LiveData<Boolean>
         get() = connection.isPlaying
 
@@ -33,5 +36,11 @@ class PlaybackViewModel(
 
     fun onSkipToPreviousClicked() {
         connection.skipToPrevious()
+    }
+
+    fun onDownSwiped() {
+        if (connection.isConnected.value == true) {
+            connection.stop()
+        }
     }
 }

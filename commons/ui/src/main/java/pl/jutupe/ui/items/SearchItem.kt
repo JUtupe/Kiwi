@@ -60,7 +60,7 @@ fun SearchItem(
                     .weight(1f)
             ) {
                 Text(
-                    text = item.title + item,
+                    text = item.title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )

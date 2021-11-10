@@ -49,8 +49,12 @@ class KiwiServiceConnection(
             state.state == PlaybackStateCompat.STATE_PLAYING
         }
 
-    val nowPlaying = MutableLiveData<MediaItem?>()
     val queue = MutableLiveData<List<QueueItem>>()
+
+    val nowPlaying = MutableLiveData<MediaItem?>()
+    val nextSong = Transformations.map(queue) {
+        it.getOrNull(0)?.item // todo
+    }
 
     private val mediaBrowserConnectionCallback = MediaBrowserConnectionCallback(context)
     private val mediaBrowser = MediaBrowserCompat(

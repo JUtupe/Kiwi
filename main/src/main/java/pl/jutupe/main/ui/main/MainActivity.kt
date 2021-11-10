@@ -16,7 +16,9 @@ import androidx.compose.foundation.background
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,36 +27,28 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sembozdemir.permissionskt.askPermissions
 import com.sembozdemir.permissionskt.handlePermissionsResult
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import pl.jutupe.home.ui.HomePage
+import org.koin.androidx.compose.get
+import org.koin.androidx.compose.getViewModel
 import pl.jutupe.home.ui.HomeScreen
+import pl.jutupe.home.ui.controller.BottomMediaController
+import pl.jutupe.home.ui.controller.BottomMediaControllerViewModel
 import pl.jutupe.main.R
 import pl.jutupe.main.ui.drawer.DrawerScreen
 import pl.jutupe.main.ui.drawer.KiwiDrawer
 import pl.jutupe.playback.PlaybackScreen
+import pl.jutupe.playback.PlaybackViewModel
 import pl.jutupe.settings.ui.SettingsScreen
 import pl.jutupe.theme.ui.ThemePickerScreen
 import pl.jutupe.ui.theme.KiwiTheme
 import pl.jutupe.ui.theme.ThemeDataStore
+import pl.jutupe.ui.util.BackdropHeader
+import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
-
-    private val themeDataStore by inject<ThemeDataStore>()
-
-    private val homePages by lazy {
-        listOf(
-            HomePage.Main(),
-            HomePage.Library(),
-            HomePage.Search(),
-        )
-    }
-
-    private val screens = listOf(
-        DrawerScreen.Home,
-        DrawerScreen.Settings,
-        DrawerScreen.Theme,
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +67,7 @@ class MainActivity : ComponentActivity() {
             onShowRationale { showRationaleDialog { it.retry() } }
             onGranted {
                 setContent {
-                    MainContent(screens, homePages)
+                    MainContent()
                 }
             }
             onDenied { requestStoragePermissions() }
@@ -120,101 +114,103 @@ class MainActivity : ComponentActivity() {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+}
 
-    @Composable
-    @OptIn(
-        ExperimentalAnimationApi::class,
+@Composable
+@OptIn(
+    ExperimentalAnimationApi::class,
+    ExperimentalMaterialApi::class,
+)
+private fun MainContent(
+    themeDataStore: ThemeDataStore = get(),
+    playbackViewModel: PlaybackViewModel = getViewModel(),
+) {
+    val screens = remember {
+        listOf(
+            DrawerScreen.Home,
+            DrawerScreen.Settings,
+            DrawerScreen.Theme,
+        )
+    }
+    val scope = rememberCoroutineScope()
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scaffoldState = rememberScaffoldState(
+        drawerState = drawerState,
     )
-    fun MainContent(screens: List<DrawerScreen>, pages: List<HomePage>) {
-        val scope = rememberCoroutineScope()
-        val navController = rememberNavController()
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-        val currentTheme by themeDataStore.currentThemeFlow.collectAsState(null)
-        val systemUiController = rememberSystemUiController()
-        var playbackShown by remember { mutableStateOf(false) }
+    val currentTheme by themeDataStore.currentThemeFlow.collectAsState(null)
+    val systemUiController = rememberSystemUiController()
 
-        val currentRoute = navBackStackEntry?.destination?.route ?: ""
+    val currentRoute = navBackStackEntry?.destination?.route ?: ""
 
-        KiwiTheme(theme = currentTheme ?: KiwiTheme.Dark) {
-            val statusBarColor = MaterialTheme.colors.primary
+    KiwiTheme(theme = currentTheme ?: KiwiTheme.Dark) {
+        val statusBarColor = MaterialTheme.colors.primary
 
-            SideEffect {
-                if (currentTheme == null) return@SideEffect
+        SideEffect {
+            if (currentTheme == null) return@SideEffect
 
-                systemUiController.setStatusBarColor(
-                    color = statusBarColor,
-                    darkIcons = false
-                )
-            }
+            systemUiController.setStatusBarColor(
+                color = statusBarColor,
+                darkIcons = false
+            )
+        }
 
-            Scaffold(
-                scaffoldState = rememberScaffoldState(drawerState = drawerState),
-                drawerContent = {
-                    KiwiDrawer(
-                        screens = screens,
-                        currentRoute = currentRoute,
-                    ) {
-                        if (it.route != currentRoute) {
-                            navController.navigate(it.route)
-                        }
-                        scope.launch {
-                            drawerState.close()
-                        }
+        Scaffold(
+            scaffoldState = scaffoldState,
+            drawerContent = {
+                KiwiDrawer(
+                    screens = screens,
+                    currentRoute = currentRoute,
+                ) {
+                    if (it.route != currentRoute) {
+                        navController.navigate(it.route)
                     }
-                },
-                drawerShape = RectangleShape,
-                drawerBackgroundColor = MaterialTheme.colors.surface,
+                    scope.launch {
+                        drawerState.close()
+                    }
+                }
+            },
+            drawerShape = RectangleShape,
+            drawerBackgroundColor = MaterialTheme.colors.surface,
+        ) {
+            NavHost(navController, startDestination = DrawerScreen.Home.route,
+                modifier = Modifier
+                    .background(color = MaterialTheme.colors.primary),
             ) {
-                NavHost(navController, startDestination = DrawerScreen.Home.route,
-                    modifier = Modifier
-                        .background(color = MaterialTheme.colors.primary),
-                ) {
-                    composable(DrawerScreen.Home.route) {
-                        HomeScreen(
-                            onBack = {
-                                scope.launch {
-                                    drawerState.open()
-                                }
-                            },
-                            onShowPlayback = { playbackShown = true },
-                            pages = pages,
-                        )
-                    }
-
-                    composable(DrawerScreen.Settings.route) {
-                        SettingsScreen(
-                            onBack = {
-                                scope.launch {
-                                    drawerState.open()
-                                }
-                            },
-                        )
-                    }
-
-                    composable(DrawerScreen.Theme.route) {
-                        ThemePickerScreen(
-                            onBack = {
-                                scope.launch {
-                                    drawerState.open()
-                                }
-                            },
-                        )
-                    }
+                composable(DrawerScreen.Home.route) {
+                    HomeScreen(
+                        onBack = {
+                            scope.launch {
+                                drawerState.open()
+                            }
+                        },
+                    )
                 }
 
-                AnimatedVisibility(
-                    visible = playbackShown,
-                    enter = slideInVertically(
-                        initialOffsetY = { it }
-                    ),
-                    exit = slideOutVertically(
-                        targetOffsetY = { it }
+                composable(DrawerScreen.Settings.route) {
+                    SettingsScreen(
+                        onBack = {
+                            scope.launch {
+                                drawerState.open()
+                            }
+                        },
                     )
-                ) {
-                    PlaybackScreen(onBack = { playbackShown = false })
+                }
+
+                composable(DrawerScreen.Theme.route) {
+                    ThemePickerScreen(
+                        onBack = {
+                            scope.launch {
+                                drawerState.open()
+                            }
+                        },
+                    )
                 }
             }
+
+            //todo bottom media controller with animations
+            PlaybackScreen(onBack = { playbackViewModel.onDownSwiped() })
         }
     }
 }

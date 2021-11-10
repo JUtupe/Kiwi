@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -13,16 +14,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 import org.koin.androidx.compose.getViewModel
 import pl.jutupe.model.MediaItem
 import pl.jutupe.ui.theme.KiwiTheme
@@ -36,18 +42,20 @@ fun PlaybackScreen(
     viewModel: PlaybackViewModel = getViewModel(),
 ) {
     val nowPlaying by viewModel.nowPlaying.observeAsState()
+    val nextSong by viewModel.nextSong.observeAsState()
     val isPlaying by viewModel.isPlaying.observeAsState(false)
 
-    PlaybackContent(
-        modifier = Modifier
-            .fillMaxSize(),
-        nowPlaying = nowPlaying,
-        isPlaying = isPlaying,
-        onBack = { onBack() },
-        onPlayPauseClicked = { viewModel.onPlayPauseClicked() },
-        onSkipToNextClicked = { viewModel.onSkipToNextClicked() },
-        onSkipToPrevClicked = { viewModel.onSkipToPreviousClicked() }
-    )
+    nowPlaying?.let {
+        PlaybackContent(
+            nowPlaying = it,
+            nextSong = nextSong,
+            isPlaying = isPlaying,
+            onBack = { onBack() },
+            onPlayPauseClicked = { viewModel.onPlayPauseClicked() },
+            onSkipToNextClicked = { viewModel.onSkipToNextClicked() },
+            onSkipToPrevClicked = { viewModel.onSkipToPreviousClicked() }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -55,7 +63,7 @@ fun PlaybackScreen(
 fun PlaybackContent(
     modifier: Modifier = Modifier,
     previousSong: MediaItem? = null,
-    nowPlaying: MediaItem? = null,
+    nowPlaying: MediaItem,
     nextSong: MediaItem? = null,
     isPlaying: Boolean = false,
     onBack: () -> Unit = { },
@@ -112,12 +120,23 @@ fun PlaybackContent(
 
             //todo carousel
             Spacer(modifier = Modifier.height(32.dp))
-            Image(
-                nowPlaying?.let { mediaItemPainter(item = it) }
-                    ?: painterResource(id = R.drawable.placeholder_song),
-                null,
-                modifier = Modifier.size(200.dp),
-            )
+            Row {
+                Image(
+                    mediaItemPainter(item = nowPlaying),
+                    null,
+                    modifier = Modifier
+                        .size(250.dp)
+                        .clip(RoundedCornerShape(dimensionResource(R.dimen.radius_small))),
+                )
+                nextSong?.let {
+                    Image(
+                        mediaItemPainter(item = it),
+                        null,
+                        modifier = Modifier.size(200.dp),
+                    )
+                }
+
+            }
             Spacer(modifier = Modifier.height(32.dp))
 
             Column(
@@ -128,13 +147,13 @@ fun PlaybackContent(
                 Text(
                     modifier = Modifier
                         .padding(8.dp),
-                    text = nowPlaying?.title ?: "",
+                    text = nowPlaying.title,
                 )
 
                 Text(
                     modifier = Modifier
                         .padding(8.dp),
-                    text = nowPlaying?.subtitle ?: "",
+                    text = nowPlaying.subtitle,
                 )
 
                 Text(
